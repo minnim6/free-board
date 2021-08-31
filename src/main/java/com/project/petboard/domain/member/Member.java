@@ -42,9 +42,9 @@ public class Member {
 
     /**
      * nickname 변경
-     * @param memberNickname
+     * @param Nickname 변경할 닉네임.
      */
-    public void NicknameChange(String memberNickname){
+    public void NicknameChange(String Nickname){
         this.memberNickname = memberNickname;
     }
 

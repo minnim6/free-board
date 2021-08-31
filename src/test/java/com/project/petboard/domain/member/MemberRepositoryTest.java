@@ -39,10 +39,9 @@ public class MemberRepositoryTest {
 
     @Test
     public void 회원정보_조회(){
-        Optional<Member> member = memberRepository.findById(1L);
-        member.ifPresent(selectedMember -> {
-           assertThat(selectedMember.getMemberNickname()).isEqualTo("회원1");
-        });
+        List<Member> memberList = memberRepository.findAll();
+        Member member = memberList.get(0);
+        assertThat(member.getMemberNickname()).isEqualTo("회원1");
     }
 
     @Test
@@ -57,13 +56,27 @@ public class MemberRepositoryTest {
 
     @Test
     public void 회원탈퇴() {
-        Optional<Member> member = memberRepository.findById(1L);
-        member.ifPresent(selectedMember -> {
-            memberRepository.delete(selectedMember);
-        });
-        if(!member.isPresent()){
+        List<Member> memberList = memberRepository.findAll();
+        Member member = memberList.get(0);
+        memberRepository.delete(member);
+        memberList = memberRepository.findAll();
+        if(memberList.isEmpty()){
             log.info("삭제완료");
         }
+    }
+
+    /***
+     * 닉네임 중복체크 , 테스트에서 뺴야할듯?
+     * @param nickname
+     * @return 중복이 존재하지 않을경우 true , 중복이있을경우 false
+     */
+    @Test
+    public boolean 닉네임_중복체크(String nickname){
+        List<Member> memberList = memberRepository.findByNickname(nickname);
+        if(memberList.isEmpty()){
+            return true;
+        }
+        return false;
     }
 
 
