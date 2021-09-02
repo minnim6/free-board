@@ -45,7 +45,7 @@ public class Member {
      * @param Nickname 변경할 닉네임.
      */
     public void NicknameChange(String Nickname){
-        this.memberNickname = memberNickname;
+        this.memberNickname = Nickname;
     }
 
 }
