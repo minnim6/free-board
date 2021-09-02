@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Getter
 @NoArgsConstructor
@@ -24,7 +25,7 @@ public class Board {
     @Temporal(value = TemporalType.DATE) //년월일 date 타입 db에 매핑
     @Column(insertable = true, updatable = false)
     @CreationTimestamp
-    private Data BoardCreateDate;
+    private Date BoardCreateDate;
 
     private String BoardTitle;
 
@@ -35,7 +36,7 @@ public class Board {
     @Temporal(value = TemporalType.DATE) //년월일 date 타입 db에 매핑
     @Column(insertable = true, updatable = true)
     @CreationTimestamp
-    private Data BoardAmendDate;
+    private Date BoardAmendDate;
 
     @Enumerated(EnumType.STRING)
     private BoardStatus boardStatus;
