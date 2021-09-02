@@ -15,7 +15,7 @@ public class Image {
     @Id
     private Long ImageNumber;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn
     private Board board;
 

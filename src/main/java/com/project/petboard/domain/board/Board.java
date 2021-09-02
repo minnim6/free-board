@@ -18,7 +18,7 @@ public class Board {
     @Id
     private Long BoardNumber;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn
     private Member member;
 

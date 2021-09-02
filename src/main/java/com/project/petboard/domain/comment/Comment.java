@@ -19,11 +19,11 @@ public class Comment {
     @Id
     private Long CommentNumber;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn
     private Board board;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn
     private Member member;
 
