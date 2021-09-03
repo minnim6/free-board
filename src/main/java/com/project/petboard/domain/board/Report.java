@@ -1,4 +1,4 @@
-package com.project.petboard.domain.questionboard;
+package com.project.petboard.domain.board;
 
 import com.project.petboard.domain.member.Member;
 import lombok.Data;
@@ -12,30 +12,27 @@ import java.util.Date;
 @Getter
 @NoArgsConstructor
 @Entity
-public class QuestionBoard {
+public class Report {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long QuestionBoardNumber;
+    private Long ReportNumber;
+
+    @ManyToOne
+    @JoinColumn
+    private Board board;
+
+    private String ReportCategory;
 
     @ManyToOne
     @JoinColumn
     private Member member;
 
-    private String QuestionBoardTitle;
-
-    private String QuestionBoardContents;
+    private String ReportContents;
 
     @Temporal(TemporalType.DATE)
     @Column(insertable = true,updatable = false)
     @CreationTimestamp
-    private Date QuestionBoardCreateDate;
-
-    @Temporal(TemporalType.DATE)
-    @Column(insertable = true,updatable = false)
-    @CreationTimestamp
-    private Date QuestionBoardCommentDate;
-
-    private String QuestionBoardComment;
+    private Date ReportCreateDate;
 
 }
