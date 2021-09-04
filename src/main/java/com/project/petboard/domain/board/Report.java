@@ -1,6 +1,7 @@
 package com.project.petboard.domain.board;
 
 import com.project.petboard.domain.member.Member;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,5 +35,13 @@ public class Report {
     @Column(insertable = true,updatable = false)
     @CreationTimestamp
     private Date ReportCreateDate;
+
+    @Builder
+    public Report(Board board,String reportCategory,Member member,String reportContents){
+        this.board = board;
+        this.ReportCategory = reportCategory;
+        this.member = member;
+        this.ReportContents = reportContents;
+    }
 
 }
