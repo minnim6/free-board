@@ -1,6 +1,7 @@
 package com.project.petboard.domain.board;
 
 import com.project.petboard.domain.member.Member;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,4 +41,23 @@ public class Board {
 
     @Enumerated(EnumType.STRING)
     private BoardStatus boardStatus;
+
+    @Builder
+    public Board(Member member,String boardTitle,String boardCategory,String boardContents){
+        this.member = member;
+        this.BoardCategory = boardCategory;
+        this.BoardTitle =  boardTitle;
+        this.BoardContents = boardContents;
+        this.boardStatus = BoardStatus.Y;
+    }
+    // 1. UpdateContents 2. UpdateBoardContents
+    public void Update(String boardTitle,String boardContents,String boardCategory){
+        this.BoardTitle = boardTitle;
+        this.BoardContents = boardContents;
+        this.BoardCategory = boardCategory;
+    }
+
+    public void blind(){
+        this.boardStatus = BoardStatus.N;
+    }
 }
