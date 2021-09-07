@@ -1,12 +1,14 @@
 package com.project.petboard.domain.questionboard;
 
 import com.project.petboard.domain.member.Member;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Getter
@@ -32,10 +34,22 @@ public class QuestionBoard {
     private Date questionBoardCreateDate;
 
     @Temporal(TemporalType.DATE)
-    @Column(insertable = true,updatable = false)
+    @Column(insertable = false,updatable = false)
     @CreationTimestamp
-    private Date questionBoardCommentDate;
+    private Date questionBoardAnswerDate;
 
-    private String questionBoardComment;
+    private String questionBoardAnswer;
+
+    @Builder
+    public QuestionBoard(Member member,String questionBoardTitle,String questionBoardContents){
+        this.member = member;
+        this.questionBoardTitle = questionBoardTitle;
+        this.questionBoardContents = questionBoardContents;
+    }
+
+    public void completeAnswer(String questionBoardAnswer,Date questionBoardAnswerDate){
+        this.questionBoardAnswer = questionBoardAnswer;
+        this.questionBoardAnswerDate = questionBoardAnswerDate;
+    }
 
 }
