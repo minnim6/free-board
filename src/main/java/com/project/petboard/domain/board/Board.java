@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Getter
@@ -19,6 +20,7 @@ public class Board {
     @Id
     private Long BoardNumber;
 
+    @NotNull
     @ManyToOne
     @JoinColumn
     private Member member;
@@ -28,16 +30,16 @@ public class Board {
     @CreationTimestamp
     private Date BoardCreateDate;
 
-    private String BoardTitle;
+    private String boardTitle;
 
-    private String BoardContents;
+    private String boardContents;
     
-    private String BoardCategory;
+    private String boardCategory;
 
     @Temporal(value = TemporalType.DATE) //년월일 date 타입 db에 매핑
     @Column(insertable = true, updatable = true)
     @CreationTimestamp
-    private Date BoardAmendDate;
+    private Date boardAmendDate;
 
     @Enumerated(EnumType.STRING)
     private BoardStatus boardStatus;
@@ -45,16 +47,16 @@ public class Board {
     @Builder
     public Board(Member member,String boardTitle,String boardCategory,String boardContents){
         this.member = member;
-        this.BoardCategory = boardCategory;
-        this.BoardTitle =  boardTitle;
-        this.BoardContents = boardContents;
+        this.boardCategory = boardCategory;
+        this.boardTitle =  boardTitle;
+        this.boardContents = boardContents;
         this.boardStatus = BoardStatus.Y;
     }
     // 1. UpdateContents 2. UpdateBoardContents
-    public void Update(String boardTitle,String boardContents,String boardCategory){
-        this.BoardTitle = boardTitle;
-        this.BoardContents = boardContents;
-        this.BoardCategory = boardCategory;
+    public void update(String boardTitle,String boardContents,String boardCategory){
+        this.boardTitle = boardTitle;
+        this.boardContents = boardContents;
+        this.boardCategory = boardCategory;
     }
 
     public void blind(){

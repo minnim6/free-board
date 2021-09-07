@@ -16,26 +16,26 @@ public class QuestionBoard {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long QuestionBoardNumber;
+    private Long questionBoardNumber;
 
     @ManyToOne
     @JoinColumn
     private Member member;
 
-    private String QuestionBoardTitle;
+    private String questionBoardTitle;
 
-    private String QuestionBoardContents;
-
-    @Temporal(TemporalType.DATE)
-    @Column(insertable = true,updatable = false)
-    @CreationTimestamp
-    private Date QuestionBoardCreateDate;
+    private String questionBoardContents;
 
     @Temporal(TemporalType.DATE)
     @Column(insertable = true,updatable = false)
     @CreationTimestamp
-    private Date QuestionBoardCommentDate;
+    private Date questionBoardCreateDate;
 
-    private String QuestionBoardComment;
+    @Temporal(TemporalType.DATE)
+    @Column(insertable = true,updatable = false)
+    @CreationTimestamp
+    private Date questionBoardCommentDate;
+
+    private String questionBoardComment;
 
 }

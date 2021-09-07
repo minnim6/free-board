@@ -18,7 +18,7 @@ public class Recomment {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long RecommentNumber;
+    private Long recommentNumber;
 
     @ManyToOne
     @JoinColumn
@@ -32,15 +32,15 @@ public class Recomment {
     @JoinColumn
     private Comment comment;
 
-    private String RecommentContents;
+    private String recommentContents;
 
     @Temporal(TemporalType.DATE)
     @Column(insertable = true,updatable = false)
     @CreationTimestamp
-    private Date RecommentCreateDate;
+    private Date recommentCreateDate;
 
     @Temporal(TemporalType.DATE)
     @Column(insertable = true,updatable = true)
     @CreationTimestamp
-    private Date RecommentAmendDate;
+    private Date recommentAmendDate;
 }
