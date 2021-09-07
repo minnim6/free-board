@@ -63,7 +63,7 @@ public class QuestionBoardTest {
         QuestionBoard questionBoard = questionBoardRepository.findAll().get(0);
         questionBoard.completeAnswer(answer,serverDate);
         questionBoardRepository.save(questionBoard);
-        
+
         assertThat(questionBoardRepository.findAll().get(0).getQuestionBoardAnswer()).isEqualTo(answer);
     }
 }
