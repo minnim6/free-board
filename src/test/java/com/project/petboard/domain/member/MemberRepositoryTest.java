@@ -7,16 +7,18 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Slf4j
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@DataJpaTest
 public class MemberRepositoryTest {
 
     @Autowired
@@ -34,9 +36,7 @@ public class MemberRepositoryTest {
 
     @Test
     public void 회원정보_조회() {
-        List<Member> memberList = memberRepository.findAll();
-
-        Member member = memberList.get(0);
+        Member member = memberRepository.findAll().get(0);
 
         assertThat(member.getMemberNickname()).isEqualTo(memberDummy.getMemberNickname());
     }
@@ -45,24 +45,21 @@ public class MemberRepositoryTest {
     public void 닉네임변경() {
         String nickname = "회원2";
 
-        List<Member> memberList = memberRepository.findAll();
-        Member member = memberList.get(0);
+        Member member = memberRepository.findAll().get(0);
 
         member.nicknameChange(nickname);
-
         memberRepository.save(member);
+
         assertThat(member.getMemberNickname()).isEqualTo(nickname);
     }
 
     @Test
     public void 회원탈퇴() {
-        List<Member> memberList = memberRepository.findAll();
-        Member member = memberList.get(0);
+        Member member = memberRepository.findAll().get(0);
 
         memberRepository.delete(member);
 
-        memberList = memberRepository.findAll();
-        assertThat(memberList.isEmpty());
+        assertThrows(IndexOutOfBoundsException.class,()-> memberRepository.findAll().get(0));
     }
 
 }

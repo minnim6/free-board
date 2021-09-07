@@ -3,6 +3,7 @@ package com.project.petboard.domain.recomment;
 import com.project.petboard.domain.board.Board;
 import com.project.petboard.domain.comment.Comment;
 import com.project.petboard.domain.member.Member;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -43,4 +44,16 @@ public class Recomment {
     @Column(insertable = true,updatable = true)
     @CreationTimestamp
     private Date recommentAmendDate;
+
+    @Builder
+    public Recomment(Member member,Board board,Comment comment,String recommentContents){
+        this.member = member;
+        this.board = board;
+        this.comment = comment;
+        this.recommentContents = recommentContents;
+    }
+
+    public void update(String recommentContents){
+        this.recommentContents = recommentContents;
+    }
 }
