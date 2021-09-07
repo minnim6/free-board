@@ -12,13 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Getter
 public class MemberDummy {
 
-    private final String MemberNickname = "회원1";
+    private final String memberNickname = "회원1";
     private final MemberSingupCategory memberSingupCategory = MemberSingupCategory.KAKAO;
     private final MemberStatus memberStatus = MemberStatus.Y;
 
     public Member toEntity() {
         return Member.builder()
-                .memberNickname(MemberNickname)
+                .memberNickname(memberNickname)
                 .memberSingupCategory(memberSingupCategory)
                 .memberStatus(memberStatus)
                 .build();

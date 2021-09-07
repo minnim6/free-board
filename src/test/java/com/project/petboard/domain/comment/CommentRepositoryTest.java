@@ -7,21 +7,28 @@ import com.project.petboard.domain.member.Member;
 import com.project.petboard.domain.member.MemberRepository;
 import com.project.petboard.domain.member.MemberSingupCategory;
 import com.project.petboard.domain.member.MemberStatus;
+import com.project.petboard.dummy.BoardDummy;
+import com.project.petboard.dummy.CommentDummy;
+import com.project.petboard.dummy.MemberDummy;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@DataJpaTest
 public class CommentRepositoryTest {
 
     @Autowired
@@ -33,29 +40,25 @@ public class CommentRepositoryTest {
     @Autowired
     BoardRepository boardRepository;
 
+    MemberDummy memberDummy = new MemberDummy();
+
+    BoardDummy boardDummy;
+
+    CommentDummy commentDummy;
+
     @Before
     public void setup(){
-        //댓글 작성 코드 setup 대체
-        memberRepository.save(Member.builder()
-                .memberNickname("회원1")
-                .memberSingupCategory(MemberSingupCategory.KAKAO) //수정 필요.
-                .memberStatus(MemberStatus.Y)
-                .build());
-        List<Member> memberList = memberRepository.findAll();
-        Member member = memberList.get(0);
-        boardRepository.save(Board.builder()
-                .member(member)
-                .boardCategory("카테고리")
-                .boardTitle("제목")
-                .boardContents("내용")
-                .build());
-        List<Board> boardList = boardRepository.findAll();
-        Board board = boardList.get(0);
-        commentRepository.save(Comment.builder()
-                .board(board)
-                .member(member)
-                .commentContents("댓글")
-                .build());
+        memberRepository.save(memberDummy.toEntity());
+
+        Member member = memberRepository.findAll().get(0);
+
+        boardDummy = new BoardDummy(member);
+        boardRepository.save(boardDummy.toEntity());
+
+        Board board = boardRepository.findAll().get(0);
+
+        commentDummy = new CommentDummy(board,member);
+        commentRepository.save(commentDummy.toEntity());
     }
 
     @After
@@ -67,29 +70,31 @@ public class CommentRepositoryTest {
 
     @Test
     public void 댓글_조회(){
-        List <Comment> commentList = commentRepository.findAll();
-        Comment comment = commentList.get(0);
-        assertThat(comment.getCommentContents()).isEqualTo("댓글");
+        Comment comment = commentRepository.findAll().get(0);
+
+        assertThat(comment.getCommentContents()).isEqualTo(commentDummy.getCommentContents());
     }
 
     @Test
     public void 댓글_수정(){
-        List <Comment> commentList = commentRepository.findAll();
-        Comment comment = commentList.get(0);
-        comment.update("수정된 내용");
+        String updateCommentContents = "내용수정";
+
+        Comment comment = commentRepository.findAll().get(0);
+
+        comment.update(updateCommentContents);
         commentRepository.save(comment);
-        commentList = commentRepository.findAll();
-        comment = commentList.get(0);
-        assertThat(comment.getCommentContents()).isEqualTo("수정된 내용");
+
+        assertThat(commentRepository.findAll().get(0).getCommentContents()).isEqualTo(updateCommentContents);
     }
 
     @Test
     public void 댓글_삭제(){
-        List <Comment> commentList = commentRepository.findAll();
-        Comment comment = commentList.get(0);
+        Comment comment = commentRepository.findAll().get(0);
+        Long commentNumber = comment.getCommentNumber();
+
         commentRepository.delete(comment);
-        commentList = commentRepository.findAll();
-        assertThat(commentList.isEmpty());
+
+        assertThrows(IndexOutOfBoundsException.class,()-> commentRepository.findAll().get(0));
     }
 
 }
