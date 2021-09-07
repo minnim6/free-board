@@ -13,11 +13,11 @@ public class Image {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long ImageNumber;
+    private Long imageNumber;
 
     @ManyToOne
     @JoinColumn
     private Board board;
 
-    private String ImageLocation;
+    private String imageLocation;
 }

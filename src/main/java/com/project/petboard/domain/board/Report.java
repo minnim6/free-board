@@ -17,31 +17,31 @@ public class Report {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long ReportNumber;
+    private Long reportNumber;
 
     @ManyToOne
     @JoinColumn
     private Board board;
 
-    private String ReportCategory;
+    private String reportCategory;
 
     @ManyToOne
     @JoinColumn
     private Member member;
 
-    private String ReportContents;
+    private String reportContents;
 
     @Temporal(TemporalType.DATE)
     @Column(insertable = true,updatable = false)
     @CreationTimestamp
-    private Date ReportCreateDate;
+    private Date reportCreateDate;
 
     @Builder
     public Report(Board board,String reportCategory,Member member,String reportContents){
         this.board = board;
-        this.ReportCategory = reportCategory;
+        this.reportCategory = reportCategory;
         this.member = member;
-        this.ReportContents = reportContents;
+        this.reportContents = reportContents;
     }
 
 }
