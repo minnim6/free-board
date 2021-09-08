@@ -11,10 +11,11 @@ import com.project.petboard.dummy.BoardDummy;
 import com.project.petboard.dummy.CommentDummy;
 import com.project.petboard.dummy.MemberDummy;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.aspectj.lang.annotation.Before;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,7 +28,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Slf4j
-@RunWith(SpringRunner.class)
+//@RunWith(SpringRunner.class)
 @DataJpaTest
 public class CommentRepositoryTest {
 
@@ -46,7 +47,7 @@ public class CommentRepositoryTest {
 
     CommentDummy commentDummy;
 
-    @Before
+    @BeforeEach
     public void setup(){
         memberRepository.save(memberDummy.toEntity());
 
@@ -61,7 +62,7 @@ public class CommentRepositoryTest {
         commentRepository.save(commentDummy.toEntity());
     }
 
-    @After
+    @AfterEach
     public void cleanup(){
         commentRepository.deleteAll();;
         boardRepository.deleteAll();

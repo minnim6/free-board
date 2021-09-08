@@ -6,10 +6,9 @@ import com.project.petboard.domain.member.MemberRepository;
 import com.project.petboard.dummy.MemberDummy;
 import com.project.petboard.dummy.QuestionBoardDummy;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,7 +19,6 @@ import java.util.Date;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @Slf4j
-@RunWith(SpringRunner.class)
 @DataJpaTest
 public class QuestionBoardTest {
 
@@ -34,7 +32,7 @@ public class QuestionBoardTest {
 
     QuestionBoardDummy questionBoardDummy;
 
-    @Before
+    @BeforeEach
     public void setup(){
         memberRepository.save(memberDummy.toEntity());
         Member member = memberRepository.findAll().get(0);
@@ -43,7 +41,7 @@ public class QuestionBoardTest {
         questionBoardRepository.save(questionBoardDummy.toEntity());
     }
 
-    @After
+    @AfterEach
     public void cleanup(){
         questionBoardRepository.deleteAll();
         memberRepository.deleteAll();

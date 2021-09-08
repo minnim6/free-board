@@ -5,15 +5,14 @@ import com.project.petboard.dummy.BoardDummy;
 import com.project.petboard.dummy.MemberDummy;
 import com.project.petboard.dummy.ReportDummy;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -22,7 +21,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Slf4j
-@RunWith(SpringRunner.class)
 @DataJpaTest
 public class BoardRepositoryTest {
 
@@ -41,7 +39,7 @@ public class BoardRepositoryTest {
 
     ReportDummy reportDummy;
 
-    @Before
+    @BeforeEach
     public void setup() {
         memberRepository.save(memberDummy.toEntity());
 
@@ -56,7 +54,7 @@ public class BoardRepositoryTest {
         reportRepository.save(reportDummy.toEntity());
     }
 
-    @After
+    @AfterEach
     public void cleanup() {
         reportRepository.deleteAll();
         boardRepository.deleteAll();
@@ -107,6 +105,6 @@ public class BoardRepositoryTest {
 
         boardRepository.delete(board);
 
-        assertThrows(IndexOutOfBoundsException.class,()-> boardRepository.findAll().get(0));
+        assertThrows(DataIntegrityViolationException.class,()-> boardRepository.findAll().get(0));
     }
 }
