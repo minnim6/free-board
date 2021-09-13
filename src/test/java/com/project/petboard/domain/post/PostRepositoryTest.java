@@ -1,7 +1,7 @@
-package com.project.petboard.domain.board;
+package com.project.petboard.domain.post;
 
 import com.project.petboard.domain.member.*;
-import com.project.petboard.dummy.BoardDummy;
+import com.project.petboard.dummy.PostDummy;
 import com.project.petboard.dummy.MemberDummy;
 import com.project.petboard.dummy.ReportDummy;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
@@ -22,10 +21,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Slf4j
 @DataJpaTest
-public class BoardRepositoryTest {
+public class PostRepositoryTest {
 
     @Autowired
-    BoardRepository boardRepository;
+    PostRepository postRepository;
 
     @Autowired
     MemberRepository memberRepository;
@@ -35,7 +34,7 @@ public class BoardRepositoryTest {
 
     MemberDummy memberDummy = new MemberDummy();
 
-    BoardDummy boardDummy;
+    PostDummy postDummy;
 
     ReportDummy reportDummy;
 
@@ -45,66 +44,66 @@ public class BoardRepositoryTest {
 
         Member member = memberRepository.findAll().get(0);
 
-        boardDummy = new BoardDummy(member);
-        boardRepository.save(boardDummy.toEntity());
+        postDummy = new PostDummy(member);
+        postRepository.save(postDummy.toEntity());
 
-        Board board = boardRepository.findAll().get(0);
+        Post post = postRepository.findAll().get(0);
 
-        reportDummy = new ReportDummy(board,member);
+        reportDummy = new ReportDummy(post,member);
         reportRepository.save(reportDummy.toEntity());
     }
 
     @AfterEach
     public void cleanup() {
         reportRepository.deleteAll();
-        boardRepository.deleteAll();
+        postRepository.deleteAll();
         memberRepository.deleteAll();
     }
 
     @Test
     public void 게시물_조회() {
-        Board board = boardRepository.findAll().get(0);
-        assertThat(board.getBoardTitle()).isEqualTo(boardDummy.getBoardTitle());
+        Post post = postRepository.findAll().get(0);
+        assertThat(post.getPostTitle()).isEqualTo(postDummy.getPostTitle());
     }
 
     @Test
     public void 게시물작성자_조회(){
-        Board board = boardRepository.findAll().get(0);
-        assertThat(board.getMember().getMemberNickname()).isEqualTo(memberDummy.getMemberNickname());
+        Post post = postRepository.findAll().get(0);
+        assertThat(post.getMember().getMemberNickname()).isEqualTo(memberDummy.getMemberNickname());
     }
 
     @Test
     public void 게시물_수정() {
         String updateContents = "내용변경";
-        Board board = boardRepository.findAll().get(0);
+        Post post = postRepository.findAll().get(0);
 
-        board.update(boardDummy.getBoardTitle(), updateContents, boardDummy.getBoardCategory());
-        boardRepository.save(board);
+        post.update(postDummy.getPostTitle(), updateContents, postDummy.getPostCategory());
+        postRepository.save(post);
 
-        assertThat(boardRepository.findAll().get(0).getBoardContents()).isEqualTo(updateContents);
+        assertThat(postRepository.findAll().get(0).getPostContents()).isEqualTo(updateContents);
     }
 
     @Test
     public void 게시물_신고() {
         int testBlindSize = 0;
 
-        Board board = boardRepository.findAll().get(0);
+        Post post = postRepository.findAll().get(0);
 
-        List<Report> reportList = reportRepository.findByBoard(board);
+        List<Report> reportList = reportRepository.findByPost(post);
 
         if (reportList.size() > testBlindSize) {
-            board.blind();
+            post.blind();
         }
 
-        assertThat(board.getBoardStatus()).isEqualTo(BoardStatus.N);
+        assertThat(post.getPostStatus()).isEqualTo(PostStatus.N);
     }
 
     @Test
     public void 게시물_삭제() {
-        Board board = boardRepository.findAll().get(0);
+        Post post = postRepository.findAll().get(0);
 
-        boardRepository.delete(board);
+        postRepository.delete(post);
 
-        assertThrows(DataIntegrityViolationException.class,()-> boardRepository.findAll().get(0));
+        assertThrows(DataIntegrityViolationException.class,()-> postRepository.findAll().get(0));
     }
 }

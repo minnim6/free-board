@@ -1,31 +1,23 @@
 package com.project.petboard.domain.comment;
 
 
-import com.project.petboard.domain.board.Board;
-import com.project.petboard.domain.board.BoardRepository;
+import com.project.petboard.domain.post.Post;
+import com.project.petboard.domain.post.PostRepository;
 import com.project.petboard.domain.member.Member;
 import com.project.petboard.domain.member.MemberRepository;
-import com.project.petboard.domain.member.MemberSingupCategory;
-import com.project.petboard.domain.member.MemberStatus;
-import com.project.petboard.dummy.BoardDummy;
+import com.project.petboard.dummy.PostDummy;
 import com.project.petboard.dummy.CommentDummy;
 import com.project.petboard.dummy.MemberDummy;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.annotation.Before;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.security.NoSuchAlgorithmException;
-import java.util.List;
-import java.util.NoSuchElementException;
 
 @Slf4j
 //@RunWith(SpringRunner.class)
@@ -39,11 +31,11 @@ public class CommentRepositoryTest {
     MemberRepository memberRepository;
 
     @Autowired
-    BoardRepository boardRepository;
+    PostRepository postRepository;
 
     MemberDummy memberDummy = new MemberDummy();
 
-    BoardDummy boardDummy;
+    PostDummy postDummy;
 
     CommentDummy commentDummy;
 
@@ -53,19 +45,19 @@ public class CommentRepositoryTest {
 
         Member member = memberRepository.findAll().get(0);
 
-        boardDummy = new BoardDummy(member);
-        boardRepository.save(boardDummy.toEntity());
+        postDummy = new PostDummy(member);
+        postRepository.save(postDummy.toEntity());
 
-        Board board = boardRepository.findAll().get(0);
+        Post post = postRepository.findAll().get(0);
 
-        commentDummy = new CommentDummy(board,member);
+        commentDummy = new CommentDummy(post,member);
         commentRepository.save(commentDummy.toEntity());
     }
 
     @AfterEach
     public void cleanup(){
         commentRepository.deleteAll();;
-        boardRepository.deleteAll();
+        postRepository.deleteAll();
         memberRepository.deleteAll();
     }
 

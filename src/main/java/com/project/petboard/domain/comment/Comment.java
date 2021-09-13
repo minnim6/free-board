@@ -1,9 +1,8 @@
 package com.project.petboard.domain.comment;
 
-import com.project.petboard.domain.board.Board;
+import com.project.petboard.domain.post.Post;
 import com.project.petboard.domain.member.Member;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -22,7 +21,7 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn
-    private Board board;
+    private Post post;
 
     @ManyToOne
     @JoinColumn
@@ -41,8 +40,8 @@ public class Comment {
     private Date commentAmendDate;
 
     @Builder
-    public Comment(Board board,Member member,String commentContents){
-        this.board = board;
+    public Comment(Post post, Member member, String commentContents){
+        this.post = post;
         this.member = member;
         this.commentContents = commentContents;
     }

@@ -1,9 +1,8 @@
-package com.project.petboard.domain.board;
+package com.project.petboard.domain.post;
 
 import com.project.petboard.domain.member.Member;
 import com.sun.istack.NotNull;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -14,11 +13,11 @@ import java.util.Date;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Board {
+public class Post {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long BoardNumber;
+    private Long postNumber;
 
     @NotNull
     @ManyToOne
@@ -28,38 +27,38 @@ public class Board {
     @Temporal(value = TemporalType.DATE) //년월일 date 타입 db에 매핑
     @Column(insertable = true, updatable = false)
     @CreationTimestamp
-    private Date BoardCreateDate;
+    private Date postCreateDate;
 
-    private String boardTitle;
+    private String postTitle;
 
-    private String boardContents;
+    private String postContents;
     
-    private String boardCategory;
+    private String postCategory;
 
     @Temporal(value = TemporalType.DATE) //년월일 date 타입 db에 매핑
     @Column(insertable = true, updatable = true)
     @CreationTimestamp
-    private Date boardAmendDate;
+    private Date postAmendDate;
 
     @Enumerated(EnumType.STRING)
-    private BoardStatus boardStatus;
+    private PostStatus postStatus;
 
     @Builder
-    public Board(Member member,String boardTitle,String boardCategory,String boardContents){
+    public Post(Member member, String postTitle, String postCategory, String postContents){
         this.member = member;
-        this.boardCategory = boardCategory;
-        this.boardTitle =  boardTitle;
-        this.boardContents = boardContents;
-        this.boardStatus = BoardStatus.Y;
+        this.postCategory = postCategory;
+        this.postTitle =  postTitle;
+        this.postContents = postContents;
+        this.postStatus = PostStatus.Y;
     }
     // 1. UpdateContents 2. UpdateBoardContents
-    public void update(String boardTitle,String boardContents,String boardCategory){
-        this.boardTitle = boardTitle;
-        this.boardContents = boardContents;
-        this.boardCategory = boardCategory;
+    public void update(String postTitle,String postContents,String postCategory){
+        this.postTitle = postTitle;
+        this.postContents = postContents;
+        this.postCategory = postCategory;
     }
 
     public void blind(){
-        this.boardStatus = BoardStatus.N;
+        this.postStatus = PostStatus.N;
     }
 }

@@ -1,8 +1,7 @@
-package com.project.petboard.domain.board;
+package com.project.petboard.domain.post;
 
 import com.project.petboard.domain.member.Member;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -21,7 +20,7 @@ public class Report {
 
     @ManyToOne
     @JoinColumn
-    private Board board;
+    private Post post;
 
     private String reportCategory;
 
@@ -37,8 +36,8 @@ public class Report {
     private Date reportCreateDate;
 
     @Builder
-    public Report(Board board,String reportCategory,Member member,String reportContents){
-        this.board = board;
+    public Report(Post post, String reportCategory, Member member, String reportContents){
+        this.post = post;
         this.reportCategory = reportCategory;
         this.member = member;
         this.reportContents = reportContents;
