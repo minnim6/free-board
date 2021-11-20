@@ -49,7 +49,7 @@ public class PostRepositoryTest {
 
         Post post = postRepository.findAll().get(0);
 
-        reportDummy = new ReportDummy(post,member);
+        reportDummy = new ReportDummy(post, member);
         reportRepository.save(reportDummy.toEntity());
     }
 
@@ -67,7 +67,7 @@ public class PostRepositoryTest {
     }
 
     @Test
-    public void 게시물작성자_조회(){
+    public void 게시물작성자_조회() {
         Post post = postRepository.findAll().get(0);
         assertThat(post.getMember().getMemberNickname()).isEqualTo(memberDummy.getMemberNickname());
     }
@@ -77,7 +77,7 @@ public class PostRepositoryTest {
         String updateContents = "내용변경";
         Post post = postRepository.findAll().get(0);
 
-        post.update(postDummy.getPostTitle(), updateContents, postDummy.getPostCategory());
+        post.updateTitle(postDummy.getPostTitle());
         postRepository.save(post);
 
         assertThat(postRepository.findAll().get(0).getPostContents()).isEqualTo(updateContents);
@@ -85,17 +85,7 @@ public class PostRepositoryTest {
 
     @Test
     public void 게시물_신고() {
-        int testBlindSize = 0;
 
-        Post post = postRepository.findAll().get(0);
-
-        List<Report> reportList = reportRepository.findByPost(post);
-
-        if (reportList.size() > testBlindSize) {
-            post.blind();
-        }
-
-        assertThat(post.getPostStatus()).isEqualTo(PostStatus.N);
     }
 
     @Test
@@ -104,6 +94,6 @@ public class PostRepositoryTest {
 
         postRepository.delete(post);
 
-        assertThrows(DataIntegrityViolationException.class,()-> postRepository.findAll().get(0));
+        assertThrows(DataIntegrityViolationException.class, () -> postRepository.findAll().get(0));
     }
 }

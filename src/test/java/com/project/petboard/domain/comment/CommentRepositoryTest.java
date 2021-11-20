@@ -64,6 +64,7 @@ public class CommentRepositoryTest {
     @Test
     public void 댓글_조회(){
         Comment comment = commentRepository.findAll().get(0);
+        log.info("-------------------------");
 
         assertThat(comment.getCommentContents()).isEqualTo(commentDummy.getCommentContents());
     }

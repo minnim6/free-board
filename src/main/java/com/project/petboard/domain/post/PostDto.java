@@ -1,9 +1,11 @@
 package com.project.petboard.domain.post;
 
 import com.project.petboard.domain.member.Member;
+import lombok.Getter;
 
 import java.util.Date;
 
+@Getter
 public class PostDto {
 
     private Long postNumber;
@@ -21,6 +23,8 @@ public class PostDto {
     private Date postAmendDate;
 
     private PostStatus postStatus;
+
+    private int postReportCount;
 
     public Post toEntity(){
         return Post.builder()

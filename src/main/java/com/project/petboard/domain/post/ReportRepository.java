@@ -1,9 +1,9 @@
 package com.project.petboard.domain.post;
 
+import com.project.petboard.domain.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
 public interface ReportRepository extends JpaRepository<Report,Long> {
-    List<Report> findByPost(Post post);
+    int countByPost(Post post);
+    boolean countByPostAndMember(Member member, Post post);
 }
