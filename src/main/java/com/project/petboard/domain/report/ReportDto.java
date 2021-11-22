@@ -1,10 +1,9 @@
-package com.project.petboard.domain.post;
+package com.project.petboard.domain.report;
 
 import com.project.petboard.domain.member.Member;
+import com.project.petboard.domain.post.Post;
 import lombok.Getter;
-import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.*;
 import java.util.Date;
 
 @Getter

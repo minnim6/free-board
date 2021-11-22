@@ -20,7 +20,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @Slf4j
 @DataJpaTest
-public class QuestionBoardTest {
+public class QuestionBoardRepositoryTest {
 
     @Autowired
     MemberRepository memberRepository;

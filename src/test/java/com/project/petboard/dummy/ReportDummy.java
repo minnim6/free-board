@@ -1,7 +1,7 @@
 package com.project.petboard.dummy;
 
 import com.project.petboard.domain.post.Post;
-import com.project.petboard.domain.post.Report;
+import com.project.petboard.domain.report.Report;
 import com.project.petboard.domain.member.Member;
 import lombok.Getter;
 

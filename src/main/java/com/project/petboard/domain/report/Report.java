@@ -1,6 +1,7 @@
-package com.project.petboard.domain.post;
+package com.project.petboard.domain.report;
 
 import com.project.petboard.domain.member.Member;
+import com.project.petboard.domain.post.Post;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

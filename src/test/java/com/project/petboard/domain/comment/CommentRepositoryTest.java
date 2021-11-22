@@ -20,7 +20,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Slf4j
-//@RunWith(SpringRunner.class)
 @DataJpaTest
 public class CommentRepositoryTest {
 

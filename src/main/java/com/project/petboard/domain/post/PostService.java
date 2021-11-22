@@ -1,24 +1,20 @@
 package com.project.petboard.domain.post;
 
 import com.project.petboard.domain.member.Member;
-import com.project.petboard.domain.member.MemberDto;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.project.petboard.domain.report.ReportDto;
+import com.project.petboard.domain.report.ReportRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
+@RequiredArgsConstructor
 @Service
 public class PostService {
 
-    @Autowired
-    PostRepository postRepository;
+    private final PostRepository postRepository;
 
-    @Autowired
-    ReportRepository reportRepository;
-
-    private int sanctionsStandard;
+    private final ReportRepository reportRepository;
 
     public Page<Post> requestPage(Pageable pageable) {
         return postRepository.findAll(pageable);
@@ -32,21 +28,7 @@ public class PostService {
         postRepository.deleteById(postNumber);
     }
 
-
     public void reportPost(ReportDto reportDto) {
-
-        Report report = reportDto.toEntity();
-        Member member = report.getMember();
-        Post post = report.getPost();
-
-        if (isDuplicateReportCheck(member,post)){
-            reportRepository.save(reportDto.toEntity());
-        }
-
-        if(fetchReportCount(post)>sanctionsStandard){
-            post.toggleStatusN();
-            postRepository.save(post);
-        }
 
     }
 
