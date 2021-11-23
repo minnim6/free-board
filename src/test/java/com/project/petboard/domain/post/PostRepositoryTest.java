@@ -47,8 +47,6 @@ public class PostRepositoryTest {
 
         Post post = postRepository.findAll().get(0);
 
-        reportDummy = new ReportDummy(post, member);
-        reportRepository.save(reportDummy.toEntity());
     }
 
     @AfterEach
@@ -79,16 +77,6 @@ public class PostRepositoryTest {
         postRepository.save(post);
 
         assertThat(postRepository.findAll().get(0).getPostContents()).isEqualTo(updateContents);
-    }
-
-    @Test
-    public void 게시물_신고() {
-        /*
-        만일 한번이상 회원이 신고한적이 있다면,
-        이미 신고처리 되었다고 알려주고,
-        신고한적이 없다면 , 신고횟수에 추가해주고 ,
-        블라인드 기준이된다면 블라인드 처리 .
-         */
     }
 
     @Test

@@ -32,12 +32,14 @@ public class PostService {
 
     }
 
-    public int fetchReportCount(Post post){
+  /*  public int fetchReportCount(Post post){
         return reportRepository.countByPost(post);
     }
 
     public Boolean isDuplicateReportCheck(Member member,Post post) {
         return  reportRepository.countByPostAndMember(member,post);
     }
+
+   */
 
 }

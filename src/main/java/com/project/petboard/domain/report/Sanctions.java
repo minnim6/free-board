@@ -1,5 +1,6 @@
 package com.project.petboard.domain.report;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,4 +18,11 @@ public class Sanctions{
     private int sanctionsValue;
 
     private String sanctionsContents;
+
+    @Builder
+    public Sanctions(String sanctionsKey,int sanctionsValue,String sanctionsContents){
+        this.sanctionsKey = sanctionsKey;
+        this.sanctionsValue = sanctionsValue;
+        this.sanctionsContents = sanctionsContents;
+    }
 }
