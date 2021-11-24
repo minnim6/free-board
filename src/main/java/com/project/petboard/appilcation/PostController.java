@@ -1,11 +1,12 @@
 package com.project.petboard.appilcation;
 
 import com.project.petboard.domain.post.*;
-import com.project.petboard.domain.report.ReportDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -30,12 +31,8 @@ public class PostController {
     }
 
     @GetMapping("{postNumber}")
-    public void requestPost(@RequestParam("postNumber")Long postNumber){
-       // return postService.requestPost(postNumber);
+    public Optional<Post> fetchPost(@RequestParam("postNumber")Long postNumber){
+        return postService.fetchPost(postNumber);
     }
 
-    @PostMapping("/report")
-    public void reportPost(@RequestBody ReportDto reportDto){
-        postService.reportPost(reportDto);
-    }
 }

@@ -1,12 +1,12 @@
 package com.project.petboard.domain.post;
 
-import com.project.petboard.domain.member.Member;
-import com.project.petboard.domain.report.ReportDto;
 import com.project.petboard.domain.report.ReportRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -28,18 +28,7 @@ public class PostService {
         postRepository.deleteById(postNumber);
     }
 
-    public void reportPost(ReportDto reportDto) {
-
+    public Optional<Post> fetchPost(Long postNumber) {
+        return postRepository.findById(postNumber);
     }
-
-  /*  public int fetchReportCount(Post post){
-        return reportRepository.countByPost(post);
-    }
-
-    public Boolean isDuplicateReportCheck(Member member,Post post) {
-        return  reportRepository.countByPostAndMember(member,post);
-    }
-
-   */
-
 }

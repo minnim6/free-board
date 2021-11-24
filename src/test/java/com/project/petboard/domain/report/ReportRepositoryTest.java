@@ -8,6 +8,7 @@ import com.project.petboard.dummy.MemberDummy;
 import com.project.petboard.dummy.PostDummy;
 import com.project.petboard.dummy.ReportDummy;
 import com.project.petboard.dummy.SanctionsDummy;
+import javafx.geometry.Pos;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,44 +62,23 @@ public class ReportRepositoryTest {
         sanctionsRepository.save(sanctionsDummy.toEntity());
     }
 
-    @Test
-    public void 게시물_신고() {
-        /*
-        만일 한번이상 회원이 신고한적이 있다면,
-        이미 신고처리 되었다고 알려주고,
-        신고한적이 없다면 , 신고횟수에 추가해주고 ,
-        블라인드 기준이된다면 블라인드 처리 .
-         */
-
-        if (!reportRepository.existsByMemberAndPost(member, post)) {
-            post.addReportCount();
-            postRepository.save(post);
-            post = postRepository.findAll().get(0);
-            int postReportCount = fetchPostReportCount(post.getPostNumber());
-            int sanctionsValue = fetchSanctionsValue("게시글가리기");
-            if(postReportCount>=sanctionsValue){
-
-            }
-        } else {
-
-        }
+    public void 게시물_신고횟수추가(){
 
     }
 
-    public void 
+    public void 신고_중복체크(){
 
-    //신고 처리 로직
-    public void saveReport(Post post, Member member){
-        reportDummy = new ReportDummy(post, member);
-        reportRepository.save(reportDummy.toEntity());
     }
 
-    public int fetchPostReportCount(Long postId){
-       return postRepository.findById(postId).get().getPostReportCount();
+    public void 신고_저장(){
+
     }
 
-    public int fetchSanctionsValue(String sanctionsKey){
-        Optional<Sanctions> sanctions = sanctionsRepository.findById(sanctionsKey);
-        return sanctions.get().getSanctionsValue();
+    public void 게시물_신고횟수가져오기(){
+
+    }
+
+    public void 신고키_값가져오기(){
+
     }
 }
