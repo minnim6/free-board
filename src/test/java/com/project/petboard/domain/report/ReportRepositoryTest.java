@@ -48,6 +48,8 @@ public class ReportRepositoryTest {
 
     Post post;
 
+    Report report;
+
     @BeforeEach
     public void setup() {
         memberRepository.save(memberDummy.toEntity());
@@ -60,25 +62,25 @@ public class ReportRepositoryTest {
         post = postRepository.findAll().get(0);
 
         sanctionsRepository.save(sanctionsDummy.toEntity());
+
+        reportDummy = new ReportDummy(post, member);
+        reportRepository.save(reportDummy.toEntity());
     }
 
-    public void 게시물_신고횟수추가(){
-
+    public void 게시물_신고횟수추가() {
+        post.addReportCount();
+        postRepository.save(post);
     }
 
-    public void 신고_중복체크(){
-
+    public void 신고_중복체크() {
+        reportRepository.existsByMemberAndPost(member, post);
     }
 
-    public void 신고_저장(){
-
+    public void 게시물_신고횟수가져오기() {
+        postRepository.findById(1L).get().getPostReportCount();
     }
 
-    public void 게시물_신고횟수가져오기(){
-
-    }
-
-    public void 신고키_값가져오기(){
+    public void 신고키_값가져오기() {
 
     }
 }

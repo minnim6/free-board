@@ -14,8 +14,8 @@ public class PostController {
 
     private final PostService postService;
 
-    @GetMapping
-    public Page<Post> requestPage(final Pageable pageable){
+    @GetMapping("/post")
+    public Page<Post> requestPage(Pageable pageable){
         return postService.requestPage(pageable);
     }
 
@@ -23,7 +23,6 @@ public class PostController {
     public void createPost(@RequestBody PostDto postDto){
         postService.createPost(postDto);
     }
-
 
     @DeleteMapping
     public void deletePost(@RequestParam("postNumber")Long postNumber){
