@@ -1,6 +1,6 @@
 package com.project.petboard.domain.recomment;
 
-import com.project.petboard.domain.board.Board;
+import com.project.petboard.domain.post.Post;
 import com.project.petboard.domain.comment.Comment;
 import com.project.petboard.domain.member.Member;
 import lombok.Builder;
@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.lang.ref.PhantomReference;
 import java.util.Date;
 
 @Getter
@@ -23,7 +22,7 @@ public class Recomment {
 
     @ManyToOne
     @JoinColumn
-    private Board board;
+    private Post post;
 
     @ManyToOne
     @JoinColumn
@@ -46,9 +45,9 @@ public class Recomment {
     private Date recommentAmendDate;
 
     @Builder
-    public Recomment(Member member,Board board,Comment comment,String recommentContents){
+    public Recomment(Member member, Post post, Comment comment, String recommentContents){
         this.member = member;
-        this.board = board;
+        this.post = post;
         this.comment = comment;
         this.recommentContents = recommentContents;
     }

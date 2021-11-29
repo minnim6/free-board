@@ -1,32 +1,28 @@
 package com.project.petboard.domain.recomment;
 
 
-import com.project.petboard.domain.board.Board;
-import com.project.petboard.domain.board.BoardRepository;
+import com.project.petboard.domain.post.Post;
+import com.project.petboard.domain.post.PostRepository;
 import com.project.petboard.domain.comment.Comment;
 import com.project.petboard.domain.comment.CommentRepository;
-import com.project.petboard.domain.comment.CommentRepositoryTest;
 import com.project.petboard.domain.member.Member;
 import com.project.petboard.domain.member.MemberRepository;
-import com.project.petboard.dummy.BoardDummy;
+import com.project.petboard.dummy.PostDummy;
 import com.project.petboard.dummy.CommentDummy;
 import com.project.petboard.dummy.MemberDummy;
 import com.project.petboard.dummy.RecommentDummy;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Slf4j
-@RunWith(SpringRunner.class)
 @DataJpaTest
 public class RecommentRepositoryTest {
 
@@ -37,44 +33,44 @@ public class RecommentRepositoryTest {
     CommentRepository commentRepository;
 
     @Autowired
-    BoardRepository boardRepository;
+    PostRepository postRepository;
 
     @Autowired
     MemberRepository memberRepository;
 
     MemberDummy memberDummy = new MemberDummy();
 
-    BoardDummy boardDummy;
+    PostDummy postDummy;
 
     CommentDummy commentDummy;
 
     RecommentDummy recommentDummy;
 
-    @Before
+    @BeforeEach
     public void setup(){
         memberRepository.save(memberDummy.toEntity());
 
         Member member = memberRepository.findAll().get(0);
 
-        boardDummy = new BoardDummy(member);
-        boardRepository.save(boardDummy.toEntity());
+        postDummy = new PostDummy(member);
+        postRepository.save(postDummy.toEntity());
 
-        Board board = boardRepository.findAll().get(0);
+        Post post = postRepository.findAll().get(0);
 
-        commentDummy = new CommentDummy(board,member);
+        commentDummy = new CommentDummy(post,member);
         commentRepository.save(commentDummy.toEntity());
 
         Comment comment = commentRepository.findAll().get(0);
 
-        recommentDummy = new RecommentDummy(member,board,comment);
+        recommentDummy = new RecommentDummy(member, post,comment);
         recommentRepository.save(recommentDummy.toEntity());
     }
 
-    @After
+    @AfterEach
     public void cleanup(){
         recommentRepository.deleteAll();
         commentRepository.deleteAll();;
-        boardRepository.deleteAll();
+        postRepository.deleteAll();
         memberRepository.deleteAll();
     }
 

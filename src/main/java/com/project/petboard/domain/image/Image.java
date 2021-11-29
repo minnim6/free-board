@@ -1,6 +1,6 @@
 package com.project.petboard.domain.image;
 
-import com.project.petboard.domain.board.Board;
+import com.project.petboard.domain.post.Post;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,7 +17,7 @@ public class Image {
 
     @ManyToOne
     @JoinColumn
-    private Board board;
+    private Post post;
 
     private String imageLocation;
 }

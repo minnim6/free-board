@@ -1,0 +1,34 @@
+package com.project.petboard.domain.post;
+
+import com.project.petboard.domain.report.ReportRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@RequiredArgsConstructor
+@Service
+public class PostService {
+
+    private final PostRepository postRepository;
+
+    private final ReportRepository reportRepository;
+
+    public Page<Post> requestPage(Pageable pageable) {
+        return postRepository.findAll(pageable);
+    }
+
+    public void createPost(PostDto postDto) {
+        postRepository.save(postDto.toEntity());
+    }
+
+    public void deletePost(Long postNumber) {
+        postRepository.deleteById(postNumber);
+    }
+
+    public Optional<Post> fetchPost(Long postNumber) {
+        return postRepository.findById(postNumber);
+    }
+}

@@ -2,10 +2,9 @@ package com.project.petboard.domain.member;
 
 import com.project.petboard.dummy.MemberDummy;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +16,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Slf4j
-@RunWith(SpringRunner.class)
 @DataJpaTest
 public class MemberRepositoryTest {
 
@@ -26,12 +24,12 @@ public class MemberRepositoryTest {
 
     MemberDummy memberDummy = new MemberDummy();
 
-    @After
+    @AfterEach
     public void cleanup() {
         memberRepository.deleteAll();
     }
 
-    @Before
+    @BeforeEach
     public void setup() { memberRepository.save(memberDummy.toEntity()); }
 
     @Test
