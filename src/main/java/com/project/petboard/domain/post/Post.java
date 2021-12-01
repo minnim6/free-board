@@ -57,20 +57,6 @@ public class Post {
         this.postStatus = PostStatus.Y;
         this.postReportCount = 0;
     }
-
-
-    public void updateTitle(String postTitle) {
-        this.postTitle = postTitle;
-    }
-
-    public void updateContents(String postContents){
-        this.postContents = postContents;
-    }
-
-    public void updateCategory(String postCategory){
-        this.postCategory = postCategory;
-    }
-
     public void addReportCount(){
         this.postReportCount = postReportCount+1;
     }
@@ -82,5 +68,4 @@ public class Post {
     public void toggleStatusY() {
         this.postStatus = PostStatus.Y;
     }
-
 }

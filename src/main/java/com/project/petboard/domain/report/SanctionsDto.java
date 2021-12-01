@@ -11,4 +11,12 @@ public class SanctionsDto {
 
     private String sanctionsContents;
 
+    public Sanctions toEntity(){
+        return Sanctions.builder()
+                .sanctionsKey(this.sanctionsKey)
+                .sanctionsValue(this.sanctionsValue)
+                .sanctionsContents(this.getSanctionsContents())
+                .build();
+    }
+
 }

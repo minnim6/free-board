@@ -72,7 +72,7 @@ public class ReportRepositoryTest {
     }
 
     public void 신고_중복체크() {
-        reportRepository.existsByMemberAndPost(member, post);
+
     }
 
 

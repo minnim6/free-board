@@ -75,7 +75,6 @@ public class PostRepositoryTest {
         String updateContents = "내용변경";
         Post post = postRepository.findAll().get(0);
 
-        post.updateContents(updateContents);
         postRepository.save(post);
 
         assertThat(postRepository.findAll().get(0).getPostContents()).isEqualTo(updateContents);
