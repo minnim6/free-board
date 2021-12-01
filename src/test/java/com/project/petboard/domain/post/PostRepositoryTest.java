@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -68,12 +69,13 @@ public class PostRepositoryTest {
         assertThat(post.getMember().getMemberNickname()).isEqualTo(memberDummy.getMemberNickname());
     }
 
+
     @Test
     public void 게시물_수정() {
         String updateContents = "내용변경";
         Post post = postRepository.findAll().get(0);
 
-        post.updateTitle(postDummy.getPostTitle());
+        post.updateContents(updateContents);
         postRepository.save(post);
 
         assertThat(postRepository.findAll().get(0).getPostContents()).isEqualTo(updateContents);

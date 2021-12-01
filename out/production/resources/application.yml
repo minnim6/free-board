@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    include:
+      - database
+---
+spring:
+  profiles:
+    active: local # 기본 환경 선택

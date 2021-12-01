@@ -8,7 +8,6 @@ import com.project.petboard.dummy.MemberDummy;
 import com.project.petboard.dummy.PostDummy;
 import com.project.petboard.dummy.ReportDummy;
 import com.project.petboard.dummy.SanctionsDummy;
-import javafx.geometry.Pos;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -76,9 +75,7 @@ public class ReportRepositoryTest {
         reportRepository.existsByMemberAndPost(member, post);
     }
 
-    public void 게시물_신고횟수가져오기() {
-        postRepository.findById(1L).get().getPostReportCount();
-    }
+
 
     public void 신고키_값가져오기() {
 

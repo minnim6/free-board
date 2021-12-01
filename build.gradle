@@ -42,6 +42,8 @@ dependencies {
     implementation('ch.qos.logback:logback-classic')
     implementation('mysql:mysql-connector-java')
 
+    testImplementation 'com.h2database:h2:1.4.200'
+
 }
 
 test {

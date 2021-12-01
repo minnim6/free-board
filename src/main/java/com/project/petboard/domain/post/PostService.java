@@ -6,8 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @RequiredArgsConstructor
 @Service
 public class PostService {
@@ -28,7 +26,8 @@ public class PostService {
         postRepository.deleteById(postNumber);
     }
 
-    public Optional<Post> fetchPost(Long postNumber) {
-        return postRepository.findById(postNumber);
+    public PostDto fetchPost(Long postNumber) {
+        return new PostDto(postRepository.findByPostNumber(postNumber));
     }
+
 }

@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
+
 
 @Getter
 @NoArgsConstructor
@@ -21,11 +23,11 @@ public class Post {
 
     @NotNull
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "member_number")
     private Member member;
 
     @Temporal(value = TemporalType.DATE) //년월일 date 타입 db에 매핑
-    @Column(insertable = true, updatable = false)
+    @Column(updatable = false)
     @CreationTimestamp
     private Date postCreateDate;
 
@@ -36,9 +38,10 @@ public class Post {
     private String postCategory;
 
     @Temporal(value = TemporalType.DATE) //년월일 date 타입 db에 매핑
-    @Column(insertable = true, updatable = true)
+    @Column(name = "post_amend_date",insertable = true, updatable = true)
     @CreationTimestamp
     private Date postAmendDate;
+
 
     @Enumerated(EnumType.STRING)
     private PostStatus postStatus;
