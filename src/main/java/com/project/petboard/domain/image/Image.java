@@ -1,13 +1,17 @@
 package com.project.petboard.domain.image;
 
-import com.project.petboard.domain.board.Board;
+import com.project.petboard.domain.post.Post;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * @author 미정
+ * @ 20211202
+ * @since 0.0.1
+ */
 @Getter
-@NoArgsConstructor
 @Entity
 public class Image {
 
@@ -17,7 +21,7 @@ public class Image {
 
     @ManyToOne
     @JoinColumn
-    private Board board;
+    private Post post;
 
     private String imageLocation;
 }

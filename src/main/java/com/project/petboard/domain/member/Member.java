@@ -40,10 +40,6 @@ public class Member {
         this.memberStatus = memberStatus;
     }
 
-    /**
-     * nickname 변경
-     * @param Nickname 변경할 닉네임.
-     */
     public void nicknameChange(String Nickname){
         this.memberNickname = Nickname;
     }
