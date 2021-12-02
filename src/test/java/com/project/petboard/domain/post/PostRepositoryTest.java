@@ -69,23 +69,5 @@ public class PostRepositoryTest {
         assertThat(post.getMember().getMemberNickname()).isEqualTo(memberDummy.getMemberNickname());
     }
 
-
-    @Test
-    public void 게시물_수정() {
-        String updateContents = "내용변경";
-        Post post = postRepository.findAll().get(0);
-
-        postRepository.save(post);
-
-        assertThat(postRepository.findAll().get(0).getPostContents()).isEqualTo(updateContents);
-    }
-
-    @Test
-    public void 게시물_삭제() {
-        Post post = postRepository.findAll().get(0);
-
-        postRepository.delete(post);
-
-        assertThrows(DataIntegrityViolationException.class, () -> postRepository.findAll().get(0));
-    }
+    
 }
