@@ -6,8 +6,12 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * @author 미정
+ * @ 20211202
+ * @since 0.0.1
+ */
 @Getter
-@NoArgsConstructor
 @Entity
 public class Image {
 

@@ -4,6 +4,7 @@ import com.project.petboard.domain.member.Member;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
 
@@ -14,7 +15,7 @@ public class PostDto {
 
     private Member member;
 
-    private Date postCreateDate;
+    private LocalDateTime postCreateDate;
 
     private String postTitle;
 

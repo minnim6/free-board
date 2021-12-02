@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -26,10 +27,10 @@ public class Post {
     @JoinColumn(name = "member_number")
     private Member member;
 
-    @Temporal(value = TemporalType.DATE) //년월일 date 타입 db에 매핑
+  //  @Temporal(value = TemporalType.DATE) //년월일 date 타입 db에 매핑
     @Column(updatable = false)
     @CreationTimestamp
-    private Date postCreateDate;
+    private LocalDateTime postCreateDate;
 
     private String postTitle;
 
@@ -38,7 +39,7 @@ public class Post {
     private String postCategory;
 
     @Temporal(value = TemporalType.DATE) //년월일 date 타입 db에 매핑
-    @Column(name = "post_amend_date",insertable = true, updatable = true)
+    @Column(insertable = true, updatable = true)
     @CreationTimestamp
     private Date postAmendDate;
 

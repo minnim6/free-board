@@ -18,9 +18,4 @@ import java.util.Optional;
 public class MemberController {
 
     private final MemberService memberService;
-
-    @GetMapping("/getMember")
-    public Optional<Member> fetchMember(@RequestParam("memberNumber") Long memberNumber){
-        return memberService.testMember(memberNumber);
-    }
 }

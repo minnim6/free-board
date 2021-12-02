@@ -9,8 +9,4 @@ import java.util.Optional;
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
-
-    public Optional<Member> testMember(Long memberNumber){
-      return memberRepository.findById(memberNumber);
-    }
 }
