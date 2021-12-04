@@ -24,6 +24,6 @@ public class MemberController {
 
     @GetMapping("/kakaologin")
     public void testLogin(@RequestParam("code") String code) {
-        System.out.println(memberService.getKakaoToken(code));
+        memberService.saveMember(code);
     }
 }

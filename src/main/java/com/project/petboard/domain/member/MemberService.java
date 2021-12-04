@@ -37,5 +37,15 @@ public class MemberService {
         ResponseEntity<Map> rs = restTemplate.postForEntity("https://kauth.kakao.com/oauth/token", entity, Map.class);
         return  rs.getBody().get("access_token").toString();
     }
+    public void saveMember(String code){
+        String authorization = getKakaoToken(code);
+       URI uri = URI.create("https://kapi.kakao.com/v2/user/me");
+       RestTemplate restTemplate = new RestTemplate();
+       MultiValueMap<String,Object> parameters = new LinkedMultiValueMap<String,Object>();
+       parameters.set("Authorization","Bearer "+authorization);
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(parameters, headers);
 
+
+    }
 }
