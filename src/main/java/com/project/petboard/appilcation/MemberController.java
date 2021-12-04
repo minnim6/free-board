@@ -6,11 +6,14 @@ import com.project.petboard.domain.member.MemberService;
 import com.project.petboard.domain.post.Post;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.Map;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -18,4 +21,9 @@ import java.util.Optional;
 public class MemberController {
 
     private final MemberService memberService;
+
+    @GetMapping("/kakaologin")
+    public void testLogin(@RequestParam("code") String code) {
+        System.out.println(memberService.getKakaoToken(code));
+    }
 }
