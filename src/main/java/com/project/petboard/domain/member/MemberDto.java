@@ -21,11 +21,25 @@ public class MemberDto {
 
     private final MemberSingupCategory memberSingupCategory;
 
+    private final MemberRole memberRole;
+
+    private final String memberEmail;
+
+    public Member toEntity(){
+        return Member.builder()
+                .memberNickname(memberNickname)
+                .memberEmail(memberEmail)
+                .memberSingupCategory(memberSingupCategory)
+                .build();
+    }
+
     public MemberDto(Member member){
         this.memberNumber = member.getMemberNumber();
         this.memberNickname = member.getMemberNickname();
         this.memberJoinDate = member.getMemberJoinDate();
         this.memberStatus = member.getMemberStatus();
         this.memberSingupCategory = member.getMemberSingupCategory();
+        this.memberRole = member.getMemberRole();
+        this.memberEmail = member.getMemberEmail();
     }
 }
