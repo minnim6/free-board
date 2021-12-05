@@ -1,0 +1,3 @@
+kakao:
+  client_id: "40c8e0dd35c6d1009d31116ba9218cec"
+  redirect_uri: "http://localhost:8080/kakaologin"

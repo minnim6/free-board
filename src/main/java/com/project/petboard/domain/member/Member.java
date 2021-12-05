@@ -22,6 +22,8 @@ public class Member {
 
     private String memberNickname;
 
+    private String memberEmail;
+
     @Temporal(value = TemporalType.DATE) //년월일 date 타입 db에 매핑
     @Column(insertable = true, updatable = false)
     @CreationTimestamp
@@ -33,11 +35,16 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private MemberSingupCategory memberSingupCategory;
 
+    @Enumerated(EnumType.STRING)
+    private MemberRole memberRole;
+
     @Builder
-    public Member(String memberNickname,MemberSingupCategory memberSingupCategory,MemberStatus memberStatus){
+    public Member(String memberNickname,MemberSingupCategory memberSingupCategory,String memberEmail){
         this.memberNickname = memberNickname;
         this.memberSingupCategory = memberSingupCategory;
-        this.memberStatus = memberStatus;
+        this.memberEmail = memberEmail;
+        this.memberStatus = MemberStatus.Y;
+        this.memberRole = MemberRole.MEMBER;
     }
 
     public void nicknameChange(String Nickname){
