@@ -16,11 +16,4 @@ public class MemberDummy {
     private final MemberSingupCategory memberSingupCategory = MemberSingupCategory.KAKAO;
     private final MemberStatus memberStatus = MemberStatus.Y;
 
-    public Member toEntity() {
-        return Member.builder()
-                .memberNickname(memberNickname)
-                .memberSingupCategory(memberSingupCategory)
-                .memberStatus(memberStatus)
-                .build();
-    }
 }
