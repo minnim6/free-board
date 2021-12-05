@@ -23,7 +23,13 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/kakaologin")
-    public void testLogin(@RequestParam("code") String code) {
-        memberService.saveMember(code);
+    public void loginMember(@RequestParam("code") String code) {
+        memberService.loginMember(code);
     }
+
+    @GetMapping("/deleteMember")
+    public void deleteMember(@RequestParam("memberNumber")Long memberNumber){
+        memberService.deleteMember(memberNumber);
+    }
+
 }

@@ -1,9 +1,10 @@
-package com.project.petboard.domain.member;
+package com.project.petboard.domain.member.kakao;
 
+import com.project.petboard.domain.member.Member;
+import com.project.petboard.domain.member.MemberSingupCategory;
 import lombok.Getter;
 import lombok.ToString;
 
-@ToString
 @Getter
 public class KakaoAccount {
 
