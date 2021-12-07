@@ -5,4 +5,5 @@
 /.gradle
 /gradle
 /build
-/src/main/resources/database.yml
+/src/main/resources/application-database.yml
+/src/mail/resources/application-kakao.yml

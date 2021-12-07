@@ -12,7 +12,7 @@
         <module name="pet-project.test" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="16">
+    <bytecodeTargetLevel target="11">
       <module name="project" target="" />
     </bytecodeTargetLevel>
   </component>
