@@ -1,8 +1,8 @@
-package com.project.petboard.infrastructure;
+package com.project.petboard.infrastructure.kakao;
 
-import com.project.petboard.domain.member.kakao.KakaoAccount;
-import com.project.petboard.domain.member.kakao.KakaoToken;
-import com.project.petboard.domain.member.kakao.RequestKakao;
+import com.project.petboard.infrastructure.kakao.KakaoAccount;
+import com.project.petboard.infrastructure.kakao.KakaoToken;
+import com.project.petboard.infrastructure.kakao.RequestKakao;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -42,7 +42,7 @@ public class KakaoUtil {
         return postRestTemplate(KAKAO_TOKEN_URI, entity, KakaoToken.class);
     }
 
-    public KakaoAccount getKakaoProfile(String code) {
+    public RequestKakao getKakaoProfile(String code) {
 
         KakaoToken kakaoToken = getKakaoToken(code);
 
@@ -55,7 +55,7 @@ public class KakaoUtil {
         RequestKakao requestKakao = postRestTemplate(KAKAO_USER_URI, entity, RequestKakao.class);
 
         //TODO:에러 처리 로직 추가
-        return requestKakao.getKakao_account();
+        return requestKakao;
 
     }
 

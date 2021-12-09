@@ -4,6 +4,7 @@ import com.project.petboard.domain.member.Member;
 import com.project.petboard.domain.member.MemberRepository;
 import com.project.petboard.domain.member.MemberService;
 import com.project.petboard.domain.post.Post;
+import com.project.petboard.infrastructure.jwt.JwtDto;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -23,8 +24,8 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/kakaologin")
-    public void loginMember(@RequestParam("code") String code) {
-        memberService.loginMember(code);
+    public JwtDto loginMember(@RequestParam("code") String code) {
+        return memberService.loginMember(code);
     }
 
     @GetMapping("/deleteMember")

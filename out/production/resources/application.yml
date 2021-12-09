@@ -3,6 +3,7 @@ spring:
     include:
       - database
       - kakao
+      - jwt
 ---
 spring:
   profiles:

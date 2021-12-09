@@ -1,4 +1,4 @@
-package com.project.petboard.domain.member.kakao;
+package com.project.petboard.infrastructure.kakao;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

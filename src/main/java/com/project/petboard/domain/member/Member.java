@@ -1,5 +1,6 @@
 package com.project.petboard.domain.member;
 
+import com.project.petboard.infrastructure.kakao.KakaoAccount;
 import jdk.jfr.Enabled;
 import lombok.Builder;
 import lombok.Generated;
@@ -24,6 +25,8 @@ public class Member {
 
     private String memberEmail;
 
+    private String memberSnsId;
+
     @Temporal(value = TemporalType.DATE) //년월일 date 타입 db에 매핑
     @Column(insertable = true, updatable = false)
     @CreationTimestamp
@@ -39,12 +42,20 @@ public class Member {
     private MemberRole memberRole;
 
     @Builder
-    public Member(String memberNickname,MemberSingupCategory memberSingupCategory,String memberEmail){
+    public Member(String memberNickname,MemberSingupCategory memberSingupCategory,String memberEmail
+    ,String memberSnsId){
         this.memberNickname = memberNickname;
         this.memberSingupCategory = memberSingupCategory;
         this.memberEmail = memberEmail;
         this.memberStatus = MemberStatus.Y;
         this.memberRole = MemberRole.MEMBER;
+        this.memberSnsId = memberSnsId;
+    }
+
+    public Member kakaoProfileUpdate(KakaoAccount kakaoAccount){
+        this.memberNickname = kakaoAccount.getProfile().getNickname();
+        this.memberEmail = kakaoAccount.getEmail();
+        return this;
     }
 
     public void nicknameChange(String Nickname){
