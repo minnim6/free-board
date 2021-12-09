@@ -22,14 +22,12 @@ import java.util.stream.Collectors;
 @Component
 public class JwtTokenUtil {
 
-    @Value("${jwt.secret-key}")
+    @Value("${jwt.secret_key}")
     private String secretKey;
 
-    @Value("${jwt.access-token-expire-time}")
-    private long accessTokenExpireTime;
+    private final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;
 
-    @Value("{$jwt.refresh-token-expire-time}")
-    private long refreshTokenExpireTime;
+    private final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;
 
     private final String AUTHORITIES_KEY = "auth";
 
@@ -39,25 +37,34 @@ public class JwtTokenUtil {
     }
 
     public JwtDto createToken(Long memberNumber){
-
         long nowDate = (new Date()).getTime();
-        Date tokenExpireDate = new Date(nowDate+accessTokenExpireTime);
+        Date tokenExpireDate = crateTokenExpireDate(nowDate,ACCESS_TOKEN_EXPIRE_TIME);
 
-        String accessToken = Jwts.builder()
+        return JwtDto.builder()
+                .accessToken(crateAccessToken(memberNumber,tokenExpireDate))
+                .refreshToken(createRefreshToken(nowDate))
+                .assessTokenExpireTime(tokenExpireDate.getTime())
+                .build();
+    }
+
+    public Date crateTokenExpireDate(long nowDate,long accessTime){
+        return new Date(nowDate+accessTime);
+    }
+
+    public String createRefreshToken(long nowDate){
+        return Jwts.builder()
+                .setExpiration(crateTokenExpireDate(nowDate,REFRESH_TOKEN_EXPIRE_TIME))
+                .signWith(SignatureAlgorithm.HS256,secretKey)
+                .compact();
+    }
+
+    public String crateAccessToken(Long memberNumber,Date tokenExpireDate){
+        return  Jwts.builder()
                 .setSubject(memberNumber.toString())
                 .claim("memberNumber",memberNumber.toString())
                 .setExpiration(tokenExpireDate)
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
-        String refreshToken = Jwts.builder()
-                .setExpiration(new Date(nowDate+refreshTokenExpireTime))
-                .signWith(SignatureAlgorithm.HS256,secretKey)
-                .compact();
-        return JwtDto.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .assessTokenExpireTime(tokenExpireDate.getTime())
-                .build();
     }
 
     public String resolveToken(HttpServletRequest request){
@@ -72,6 +79,7 @@ public class JwtTokenUtil {
            return false;
        }
     }
+
     public Claims paresClaims(String token){
         try{
             return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
@@ -79,6 +87,7 @@ public class JwtTokenUtil {
             throw new JwtException("만료되었거나 올바르지 않은 토큰입니다.",e);
         }
     }
+
     public Authentication getAuthentication(String token){
         Claims claims = paresClaims(token);
 
