@@ -3,6 +3,9 @@ package com.project.petboard.domain.member;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -42,4 +45,6 @@ public class MemberDto {
         this.memberRole = member.getMemberRole();
         this.memberEmail = member.getMemberEmail();
     }
+
+
 }
