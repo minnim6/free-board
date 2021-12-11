@@ -1,8 +1,11 @@
 package com.project.petboard.infrastructure.kakao;
 
 import com.project.petboard.domain.member.Member;
-import com.project.petboard.domain.member.MemberSingupCategory;
+import com.project.petboard.domain.member.MemberSignupCategory;
+import com.project.petboard.domain.member.Role;
 import lombok.Getter;
+
+import java.util.Set;
 
 @Getter
 public class RequestKakao {
@@ -13,7 +16,7 @@ public class RequestKakao {
         return Member.builder()
                 .memberNickname(kakao_account.getProfile().getNickname())
                 .memberEmail(kakao_account.getEmail())
-                .memberSingupCategory(MemberSingupCategory.KAKAO)
+                .memberSignupCategory(MemberSignupCategory.KAKAO)
                 .memberSnsId(String.valueOf(id))
                 .build();
     }

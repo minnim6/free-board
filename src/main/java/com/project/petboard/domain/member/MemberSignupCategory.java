@@ -1,5 +1,5 @@
 package com.project.petboard.domain.member;
 
-public enum MemberSingupCategory {
+public enum MemberSignupCategory {
     GOOGLE,KAKAO
 }

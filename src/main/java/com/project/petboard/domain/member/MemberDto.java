@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Getter
@@ -18,13 +20,15 @@ public class MemberDto {
 
     private final String memberNickname;
 
+    private String memberSnsId;
+
     private final Date memberJoinDate;
 
     private final MemberStatus memberStatus;
 
-    private final MemberSingupCategory memberSingupCategory;
+    private final MemberSignupCategory memberSignupCategory;
 
-    private final MemberRole memberRole;
+    private final List<Role> memberRole;
 
     private final String memberEmail;
 
@@ -32,7 +36,8 @@ public class MemberDto {
         return Member.builder()
                 .memberNickname(memberNickname)
                 .memberEmail(memberEmail)
-                .memberSingupCategory(memberSingupCategory)
+                .memberSignupCategory(memberSignupCategory)
+                .memberSnsId(memberSnsId)
                 .build();
     }
 
@@ -41,9 +46,10 @@ public class MemberDto {
         this.memberNickname = member.getMemberNickname();
         this.memberJoinDate = member.getMemberJoinDate();
         this.memberStatus = member.getMemberStatus();
-        this.memberSingupCategory = member.getMemberSingupCategory();
+        this.memberSignupCategory = member.getMemberSignupCategory();
         this.memberRole = member.getMemberRole();
         this.memberEmail = member.getMemberEmail();
+        this.memberSnsId = member.getMemberSnsId();
     }
 
 

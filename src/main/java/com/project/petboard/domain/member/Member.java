@@ -11,6 +11,8 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor
@@ -36,19 +38,18 @@ public class Member {
     private MemberStatus memberStatus;
 
     @Enumerated(EnumType.STRING)
-    private MemberSingupCategory memberSingupCategory;
+    private MemberSignupCategory memberSignupCategory;
 
-    @Enumerated(EnumType.STRING)
-    private MemberRole memberRole;
+    @OneToMany(mappedBy = "role")
+    private List<Role> memberRole;
 
     @Builder
-    public Member(String memberNickname,MemberSingupCategory memberSingupCategory,String memberEmail
+    public Member(String memberNickname,MemberSignupCategory memberSignupCategory,String memberEmail
     ,String memberSnsId){
         this.memberNickname = memberNickname;
-        this.memberSingupCategory = memberSingupCategory;
+        this.memberSignupCategory = memberSignupCategory;
         this.memberEmail = memberEmail;
         this.memberStatus = MemberStatus.Y;
-        this.memberRole = MemberRole.MEMBER;
         this.memberSnsId = memberSnsId;
     }
 
@@ -56,10 +57,6 @@ public class Member {
         this.memberNickname = kakaoAccount.getProfile().getNickname();
         this.memberEmail = kakaoAccount.getEmail();
         return this;
-    }
-
-    public void nicknameChange(String Nickname){
-        this.memberNickname = Nickname;
     }
 
 }

@@ -51,7 +51,7 @@ public class JwtTokenUtil {
         return new Date(nowDate+accessTime);
     }
 
-    public String createRefreshToken(long nowDate){
+    public String createRefreshToken(long nowDate) {
         return Jwts.builder()
                 .setExpiration(crateTokenExpireDate(nowDate,REFRESH_TOKEN_EXPIRE_TIME))
                 .signWith(SignatureAlgorithm.HS256,secretKey)
@@ -79,6 +79,13 @@ public class JwtTokenUtil {
            return false;
        }
     }
+    /*
+    리프레쉬 토큰 , 만료시간 , 액세스 토큰
+
+    2. 토큰이 만료되었을 경우에는 클라이언트에게 리프레쉬 토큰을 요청한다 .
+    3. 유효성 체크 , 디비에 비교후 문제가 없다면 액세스 토큰을 발급.
+    4. 리프레쉬토큰도 만료 되었다면 -> 로그인 다시해
+     */
 
     public Claims paresClaims(String token){
         try{
@@ -95,6 +102,7 @@ public class JwtTokenUtil {
             throw new RuntimeException();
         }
 
+        // 가져온 claims 로 권한을 반환한다
         Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                         .map(SimpleGrantedAuthority::new)

@@ -6,15 +6,23 @@ import com.project.petboard.infrastructure.kakao.KakaoAccount;
 import com.project.petboard.infrastructure.kakao.KakaoUtil;
 import com.project.petboard.infrastructure.kakao.RequestKakao;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
+@Slf4j
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class MemberService{
 
     private final MemberRepository memberRepository;
+
+    private final RoleRepository roleRepository;
 
     private final KakaoUtil kakaoUtil;
 
@@ -26,9 +34,10 @@ public class MemberService{
 
     public JwtDto loginMember(String code){
         RequestKakao requestKakao  = kakaoUtil.getKakaoProfile(code);
-        Member member = memberRepository.findByMemberSnsId(String.valueOf(requestKakao.getId()))
-                .map(entity -> entity.kakaoProfileUpdate(requestKakao.getKakao_account()))
-                .orElse(saveMember(requestKakao));
+        log.info(String.valueOf(requestKakao.getId()));
+       Member member = memberRepository.findByMemberSnsId(String.valueOf(requestKakao.getId()))
+               .map(entity -> entity.kakaoProfileUpdate(requestKakao.getKakao_account()))
+               .orElseGet(()->saveMember(requestKakao));
         return createToken(member);
     }
 
@@ -40,8 +49,15 @@ public class MemberService{
         return memberRepository.existsByMemberEmail(email);
     }
 
+    public void saveRole(Member member){
+        roleRepository.save(new Role(member,"MEMBER"));
+    }
+
     public Member saveMember(RequestKakao requestKakao){
-        return memberRepository.save(requestKakao.toEntity());
+        memberRepository.save(requestKakao.toEntity());
+        Member member = memberRepository.findByMemberSnsId(String.valueOf(requestKakao.getId())).get();
+        saveRole(member);
+        return member;
     }
 
 }
