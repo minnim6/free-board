@@ -1,7 +1,9 @@
 package com.project.petboard.infrastructure.jwt;
 
-import com.project.petboard.infrastructure.jwt.JwtDto;
+import com.project.petboard.domain.member.MemberRepository;
+import com.project.petboard.domain.member.Role;
 import io.jsonwebtoken.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,12 +15,10 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @Component
 public class JwtTokenUtil {
 
@@ -30,6 +30,8 @@ public class JwtTokenUtil {
     private final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;
 
     private final String AUTHORITIES_KEY = "auth";
+
+    private final MemberRepository memberRepository;
 
     @PostConstruct
     protected void settingsToken(){
@@ -102,7 +104,15 @@ public class JwtTokenUtil {
             throw new RuntimeException();
         }
 
-        // 가져온 claims 로 권한을 반환한다
+        // 가져온 claims 로 권한을 반환한다 -> 가져온 회원 id로 권한을 가져오기
+        /*
+        Long memberNumber =  claims.get("memberNumber")
+        public Collection<extends GrantedAuthority> getAuthorities(Long memberNumber){
+        }
+         */
+        /*
+        Collection <GrantedAuthority 상속받는 애들 ~ >
+         */
         Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                         .map(SimpleGrantedAuthority::new)
@@ -112,7 +122,19 @@ public class JwtTokenUtil {
         return new UsernamePasswordAuthenticationToken(userDetails,"",authorities);
     }
 
+    public Collection<? extends GrantedAuthority> getAuthorities(Long memberNumber){
+        List<Role> roles = memberRepository.findByMemberNumber(memberNumber).getMemberRole();
+        //      for(int i=0;i< roles.size();i++){
+//           authorities.add(new SimpleGrantedAuthority(roles.get(0).getRole()));
+//       }
+      return memberRepository.findByMemberNumber(memberNumber)
+              .getMemberRole()
+              .stream().map(role -> new SimpleGrantedAuthority(role.getRole()))
+              .collect(Collectors.toList());
+    }
+
     public boolean isCheckAuthorities(Claims claims){
         return !(claims.get(AUTHORITIES_KEY) == null);
     }
+    
 }

@@ -26,8 +26,6 @@ public class MemberService{
 
     private final JwtTokenUtil jwtTokenUtil;
 
-    private final EntityManager entityManager;
-
     public void deleteMember(Long memberNumber){
         memberRepository.deleteById(memberNumber);
     }
@@ -38,17 +36,11 @@ public class MemberService{
        Member member = memberRepository.findByMemberSnsId(String.valueOf(requestKakao.getId()))
                .map(entity -> entity.kakaoProfileUpdate(requestKakao.getKakao_account()))
                .orElseGet(()->saveMember(requestKakao));
-        List<Role> list = member.getMemberRole();
-        log.info(String.valueOf(list.size()));
         return createToken(member);
     }
 
     public JwtDto createToken(Member member){
        return jwtTokenUtil.createToken(member.getMemberNumber());
-    }
-
-    public boolean isCheckOverlapMember(String email){
-        return memberRepository.existsByMemberEmail(email);
     }
 
     public void saveRole(Member member){
