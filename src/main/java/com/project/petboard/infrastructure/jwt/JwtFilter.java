@@ -1,6 +1,7 @@
 package com.project.petboard.infrastructure.jwt;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -21,11 +22,14 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        System.out.println("------------------------------------------1");
         String token = jwtTokenUtil.resolveToken(request);
         if(!token.isEmpty()&& jwtTokenUtil.isValidateToken(token)){
+            System.out.println("------------------------------------------2");
             Authentication authentication = jwtTokenUtil.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
+        System.out.println("------------------------------------------3");
         filterChain.doFilter(request,response);
     }
 

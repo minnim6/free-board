@@ -59,10 +59,6 @@ public class KakaoUtil {
 
     }
 
-    public void logoutKakao(){
-
-    }
-
     public <T> T postRestTemplate(URI uri, Object request, Class<T> tClass) {
         RestTemplate restTemplate = new RestTemplate();
         return restTemplate.postForObject(uri, request, tClass);

@@ -11,7 +11,10 @@ import java.util.Date;
 @Entity
 public class Token {
 
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
+    private Long tokenNumber;
+
     private String refreshToken;
 
     private String accessToken;

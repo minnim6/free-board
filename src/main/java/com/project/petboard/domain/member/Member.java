@@ -41,7 +41,7 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private MemberSignupCategory memberSignupCategory;
 
-    @OneToMany(mappedBy = "member" )
+    @OneToMany(mappedBy = "member",fetch = FetchType.EAGER)
     private List<Role> memberRole = new ArrayList<>();
 
     @Builder

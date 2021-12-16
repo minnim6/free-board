@@ -1,0 +1,2 @@
+GET http://localhost:8080/post/getPage?page=0
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0MyIsIm1lbWJlck51bWJlciI6IjQzIiwiZXhwIjoxNjM5NjQ3MjIwfQ.vhMtaPTGrysiFaDugZv6MZeQEioF3JIY2ixL0brDez1cTJLbqTSHYJugxiv4dPs4kD-sraTj2jao1tEgoeC1-w

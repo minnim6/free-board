@@ -6,6 +6,7 @@ import com.project.petboard.infrastructure.kakao.KakaoUtil;
 import com.project.petboard.infrastructure.kakao.RequestKakao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +31,7 @@ public class MemberService{
         memberRepository.deleteById(memberNumber);
     }
 
-    public JwtDto loginMember(String code){
+    public ResponseEntity<JwtDto> loginMember(String code){
         RequestKakao requestKakao  = kakaoUtil.getKakaoProfile(code);
         log.info(String.valueOf(requestKakao.getId()));
        Member member = memberRepository.findByMemberSnsId(String.valueOf(requestKakao.getId()))
@@ -39,8 +40,8 @@ public class MemberService{
         return createToken(member);
     }
 
-    public JwtDto createToken(Member member){
-       return jwtTokenUtil.createToken(member.getMemberNumber());
+    public ResponseEntity<JwtDto> createToken(Member member){
+       return jwtTokenUtil.responseHeaderToken(member.getMemberNumber());
     }
 
     public void saveRole(Member member){

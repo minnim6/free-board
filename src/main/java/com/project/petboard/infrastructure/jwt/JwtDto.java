@@ -7,6 +7,7 @@ import java.util.Date;
 
 @Getter
 public class JwtDto {
+
     private final String accessToken;
     private final String refreshToken;
     private final long accessTokenExpireTime;
