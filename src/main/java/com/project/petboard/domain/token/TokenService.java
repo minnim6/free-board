@@ -26,24 +26,38 @@ public class TokenService {
 
     private final TokenRepository tokenRepository;
 
-    public ResponseEntity<ResponseTokenDto> RequestToken(HttpServletRequest servletRequest){
+    public ResponseTokenDto requestToken(HttpServletRequest servletRequest){
+
         String accessToken = servletRequest.getHeader("accessToken");
         String refreshToken = servletRequest.getHeader("refreshToken");
 
-        RequestToken requestToken = new RequestToken(tokenRepository.findByRefreshToken(refreshToken));
-        if(requestToken.getAccessToken().equals(accessToken)){
+        RequestToken requestToken = getRequestToken(refreshToken);
+        if(requestToken.getAccessToken().equals(accessToken)&&isValidateDate(requestToken.getRefreshTokenExpireTime())){
            if(new Date().before(requestToken.getRefreshTokenExpireTime())){
-               Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(accessToken).getBody();
+               Claims claims = getClaims(accessToken);
                Long memberNumber =  Long.valueOf(String.valueOf(claims.get("memberNumber")));
-               Date tokenExpireDate = new Date(new Date().getTime()+ACCESS_TOKEN_EXPIRE_TIME);
-               String responseAccessToken =  jwtTokenUtil.crateAccessToken(memberNumber,tokenExpireDate);
-               return ResponseEntity.ok(new ResponseTokenDto(responseAccessToken,tokenExpireDate));
+               Date tokenExpireDate = createTokenExpireDate();
+               String responseAccessToken =  jwtTokenUtil.crateAccessToken(memberNumber,createTokenExpireDate());
+               return new ResponseTokenDto(responseAccessToken,tokenExpireDate);
            }
         }
         throw new RuntimeException();
     }
-    public boolean isCheckDate(){
 
+    public Date createTokenExpireDate(){
+        return new Date(new Date().getTime()+ACCESS_TOKEN_EXPIRE_TIME);
+    }
+
+    public Claims getClaims(String accessToken){
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(accessToken).getBody();
+    }
+
+    public RequestToken getRequestToken(String refreshToken){
+        return new RequestToken(tokenRepository.findByRefreshToken(refreshToken));
+    }
+
+    public boolean isValidateDate(Date refreshTokenExpireTime){
+        return new Date().before(refreshTokenExpireTime);
     }
 
 }
