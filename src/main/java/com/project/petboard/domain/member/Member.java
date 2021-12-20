@@ -10,6 +10,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -40,8 +41,8 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private MemberSignupCategory memberSignupCategory;
 
-    @OneToMany(mappedBy = "role")
-    private List<Role> memberRole;
+    @OneToMany(mappedBy = "member",fetch = FetchType.EAGER)
+    private List<Role> memberRole = new ArrayList<>();
 
     @Builder
     public Member(String memberNickname,MemberSignupCategory memberSignupCategory,String memberEmail

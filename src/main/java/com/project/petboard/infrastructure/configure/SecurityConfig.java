@@ -13,12 +13,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
     private final JwtTokenUtil jwtTokenUtil;
 
     @Override
     public void configure(WebSecurity web) throws Exception
     {
-        web.ignoring().antMatchers("/**");
+        web.ignoring().antMatchers("/css/**", "/script/**", "/","/member/**");
     }
 
     @Override
@@ -28,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/**").permitAll()
+                .antMatchers("/member/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtSecurityConfig(jwtTokenUtil));
