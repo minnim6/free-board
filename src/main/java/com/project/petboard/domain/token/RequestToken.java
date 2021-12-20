@@ -21,7 +21,6 @@ public class RequestToken {
 
     public Token toEntity(){
         return Token.builder()
-                .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .refreshTokenExpireTime(refreshTokenExpireTime)
                 .build();

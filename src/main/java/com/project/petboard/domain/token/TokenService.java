@@ -33,8 +33,7 @@ public class TokenService {
         String accessToken = servletRequest.getHeader("accessToken");
         String refreshToken = servletRequest.getHeader("refreshToken");
 
-        RequestToken requestToken = getRequestToken(refreshToken);
-        if(requestToken.getAccessToken().equals(accessToken)&&isValidateDate(requestToken.getRefreshTokenExpireTime())){
+       /* if(requestToken.getAccessToken().equals(accessToken)&&isValidateDate(requestToken.getRefreshTokenExpireTime())){
            if(new Date().before(requestToken.getRefreshTokenExpireTime())){
                Claims claims = getClaims(accessToken);
                Long memberNumber =  Long.valueOf(String.valueOf(claims.get("memberNumber")));
@@ -43,6 +42,8 @@ public class TokenService {
                return new ResponseTokenDto(responseAccessToken,tokenExpireDate);
            }
         }
+        
+        */
         throw new RuntimeException();
     }
 
@@ -54,9 +55,7 @@ public class TokenService {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(accessToken).getBody();
     }
 
-    public RequestToken getRequestToken(String refreshToken){
-        return new RequestToken(tokenRepository.findByRefreshToken(refreshToken));
-    }
+
 
     public boolean isValidateDate(Date refreshTokenExpireTime){
         return new Date().before(refreshTokenExpireTime);

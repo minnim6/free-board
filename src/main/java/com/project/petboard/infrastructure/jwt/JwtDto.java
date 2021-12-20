@@ -8,13 +8,11 @@ import java.util.Date;
 @Getter
 public class JwtDto {
 
-    private final String accessToken;
     private final String refreshToken;
     private final long accessTokenExpireTime;
 
     @Builder
-    public JwtDto(String accessToken,String refreshToken,long assessTokenExpireTime){
-        this.accessToken = accessToken;
+    public JwtDto(String refreshToken,long assessTokenExpireTime){
         this.refreshToken = refreshToken;
         this.accessTokenExpireTime = assessTokenExpireTime;
     }
