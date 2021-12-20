@@ -17,7 +17,7 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 @Service
-public class MemberService{
+public class MemberService {
 
     private final MemberRepository memberRepository;
 
@@ -27,28 +27,27 @@ public class MemberService{
 
     private final JwtTokenUtil jwtTokenUtil;
 
-    public void deleteMember(Long memberNumber){
+    public void deleteMember(Long memberNumber) {
         memberRepository.deleteById(memberNumber);
     }
 
-    public ResponseEntity<JwtDto> loginMember(String code){
-        RequestKakao requestKakao  = kakaoUtil.getKakaoProfile(code);
-        log.info(String.valueOf(requestKakao.getId()));
-       Member member = memberRepository.findByMemberSnsId(String.valueOf(requestKakao.getId()))
-               .map(entity -> entity.kakaoProfileUpdate(requestKakao.getKakao_account()))
-               .orElseGet(()->saveMember(requestKakao));
+    public ResponseEntity<JwtDto> loginMember(String code) {
+        RequestKakao requestKakao = kakaoUtil.getKakaoProfile(code);
+        Member member = memberRepository.findByMemberSnsId(String.valueOf(requestKakao.getId()))
+                .map(entity -> entity.kakaoProfileUpdate(requestKakao.getKakao_account()))
+                .orElseGet(() -> saveMember(requestKakao));
         return createToken(member);
     }
 
-    public ResponseEntity<JwtDto> createToken(Member member){
-       return jwtTokenUtil.responseHeaderToken(member.getMemberNumber());
+    public ResponseEntity<JwtDto> createToken(Member member) {
+        return jwtTokenUtil.responseHeaderToken(member.getMemberNumber());
     }
 
-    public void saveRole(Member member){
-        roleRepository.save(new Role(member,"MEMBER"));
+    public void saveRole(Member member) {
+        roleRepository.save(new Role(member, "MEMBER"));
     }
 
-    public Member saveMember(RequestKakao requestKakao){
+    public Member saveMember(RequestKakao requestKakao) {
         memberRepository.save(requestKakao.toEntity());
         Member member = memberRepository.findByMemberSnsId(String.valueOf(requestKakao.getId())).get();
         saveRole(member);

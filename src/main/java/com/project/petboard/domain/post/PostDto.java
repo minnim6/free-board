@@ -40,6 +40,7 @@ public class PostDto {
         this.postStatus = post.getPostStatus();
         this.postReportCount = post.getPostReportCount();
     }
+
     public Post toEntity(){
         return Post.builder()
                 .member(member)

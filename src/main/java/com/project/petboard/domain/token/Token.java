@@ -1,5 +1,6 @@
 package com.project.petboard.domain.token;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,14 +12,19 @@ import java.util.Date;
 @Entity
 public class Token {
 
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long tokenNumber;
 
     private String refreshToken;
 
-    private String accessToken;
-
     @Temporal(TemporalType.DATE)
     private Date  refreshTokenExpireTime;
+
+    @Builder
+    public Token(String refreshToken,Date refreshTokenExpireTime){
+        this.refreshToken = refreshToken;
+        this.refreshTokenExpireTime = refreshTokenExpireTime;
+    }
+
 }

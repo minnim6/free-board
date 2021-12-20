@@ -2,6 +2,10 @@ package com.project.petboard.infrastructure.jwt;
 
 import com.project.petboard.domain.member.MemberRepository;
 import com.project.petboard.domain.member.Role;
+import com.project.petboard.domain.token.RequestToken;
+import com.project.petboard.domain.token.ResponseTokenDto;
+import com.project.petboard.domain.token.Token;
+import com.project.petboard.domain.token.TokenRepository;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,6 +40,8 @@ public class JwtTokenUtil {
 
     private final MemberRepository memberRepository;
 
+    private final TokenRepository tokenRepository;
+
     @PostConstruct
     protected void settingsToken() {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
@@ -44,10 +50,12 @@ public class JwtTokenUtil {
     public JwtDto createToken(Long memberNumber) {
         long nowDate = (new Date()).getTime();
         Date tokenExpireDate = crateTokenExpireDate(nowDate, ACCESS_TOKEN_EXPIRE_TIME);
-
+        String accessToken = crateAccessToken(memberNumber, tokenExpireDate);
+        Date refreshTokenExpireDate = crateTokenExpireDate(nowDate, REFRESH_TOKEN_EXPIRE_TIME);
+        String refreshToken = createRefreshToken(new Date(refreshTokenExpireDate.getTime()));
         return JwtDto.builder()
-                .accessToken(crateAccessToken(memberNumber, tokenExpireDate))
-                .refreshToken(createRefreshToken(nowDate))
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .assessTokenExpireTime(tokenExpireDate.getTime())
                 .build();
     }
@@ -60,9 +68,9 @@ public class JwtTokenUtil {
         return new Date(nowDate + accessTime);
     }
 
-    public String createRefreshToken(long nowDate) {
+    public String createRefreshToken(Date nowDate) {
         return Jwts.builder()
-                .setExpiration(crateTokenExpireDate(nowDate, REFRESH_TOKEN_EXPIRE_TIME))
+                .setExpiration(nowDate)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
