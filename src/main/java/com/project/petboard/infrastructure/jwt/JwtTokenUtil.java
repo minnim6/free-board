@@ -2,14 +2,10 @@ package com.project.petboard.infrastructure.jwt;
 
 import com.project.petboard.domain.member.MemberRepository;
 import com.project.petboard.domain.member.Role;
-import com.project.petboard.domain.token.RequestToken;
-import com.project.petboard.domain.token.ResponseTokenDto;
-import com.project.petboard.domain.token.Token;
 import com.project.petboard.domain.token.TokenRepository;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,7 +17,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -52,7 +47,7 @@ public class JwtTokenUtil {
         Date tokenExpireDate = crateTokenExpireDate(nowDate, ACCESS_TOKEN_EXPIRE_TIME);
         String accessToken = crateAccessToken(memberNumber, tokenExpireDate);
         Date refreshTokenExpireDate = crateTokenExpireDate(nowDate, REFRESH_TOKEN_EXPIRE_TIME);
-        String refreshToken = createRefreshToken(new Date(refreshTokenExpireDate.getTime()));
+        String refreshToken = createRefreshToken(refreshTokenExpireDate);
         return JwtDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
