@@ -2,10 +2,12 @@ package com.project.petboard.infrastructure.jwt;
 
 import com.project.petboard.domain.member.MemberRepository;
 import com.project.petboard.domain.member.Role;
+import com.project.petboard.domain.token.Token;
 import com.project.petboard.domain.token.TokenRepository;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -42,20 +44,25 @@ public class JwtTokenUtil {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public JwtDto createToken(Long memberNumber) {
+    public ResponseJwt createToken(Long memberNumber) {
         long nowDate = (new Date()).getTime();
         Date tokenExpireDate = crateTokenExpireDate(nowDate, ACCESS_TOKEN_EXPIRE_TIME);
         String accessToken = crateAccessToken(memberNumber, tokenExpireDate);
         Date refreshTokenExpireDate = crateTokenExpireDate(nowDate, REFRESH_TOKEN_EXPIRE_TIME);
         String refreshToken = createRefreshToken(refreshTokenExpireDate);
-        return JwtDto.builder()
+        saveRefreshToken(refreshToken,refreshTokenExpireDate);
+        return ResponseJwt.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .assessTokenExpireTime(tokenExpireDate.getTime())
                 .build();
     }
 
-    public ResponseEntity<JwtDto> responseHeaderToken(Long memberNumber){
+    public void saveRefreshToken(String refreshToken,Date refreshTokenExpireDate){
+        tokenRepository.save(new Token(refreshToken,refreshTokenExpireDate));
+    }
+
+    public ResponseEntity<ResponseJwt> responseHeaderToken(Long memberNumber){
         return ResponseEntity.ok(createToken(memberNumber));
     }
 
@@ -80,7 +87,6 @@ public class JwtTokenUtil {
     }
 
     public String resolveToken(HttpServletRequest request) {
-        System.out.println(request.getHeader("Authorization"));
         return request.getHeader("Authorization");
     }
 

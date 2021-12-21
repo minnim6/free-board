@@ -16,7 +16,7 @@ public class QuestionBoardController {
 
     private final QuestionBoardService questionBoardService;
 
-    @GetMapping(value = "/fetchQuestionBoard")
+    @GetMapping(value = "/getQuestionBoard")
     public QuestionBoardDto fetchQuestionBoard(@RequestParam("questionNumber")Long questionNumber){
         return questionBoardService.fetchQuestionBoard(questionNumber);
     }

@@ -1,6 +1,6 @@
 package com.project.petboard.domain.member;
 
-import com.project.petboard.infrastructure.jwt.JwtDto;
+import com.project.petboard.infrastructure.jwt.ResponseJwt;
 import com.project.petboard.infrastructure.jwt.JwtTokenUtil;
 import com.project.petboard.infrastructure.kakao.KakaoUtil;
 import com.project.petboard.infrastructure.kakao.RequestKakao;
@@ -9,9 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import java.util.List;
 
 @Slf4j
 @Transactional
@@ -31,7 +28,7 @@ public class MemberService {
         memberRepository.deleteById(memberNumber);
     }
 
-    public ResponseEntity<JwtDto> loginMember(String code) {
+    public ResponseEntity<ResponseJwt> loginMember(String code) {
         RequestKakao requestKakao = kakaoUtil.getKakaoProfile(code);
         Member member = memberRepository.findByMemberSnsId(String.valueOf(requestKakao.getId()))
                 .map(entity -> entity.kakaoProfileUpdate(requestKakao.getKakao_account()))
@@ -39,7 +36,7 @@ public class MemberService {
         return createToken(member);
     }
 
-    public ResponseEntity<JwtDto> createToken(Member member) {
+    public ResponseEntity<ResponseJwt> createToken(Member member) {
         return jwtTokenUtil.responseHeaderToken(member.getMemberNumber());
     }
 

@@ -1,20 +1,24 @@
 package com.project.petboard.infrastructure.configure;
 
+import com.project.petboard.infrastructure.jwt.JwtFilter;
 import com.project.petboard.infrastructure.jwt.JwtSecurityConfig;
 import com.project.petboard.infrastructure.jwt.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenUtil jwtTokenUtil;
+
+    String[] whiteList = {"/members"};
 
     @Override
     public void configure(WebSecurity web) throws Exception
@@ -29,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/member/**").permitAll()
+                .antMatchers("/member/**", "/").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtSecurityConfig(jwtTokenUtil));

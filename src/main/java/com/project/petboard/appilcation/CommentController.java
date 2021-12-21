@@ -19,6 +19,7 @@ public class CommentController {
     public void createComment(@RequestBody CommentDto commentDto) {
         commentService.createComment(commentDto);
     }
+
     @DeleteMapping(value = "deleteComment")
     public void deleteComment(@RequestParam("commentNumber")Long commentNumber) {
         commentService.deleteComment(commentNumber);
