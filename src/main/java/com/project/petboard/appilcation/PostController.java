@@ -20,7 +20,6 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping("/getPage")
-    @PreAuthorize("hasRole('MEMBER')")
     public Page<Post> requestPage(Pageable pageable) {
         return postService.requestPage(pageable);
     }

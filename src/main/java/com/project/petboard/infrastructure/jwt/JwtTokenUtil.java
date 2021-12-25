@@ -1,14 +1,11 @@
 package com.project.petboard.infrastructure.jwt;
 
+import com.project.petboard.domain.member.Member;
 import com.project.petboard.domain.member.MemberRepository;
 import com.project.petboard.domain.member.Role;
-import com.project.petboard.domain.token.Token;
-import com.project.petboard.domain.token.TokenRepository;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -37,20 +34,21 @@ public class JwtTokenUtil {
 
     private final MemberRepository memberRepository;
 
-    private final TokenRepository tokenRepository;
-
     @PostConstruct
     protected void settingsToken() {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public ResponseJwt createToken(Long memberNumber) {
+    public ResponseJwt createToken(Member member) {
+
         long nowDate = (new Date()).getTime();
         Date tokenExpireDate = crateTokenExpireDate(nowDate, ACCESS_TOKEN_EXPIRE_TIME);
-        String accessToken = crateAccessToken(memberNumber, tokenExpireDate);
+        String accessToken = crateAccessToken(member.getMemberNumber(), tokenExpireDate);
         Date refreshTokenExpireDate = crateTokenExpireDate(nowDate, REFRESH_TOKEN_EXPIRE_TIME);
         String refreshToken = createRefreshToken(refreshTokenExpireDate);
-        saveRefreshToken(refreshToken,refreshTokenExpireDate);
+        member.setMemberRefreshToke(refreshToken);
+        member.setMemberRefreshTokenExpireTime(refreshTokenExpireDate);
+
         return ResponseJwt.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
@@ -58,12 +56,8 @@ public class JwtTokenUtil {
                 .build();
     }
 
-    public void saveRefreshToken(String refreshToken,Date refreshTokenExpireDate){
-        tokenRepository.save(new Token(refreshToken,refreshTokenExpireDate));
-    }
-
-    public ResponseEntity<ResponseJwt> responseHeaderToken(Long memberNumber){
-        return ResponseEntity.ok(createToken(memberNumber));
+    public boolean isExistsMemberRefreshToken(String refreshToken){
+      return memberRepository.existsByMemberRefreshToken(refreshToken);
     }
 
     public Date crateTokenExpireDate(long nowDate, long accessTime) {
@@ -135,4 +129,27 @@ public class JwtTokenUtil {
         return !(claims.get(AUTHORITIES_KEY) == null);
     }
 
+    public ResponseJwt requestToken(HttpServletRequest servletRequest) {
+        String accessToken = servletRequest.getHeader("accessToken");
+        String refreshToken = servletRequest.getHeader("refreshToken");
+        if(isExistsMemberRefreshToken(refreshToken)&&isValidateToken(refreshToken)) {
+            Long memberNumber = Long.valueOf(String.valueOf(getClaims(accessToken).get("memberNumber")));
+            Date tokenExpireDate = createTokenExpireDate();
+            crateAccessToken(memberNumber, tokenExpireDate);
+            return new ResponseJwt(accessToken,refreshToken ,tokenExpireDate.getTime());
+        }
+        throw new RuntimeException();
+    }
+
+    public Date createTokenExpireDate() {
+        return new Date(new Date().getTime() + ACCESS_TOKEN_EXPIRE_TIME);
+    }
+
+    public Claims getClaims(String accessToken) {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(accessToken).getBody();
+    }
+
+    public boolean isValidateDate(Date refreshTokenExpireTime) {
+        return new Date().before(refreshTokenExpireTime);
+    }
 }

@@ -18,8 +18,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenUtil jwtTokenUtil;
 
-    String[] whiteList = {"/members"};
-
     @Override
     public void configure(WebSecurity web) throws Exception
     {
@@ -31,10 +29,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
-                .antMatchers("/member/**", "/").permitAll()
-                .anyRequest().authenticated()
                 .and()
                 .apply(new JwtSecurityConfig(jwtTokenUtil));
     }

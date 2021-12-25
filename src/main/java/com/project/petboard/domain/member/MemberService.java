@@ -28,16 +28,16 @@ public class MemberService {
         memberRepository.deleteById(memberNumber);
     }
 
-    public ResponseEntity<ResponseJwt> loginMember(String code) {
+    public ResponseJwt loginMember(String code) {
         RequestKakao requestKakao = kakaoUtil.getKakaoProfile(code);
-        Member member = memberRepository.findByMemberSnsId(String.valueOf(requestKakao.getId()))
-                .map(entity -> entity.kakaoProfileUpdate(requestKakao.getKakao_account()))
-                .orElseGet(() -> saveMember(requestKakao));
-        return createToken(member);
+        Member member = getMember(requestKakao);
+        return jwtTokenUtil.createToken(member);
     }
 
-    public ResponseEntity<ResponseJwt> createToken(Member member) {
-        return jwtTokenUtil.responseHeaderToken(member.getMemberNumber());
+    public Member getMember(RequestKakao requestKakao) {
+        return  memberRepository.findByMemberSnsId(String.valueOf(requestKakao.getId()))
+                .map(entity -> entity.kakaoProfileUpdate(requestKakao.getKakao_account()))
+                .orElseGet(() -> saveMember(requestKakao));
     }
 
     public void saveRole(Member member) {

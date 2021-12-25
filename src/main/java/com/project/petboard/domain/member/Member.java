@@ -44,6 +44,11 @@ public class Member {
     @OneToMany(mappedBy = "member",fetch = FetchType.EAGER)
     private List<Role> memberRole = new ArrayList<>();
 
+    private String memberRefreshToken;
+
+    @Temporal(value = TemporalType.TIMESTAMP ) //년월일 date 타입 db에 매핑
+    private Date memberRefreshTokenExpireTime;
+
     @Builder
     public Member(String memberNickname,MemberSignupCategory memberSignupCategory,String memberEmail
     ,String memberSnsId){
@@ -52,6 +57,14 @@ public class Member {
         this.memberEmail = memberEmail;
         this.memberStatus = MemberStatus.Y;
         this.memberSnsId = memberSnsId;
+    }
+
+    public void setMemberRefreshToke(String refreshToke){
+        this.memberRefreshToken = refreshToke;
+    }
+
+    public void setMemberRefreshTokenExpireTime(Date refreshTokenExpireTime){
+        this.memberRefreshTokenExpireTime = refreshTokenExpireTime;
     }
 
     public Member kakaoProfileUpdate(KakaoAccount kakaoAccount){

@@ -14,7 +14,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/kakaologin")
-    public ResponseEntity<ResponseJwt> loginMember(@RequestParam("code") String code) {
+    public ResponseJwt loginMember(@RequestParam("code") String code) {
         return memberService.loginMember(code);
     }
 
