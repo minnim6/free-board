@@ -1,5 +1,7 @@
 package com.project.petboard.domain.questionboard;
 
+import com.project.petboard.infrastructure.exception.CustomErrorException;
+import com.project.petboard.infrastructure.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,10 +20,14 @@ public class QuestionBoardService {
 
     @Transactional(readOnly = true)
     public QuestionBoardDto fetchQuestionBoard(Long questionNumber) {
-        return new QuestionBoardDto(questionBoardRepository.findByQuestionBoardNumber(questionNumber));
+        try {
+            return new QuestionBoardDto(questionBoardRepository.findByQuestionBoardNumber(questionNumber));
+        } catch (Exception e) {
+            throw new CustomErrorException(e.getMessage(), ErrorCode.NOT_FOUND);
+        }
     }
 
-    public void deleteQuestionBoard(Long questionNumber){
+    public void deleteQuestionBoard(Long questionNumber) {
         questionBoardRepository.deleteById(questionNumber);
     }
 
@@ -31,6 +37,10 @@ public class QuestionBoardService {
 
     @Transactional(readOnly = true)
     public Page<QuestionBoard> requestPage(Pageable pageable) {
-       return questionBoardRepository.findAll(pageable);
+        try {
+            return questionBoardRepository.findAll(pageable);
+        } catch (Exception e) {
+            throw new CustomErrorException(e.getMessage(), ErrorCode.NOT_FOUND);
+        }
     }
 }

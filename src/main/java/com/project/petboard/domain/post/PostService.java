@@ -1,11 +1,11 @@
 package com.project.petboard.domain.post;
 
 import com.project.petboard.domain.member.Member;
-import com.project.petboard.domain.member.MemberDto;
 import com.project.petboard.domain.member.MemberRepository;
 import com.project.petboard.domain.report.ReportRepository;
 import com.project.petboard.domain.report.SanctionsRepository;
-import com.project.petboard.domain.report.SanctionsService;
+import com.project.petboard.infrastructure.exception.CustomErrorException;
+import com.project.petboard.infrastructure.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +27,11 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public Page<Post> requestPage(Pageable pageable) {
-        return postRepository.findAll(pageable);
+        try {
+            return postRepository.findAll(pageable);
+        }catch (Exception e){
+            throw new CustomErrorException(e.getMessage(), ErrorCode.NOT_FOUND);
+        }
     }
 
     public void createPost(PostDto postDto) {
@@ -44,8 +48,12 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public PostDto fetchPost(Long postNumber) {
-        return new PostDto(postRepository.findByPostNumber(postNumber));
+    public PostRequestDto fetchPost(Long postNumber) {
+        try {
+            return new PostRequestDto(postRepository.findByPostNumber(postNumber));
+        }catch (Exception e){
+            throw new CustomErrorException(e.getMessage(), ErrorCode.NOT_FOUND);
+        }
     }
 
     public void reportPost(Long memberNumber,Long postNumber) {

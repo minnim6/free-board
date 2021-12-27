@@ -3,6 +3,8 @@ package com.project.petboard.infrastructure.jwt;
 import com.project.petboard.domain.member.Member;
 import com.project.petboard.domain.member.MemberRepository;
 import com.project.petboard.domain.member.Role;
+import com.project.petboard.infrastructure.exception.CustomErrorException;
+import com.project.petboard.infrastructure.exception.ErrorCode;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -103,9 +105,8 @@ public class JwtTokenUtil {
 
     public Authentication getAuthentication(String token) {
         Claims claims = paresClaims(token);
-
         if (!isCheckAuthorities(claims)) {
-            throw new RuntimeException();
+            throw new CustomErrorException(ErrorCode.BAD_REQUEST);
         }
         Long memberNumber =  Long.valueOf(String.valueOf(claims.get(AUTHORITIES_KEY)));
 
@@ -138,7 +139,7 @@ public class JwtTokenUtil {
             crateAccessToken(memberNumber, tokenExpireDate);
             return new ResponseJwt(accessToken,refreshToken ,tokenExpireDate.getTime());
         }
-        throw new RuntimeException();
+        throw new CustomErrorException(ErrorCode.TOKEN_EXPIRE);
     }
 
     public Date createTokenExpireDate() {

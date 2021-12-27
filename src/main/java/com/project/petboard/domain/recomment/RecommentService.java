@@ -1,5 +1,7 @@
 package com.project.petboard.domain.recomment;
 
+import com.project.petboard.infrastructure.exception.CustomErrorException;
+import com.project.petboard.infrastructure.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +25,11 @@ public class RecommentService {
 
     @Transactional(readOnly = true)
     public Page<Recomment> requestRecommentPage(Pageable pageable) {
-        return recommentRepository.findAll(pageable);
+        try {
+            return recommentRepository.findAll(pageable);
+        }catch (Exception e){
+            throw new CustomErrorException(e.getMessage(), ErrorCode.NOT_FOUND);
+        }
     }
 
 }

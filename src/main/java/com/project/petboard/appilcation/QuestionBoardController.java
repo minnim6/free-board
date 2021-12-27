@@ -6,6 +6,7 @@ import com.project.petboard.domain.questionboard.QuestionBoardService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,10 +21,13 @@ public class QuestionBoardController {
     public QuestionBoardDto fetchQuestionBoard(@RequestParam("questionNumber")Long questionNumber){
         return questionBoardService.fetchQuestionBoard(questionNumber);
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(value = "/delete")
     public void deleteQuestionBoard(@RequestParam("questionNumber")Long questionNumber){
         questionBoardService.deleteQuestionBoard(questionNumber);
     }
+
     @PostMapping(value = "/create")
     public void createQuestionBoard(@RequestBody QuestionBoardDto questionBoardDto){
         questionBoardService.createQuestionBoard(questionBoardDto);

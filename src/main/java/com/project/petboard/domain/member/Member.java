@@ -1,5 +1,6 @@
 package com.project.petboard.domain.member;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.petboard.infrastructure.kakao.KakaoAccount;
 import jdk.jfr.Enabled;
 import lombok.Builder;
