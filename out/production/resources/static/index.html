@@ -1,12 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+<link rel ="stylesheet" href="css/bootstrap.css">
 </head>
-<body>)
+
+<style>
+    .center{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+<body>
 <!DOCTYPE html>
 <html lang="en">
+<div class="center">
+    hello!
+</div>
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -25,13 +37,15 @@
 
 </head>
 <body>
-
+<div class="center">
 <a id="custom-login-btn" href="javascript:loginWithKakao()">
     <img
             src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg"
             width="222"
     />
 </a>
+</div>
+
 <p id="token-result"></p>
 <script type="text/javascript">
     function loginWithKakao() {
@@ -61,6 +75,6 @@
         if (parts.length === 2) return parts.pop().split(";").shift();
     }
 </script>
-
-</body>
-</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript"src="js/bootstrap.js"></script>
+</body></html>

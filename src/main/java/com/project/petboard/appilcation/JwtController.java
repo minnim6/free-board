@@ -17,8 +17,8 @@ public class JwtController {
     private final JwtTokenUtil jwtTokenUtil;
 
     @RequestMapping("/requestToken")
-    public ResponseEntity<ResponseJwt> RequestToken(HttpServletRequest servletRequest){
-        return ResponseEntity.ok(jwtTokenUtil.requestToken(servletRequest));
+    public ResponseJwt RequestToken(HttpServletRequest servletRequest){
+        return jwtTokenUtil.requestToken(servletRequest);
     }
 
 }

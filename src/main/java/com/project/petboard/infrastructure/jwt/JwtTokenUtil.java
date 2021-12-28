@@ -135,6 +135,7 @@ public class JwtTokenUtil {
         String refreshToken = servletRequest.getHeader("refreshToken");
         if(isExistsMemberRefreshToken(refreshToken)&&isValidateToken(refreshToken)) {
             Long memberNumber = Long.valueOf(String.valueOf(getClaims(accessToken).get("memberNumber")));
+
             Date tokenExpireDate = createTokenExpireDate();
             crateAccessToken(memberNumber, tokenExpireDate);
             return new ResponseJwt(accessToken,refreshToken ,tokenExpireDate.getTime());

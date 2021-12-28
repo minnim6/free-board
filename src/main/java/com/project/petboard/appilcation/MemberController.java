@@ -18,7 +18,7 @@ public class MemberController {
         return memberService.loginMember(code);
     }
 
-    @GetMapping("/deleteMember")
+    @DeleteMapping("/deleteMember")
     public void deleteMember(@RequestParam("memberNumber")Long memberNumber){
         memberService.deleteMember(memberNumber);
     }
