@@ -1,9 +1,8 @@
 package com.project.petboard.appilcation;
 
 import com.project.petboard.domain.member.MemberService;
-import com.project.petboard.infrastructure.jwt.ResponseJwt;
+import com.project.petboard.infrastructure.jwt.RequestJwt;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
@@ -14,7 +13,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/kakaologin")
-    public ResponseJwt loginMember(@RequestParam("code") String code){
+    public RequestJwt loginMember(@RequestParam("code") String code){
         return memberService.loginMember(code);
     }
 

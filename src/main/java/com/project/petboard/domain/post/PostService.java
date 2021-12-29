@@ -5,7 +5,8 @@ import com.project.petboard.domain.member.MemberRepository;
 import com.project.petboard.domain.report.ReportRepository;
 import com.project.petboard.domain.report.SanctionsRepository;
 import com.project.petboard.infrastructure.exception.CustomErrorException;
-import com.project.petboard.infrastructure.exception.ErrorCode;
+import com.project.petboard.infrastructure.exception.HttpErrorCode;
+import com.project.petboard.infrastructure.exception.ReportErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,13 +30,13 @@ public class PostService {
     public Page<Post> requestPage(Pageable pageable) {
         try {
             return postRepository.findAll(pageable);
-        }catch (Exception e){
-            throw new CustomErrorException(e.getMessage(), ErrorCode.NOT_FOUND);
+        } catch (Exception e) {
+            throw new CustomErrorException(e.getMessage(), HttpErrorCode.NOT_FOUND);
         }
     }
 
-    public void createPost(PostDto postDto) {
-        postRepository.save(postDto.toEntity());
+    public Long createPost(PostDto postDto) {
+        return postRepository.save(postDto.toEntity()).getPostNumber();
     }
 
     public void deletePost(Long postNumber) {
@@ -47,55 +48,59 @@ public class PostService {
         post.toggleStatusY();
     }
 
+    public PostResponseDto updatePost(PostDto postDto) {
+        return new PostResponseDto(postRepository.save(postDto.toEntity()));
+    }
+
     @Transactional(readOnly = true)
-    public PostRequestDto fetchPost(Long postNumber) {
+    public PostResponseDto fetchPost(Long postNumber) {
         try {
-            return new PostRequestDto(postRepository.findByPostNumber(postNumber));
-        }catch (Exception e){
-            throw new CustomErrorException(e.getMessage(), ErrorCode.NOT_FOUND);
+            return new PostResponseDto(postRepository.findByPostNumber(postNumber));
+        } catch (Exception e) {
+            throw new CustomErrorException(e.getMessage(), HttpErrorCode.NOT_FOUND);
         }
     }
 
-    public void reportPost(Long memberNumber,Long postNumber) {
-      if (isCheckOverlapReport(memberNumber,postNumber)){
-        //TODO:이미 신고했던 유저일경우 400에러던져줌
-      }
-      addReport(postNumber);
-      if (isCheckOverlapReport(memberNumber,postNumber)){
-          blindPost(postNumber);
-      }
+    public void reportPost(Long memberNumber, Long postNumber) {
+        if (isCheckOverlapReport(memberNumber, postNumber)) {
+           throw new CustomErrorException(ReportErrorCode.REPORT_DUPLICATION);
+        }
+        addReport(postNumber);
+        if (isSanctionsCountOverCheck(postNumber)) {
+            blindPost(postNumber);
+        }
     }
 
-    public boolean isSanctionsCountOverCheck(Long postNumber) {
-        return getPostEntity(postNumber).getPostReportCount()>=getSanctionsValue();
+    private boolean isSanctionsCountOverCheck(Long postNumber) {
+        return getPostEntity(postNumber).getPostReportCount() >= getSanctionsValue();
     }
 
-    public void blindPost(Long postNumber) {
+    private void blindPost(Long postNumber) {
         Post post = getPostEntity(postNumber);
         post.toggleStatusN();
     }
 
-    public int getSanctionsValue() {
+    private int getSanctionsValue() {
         return sanctionsRepository.findBySanctionsKey("게시물")
                 .getSanctionsValue();
     }
 
-    public void addReport(Long postNumber) {
+    private void addReport(Long postNumber) {
         Post post = getPostEntity(postNumber);
         post.addReportCount();
     }
 
-    public Member getMemberEntity(Long memberNumber) {
+    private Member getMemberEntity(Long memberNumber) {
         return memberRepository.findByMemberNumber(memberNumber);
     }
 
-    public Post getPostEntity(Long postNumber) {
+    private Post getPostEntity(Long postNumber) {
         return postRepository.findByPostNumber(postNumber);
     }
 
     @Transactional(readOnly = true)
-    public boolean isCheckOverlapReport(Long memberNumber,Long postNumber) {
-        return reportRepository.existsByMemberAndPost(getMemberEntity(memberNumber),getPostEntity(postNumber));
+    public boolean isCheckOverlapReport(Long memberNumber, Long postNumber) {
+        return reportRepository.existsByMemberAndPost(getMemberEntity(memberNumber), getPostEntity(postNumber));
     }
 
 }

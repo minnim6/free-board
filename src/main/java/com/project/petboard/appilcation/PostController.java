@@ -32,7 +32,7 @@ public class PostController {
     }
 
     @GetMapping("/getPost")
-    public PostRequestDto fetchPost(@RequestParam("postNumber") Long postNumber){
+    public PostResponseDto fetchPost(@RequestParam("postNumber") Long postNumber){
             return postService.fetchPost(postNumber);
     }
 

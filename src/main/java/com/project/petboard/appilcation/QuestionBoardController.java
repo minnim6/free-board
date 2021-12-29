@@ -29,8 +29,8 @@ public class QuestionBoardController {
     }
 
     @PostMapping(value = "/create")
-    public void createQuestionBoard(@RequestBody QuestionBoardDto questionBoardDto){
-        questionBoardService.createQuestionBoard(questionBoardDto);
+    public Long createQuestionBoard(@RequestBody QuestionBoardDto questionBoardDto){
+        return questionBoardService.createQuestionBoard(questionBoardDto);
     }
     @GetMapping(value = "/getPage")
     public Page<QuestionBoard> requestPage(Pageable pageable){

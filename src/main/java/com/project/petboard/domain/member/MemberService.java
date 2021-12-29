@@ -1,12 +1,11 @@
 package com.project.petboard.domain.member;
 
-import com.project.petboard.infrastructure.jwt.ResponseJwt;
+import com.project.petboard.infrastructure.jwt.RequestJwt;
 import com.project.petboard.infrastructure.jwt.JwtTokenUtil;
 import com.project.petboard.infrastructure.kakao.KakaoUtil;
 import com.project.petboard.infrastructure.kakao.RequestKakao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,19 +27,19 @@ public class MemberService {
         memberRepository.deleteById(memberNumber);
     }
 
-    public ResponseJwt loginMember(String code) {
+    public RequestJwt loginMember(String code) {
         RequestKakao requestKakao = kakaoUtil.getKakaoProfile(code);
         Member member = getMember(requestKakao);
         return jwtTokenUtil.createToken(member);
     }
 
-    public Member getMember(RequestKakao requestKakao) {
+    private Member getMember(RequestKakao requestKakao) {
         return  memberRepository.findByMemberSnsId(String.valueOf(requestKakao.getId()))
                 .map(entity -> entity.kakaoProfileUpdate(requestKakao.getKakao_account()))
                 .orElseGet(() -> saveMember(requestKakao));
     }
 
-    public void saveRole(Member member) {
+    private void saveRole(Member member) {
         roleRepository.save(new Role(member, "MEMBER"));
     }
 

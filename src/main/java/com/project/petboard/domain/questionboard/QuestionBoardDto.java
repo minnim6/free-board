@@ -10,19 +10,19 @@ import java.util.Date;
 @Getter
 public class QuestionBoardDto{
 
-    private Long questionBoardNumber;
+    private final Long questionBoardNumber;
 
-    private Member member;
+    private final Member member;
 
-    private String questionBoardTitle;
+    private final String questionBoardTitle;
 
-    private String questionBoardContents;
+    private final String questionBoardContents;
 
-    private Date questionBoardCreateDate;
+    private final Date questionBoardCreateDate;
 
-    private Date questionBoardAnswerDate;
+    private final Date questionBoardAnswerDate;
 
-    private String questionBoardAnswer;
+    private final String questionBoardAnswer;
 
     public QuestionBoard toEntity(){
         return  QuestionBoard.builder()

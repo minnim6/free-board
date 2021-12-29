@@ -1,7 +1,7 @@
 package com.project.petboard.domain.recomment;
 
 import com.project.petboard.infrastructure.exception.CustomErrorException;
-import com.project.petboard.infrastructure.exception.ErrorCode;
+import com.project.petboard.infrastructure.exception.HttpErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +28,7 @@ public class RecommentService {
         try {
             return recommentRepository.findAll(pageable);
         }catch (Exception e){
-            throw new CustomErrorException(e.getMessage(), ErrorCode.NOT_FOUND);
+            throw new CustomErrorException(e.getMessage(), HttpErrorCode.NOT_FOUND);
         }
     }
 
