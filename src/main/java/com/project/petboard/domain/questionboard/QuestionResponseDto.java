@@ -1,18 +1,18 @@
 package com.project.petboard.domain.questionboard;
 
-import com.project.petboard.domain.member.Member;
+import com.project.petboard.domain.member.MemberResponseDto;
 import lombok.Getter;
-import org.hibernate.annotations.CreationTimestamp;
+import lombok.RequiredArgsConstructor;
 
-import javax.persistence.*;
 import java.util.Date;
 
+@RequiredArgsConstructor
 @Getter
-public class QuestionBoardDto{
+public class QuestionResponseDto {
 
     private final Long questionBoardNumber;
 
-    private final Member member;
+    private final MemberResponseDto memberReponeseDto;
 
     private final String questionBoardTitle;
 
@@ -24,21 +24,14 @@ public class QuestionBoardDto{
 
     private final String questionBoardAnswer;
 
-    public QuestionBoard toEntity(){
-        return  QuestionBoard.builder()
-                .member(member)
-                .questionBoardTitle(questionBoardTitle)
-                .questionBoardContents(questionBoardContents)
-                .build();
-    }
-
-    public QuestionBoardDto(QuestionBoard questionBoard){
+    public QuestionResponseDto(QuestionBoard questionBoard){
         this.questionBoardNumber = questionBoard.getQuestionBoardNumber();
-        this.member = questionBoard.getMember();
+        this.memberReponeseDto = new MemberResponseDto(questionBoard.getMember());
         this.questionBoardTitle = questionBoard.getQuestionBoardTitle();
         this.questionBoardContents = questionBoard.getQuestionBoardContents();
         this.questionBoardCreateDate = questionBoard.getQuestionBoardCreateDate();
-        this.questionBoardAnswerDate = questionBoard.getQuestionBoardAnswerDate();
         this.questionBoardAnswer = questionBoard.getQuestionBoardAnswer();
+        this.questionBoardAnswerDate = questionBoard.getQuestionBoardAnswerDate();
     }
+
 }

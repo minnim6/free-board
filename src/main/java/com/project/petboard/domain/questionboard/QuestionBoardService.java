@@ -1,5 +1,7 @@
 package com.project.petboard.domain.questionboard;
 
+import com.project.petboard.domain.member.Member;
+import com.project.petboard.domain.member.MemberRepository;
 import com.project.petboard.infrastructure.exception.CustomErrorException;
 import com.project.petboard.infrastructure.exception.HttpErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +17,12 @@ public class QuestionBoardService {
 
     private final QuestionBoardRepository questionBoardRepository;
 
+    private final MemberRepository memberRepository;
+
     @Transactional(readOnly = true)
-    public QuestionBoardDto fetchQuestionBoard(Long questionNumber) {
+    public QuestionResponseDto fetchQuestionBoard(Long questionNumber) {
         try {
-            return new QuestionBoardDto(questionBoardRepository.findByQuestionBoardNumber(questionNumber));
+            return new QuestionResponseDto(questionBoardRepository.findByQuestionBoardNumber(questionNumber));
         } catch (Exception e) {
             throw new CustomErrorException(e.getMessage(), HttpErrorCode.NOT_FOUND);
         }
@@ -28,8 +32,12 @@ public class QuestionBoardService {
         questionBoardRepository.deleteById(questionNumber);
     }
 
-    public Long createQuestionBoard(QuestionBoardDto questionBoardDto) {
-        return questionBoardRepository.save(questionBoardDto.toEntity()).getQuestionBoardNumber();
+    public Long createQuestionBoard(QuestionBoardRequestDto questionBoardDto) {
+        try {
+            return questionBoardRepository.save(questionBoardDto.toEntity(getMemberEntity(questionBoardDto.getMemberNumber()))).getQuestionBoardNumber();
+        }catch (Exception e){
+            throw new CustomErrorException(e.getMessage(),HttpErrorCode.BAD_REQUEST);
+        }
     }
 
     @Transactional(readOnly = true)
@@ -39,5 +47,9 @@ public class QuestionBoardService {
         } catch (Exception e) {
             throw new CustomErrorException(e.getMessage(), HttpErrorCode.NOT_FOUND);
         }
+    }
+
+    public Member getMemberEntity(Long memberNumber){
+        return memberRepository.findByMemberNumber(memberNumber);
     }
 }

@@ -4,6 +4,7 @@ import com.project.petboard.domain.member.Member;
 import com.project.petboard.domain.member.MemberRepository;
 import com.project.petboard.domain.report.ReportRepository;
 import com.project.petboard.domain.report.SanctionsRepository;
+import com.project.petboard.infrastructure.exception.CrudErrorCode;
 import com.project.petboard.infrastructure.exception.CustomErrorException;
 import com.project.petboard.infrastructure.exception.HttpErrorCode;
 import com.project.petboard.infrastructure.exception.ReportErrorCode;
@@ -35,8 +36,14 @@ public class PostService {
         }
     }
 
-    public Long createPost(PostDto postDto) {
-        return postRepository.save(postDto.toEntity()).getPostNumber();
+    public Long createPost(PostRequestDto postRequestDto) {
+        try {
+            return postRepository.save(postRequestDto.toEntity(getMemberEntity(postRequestDto.getMemberNumber()))).getPostNumber();
+        }catch (NullPointerException e){
+            throw new CustomErrorException(e.getMessage(), CrudErrorCode.NULL_EXCEPTION);
+        } catch (Exception e){
+            throw new CustomErrorException(e.getMessage(), HttpErrorCode.BAD_REQUEST);
+        }
     }
 
     public void deletePost(Long postNumber) {
@@ -48,8 +55,8 @@ public class PostService {
         post.toggleStatusY();
     }
 
-    public PostResponseDto updatePost(PostDto postDto) {
-        return new PostResponseDto(postRepository.save(postDto.toEntity()));
+    public PostResponseDto updatePost(PostRequestDto postRequestDto) {
+        return new PostResponseDto(postRepository.save(postRequestDto.toEntity(getMemberEntity(postRequestDto.getMemberNumber()))));
     }
 
     @Transactional(readOnly = true)

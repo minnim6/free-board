@@ -1,13 +1,13 @@
 package com.project.petboard.appilcation;
 
 import com.project.petboard.domain.questionboard.QuestionBoard;
-import com.project.petboard.domain.questionboard.QuestionBoardDto;
+import com.project.petboard.domain.questionboard.QuestionBoardRequestDto;
 import com.project.petboard.domain.questionboard.QuestionBoardService;
+import com.project.petboard.domain.questionboard.QuestionResponseDto;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
@@ -18,7 +18,7 @@ public class QuestionBoardController {
     private final QuestionBoardService questionBoardService;
 
     @GetMapping(value = "/getQuestionBoard")
-    public QuestionBoardDto fetchQuestionBoard(@RequestParam("questionNumber")Long questionNumber){
+    public QuestionResponseDto fetchQuestionBoard(@RequestParam("questionNumber")Long questionNumber){
         return questionBoardService.fetchQuestionBoard(questionNumber);
     }
 
@@ -29,7 +29,7 @@ public class QuestionBoardController {
     }
 
     @PostMapping(value = "/create")
-    public Long createQuestionBoard(@RequestBody QuestionBoardDto questionBoardDto){
+    public Long createQuestionBoard(@RequestBody QuestionBoardRequestDto questionBoardDto){
         return questionBoardService.createQuestionBoard(questionBoardDto);
     }
     @GetMapping(value = "/getPage")

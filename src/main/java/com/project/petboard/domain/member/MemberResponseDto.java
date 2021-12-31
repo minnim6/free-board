@@ -5,11 +5,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class MemberRequestDto {
+public class MemberResponseDto {
 
+    private Long memberNumber;
     private String memberNickname;
 
-    public MemberRequestDto(Member member){
+    public MemberResponseDto(Member member){
+        this.memberNumber = member.getMemberNumber();
         this.memberNickname = member.getMemberNickname();
     }
 

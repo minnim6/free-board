@@ -21,8 +21,8 @@ public class PostController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('MEMBER')")
-    public void createPost(@RequestBody PostDto postDto) {
-        postService.createPost(postDto);
+    public Long createPost(@RequestBody PostRequestDto postRequestDto) {
+        return postService.createPost(postRequestDto);
     }
 
     @DeleteMapping("/delete")
