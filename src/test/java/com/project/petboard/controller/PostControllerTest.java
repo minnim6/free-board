@@ -1,8 +1,8 @@
 package com.project.petboard.controller;
 
 
-
 import com.project.petboard.appilcation.PostController;
+import com.project.petboard.domain.member.Member;
 import com.project.petboard.domain.post.Post;
 import com.project.petboard.domain.post.PostResponseDto;
 import com.project.petboard.domain.post.PostService;
@@ -35,20 +35,20 @@ public class PostControllerTest {
     @Test
     public void fetchPostTest() throws Exception {
 
-        // 준비
         Long postId = 1L;
 
         final String title = "타이틀입니다.";
         final String content = "내용입니다";
 
         Post post = Post.builder()
-                        .postTitle(title)
-                                .postContents(content)
-                                        .build();
+                .postTitle(title)
+                .postContents(content)
+                .member(new Member())
+                .build();
 
         doReturn(new PostResponseDto(post)).when(postService).fetchPost(postId);
 
-        ResultActions actions = mockMvc.perform(get("/post/getPost")
+        ResultActions actions = mockMvc.perform(get("/post")
                 .param("postNumber", String.valueOf(postId)));
 
         actions.andExpect(status().isOk())

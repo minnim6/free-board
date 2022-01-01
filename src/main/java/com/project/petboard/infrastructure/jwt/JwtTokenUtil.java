@@ -41,7 +41,7 @@ public class JwtTokenUtil {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public RequestJwt createToken(Member member) {
+    public ResponseJwt createToken(Member member) {
 
         long nowDate = (new Date()).getTime();
         Date tokenExpireDate = crateTokenExpireDate(nowDate, ACCESS_TOKEN_EXPIRE_TIME);
@@ -53,7 +53,7 @@ public class JwtTokenUtil {
         member.setMemberRefreshToke(refreshToken);
         member.setMemberRefreshTokenExpireTime(refreshTokenExpireDate);
 
-        return RequestJwt.builder()
+        return ResponseJwt.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .assessTokenExpireTime(tokenExpireDate.getTime())
@@ -130,13 +130,12 @@ public class JwtTokenUtil {
         return !(claims.get(AUTHORITIES_KEY) == null);
     }
 
-    public RequestJwt requestToken(String accessToken, String refreshToken) {
-        if(isExistsMemberRefreshToken(refreshToken) && isValidateToken(refreshToken)) {
+    public ResponseJwt requestToken(String accessToken, String refreshToken) {
+        if(isValidateToken(refreshToken)) {
             Long memberNumber = Long.valueOf(String.valueOf(getClaims(accessToken).get("memberNumber")));
-
             Date tokenExpireDate = createAccessTokenExpireDate();
             crateAccessToken(memberNumber, tokenExpireDate);
-            return new RequestJwt(accessToken,refreshToken ,tokenExpireDate.getTime());
+            return new ResponseJwt(accessToken,refreshToken ,tokenExpireDate.getTime());
         }
         throw new CustomErrorException(JwtErrorCode.TOKEN_EXPIRE);
     }

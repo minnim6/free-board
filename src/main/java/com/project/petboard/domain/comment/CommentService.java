@@ -4,6 +4,9 @@ import com.project.petboard.domain.member.Member;
 import com.project.petboard.domain.member.MemberRepository;
 import com.project.petboard.domain.post.Post;
 import com.project.petboard.domain.post.PostRepository;
+import com.project.petboard.infrastructure.exception.CrudErrorCode;
+import com.project.petboard.infrastructure.exception.CustomErrorException;
+import com.project.petboard.infrastructure.exception.HttpErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,9 +25,15 @@ public class CommentService {
     private final PostRepository postRepository;
 
     public CommentResponseDto createComment(CommentRequestDto commentRequestDto) {
-       return new CommentResponseDto(commentRepository.save(commentRequestDto.toEntity(
-                getPostEntity(commentRequestDto.getPostNumber()),getMemberEntity(commentRequestDto.getMemberNumber())
-        )));
+        try {
+            return new CommentResponseDto(commentRepository.save(commentRequestDto.toEntity(
+                    getPostEntity(commentRequestDto.getPostNumber()),getMemberEntity(commentRequestDto.getMemberNumber())
+            )));
+        }catch (NullPointerException e){
+            throw new CustomErrorException(e.getMessage(), CrudErrorCode.NULL_EXCEPTION);
+        }catch (Exception e){
+            throw new CustomErrorException(e.getMessage(), HttpErrorCode.BAD_REQUEST);
+        }
     }
 
     @Transactional(readOnly = true)

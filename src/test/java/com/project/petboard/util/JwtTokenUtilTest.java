@@ -1,20 +1,11 @@
 package com.project.petboard.util;
 
-import com.project.petboard.domain.member.Member;
 import com.project.petboard.domain.member.MemberRepository;
-import com.project.petboard.domain.member.Role;
 import com.project.petboard.infrastructure.exception.CustomErrorException;
 import com.project.petboard.infrastructure.jwt.JwtTokenUtil;
-import com.project.petboard.infrastructure.jwt.RequestJwt;
+import com.project.petboard.infrastructure.jwt.ResponseJwt;
 import org.junit.Test;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,7 +31,7 @@ public class JwtTokenUtilTest {
         String refreshToken = jwtTokenUtil.createRefreshToken(jwtTokenUtil.crateTokenExpireDate(nowDate, ACCESS_TOKEN_EXPIRE_TIME));
         given(memberRepository.existsByMemberRefreshToken(refreshToken)).willReturn(true);
 
-        assertThat(jwtTokenUtil.requestToken(accessToken, refreshToken)).isInstanceOf(RequestJwt.class);
+        assertThat(jwtTokenUtil.requestToken(accessToken, refreshToken)).isInstanceOf(ResponseJwt.class);
 
         verify(memberRepository, times(1)).existsByMemberRefreshToken(refreshToken); // existsByMemberRefreshToken 1회 실행했냐?
     }

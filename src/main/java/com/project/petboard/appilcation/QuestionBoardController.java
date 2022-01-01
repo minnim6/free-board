@@ -11,28 +11,28 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
-@RequestMapping("/questionBoard")
+
 @RestController
 public class QuestionBoardController {
 
     private final QuestionBoardService questionBoardService;
 
-    @GetMapping(value = "/getQuestionBoard")
+    @GetMapping(value = "/question")
     public QuestionResponseDto fetchQuestionBoard(@RequestParam("questionNumber")Long questionNumber){
         return questionBoardService.fetchQuestionBoard(questionNumber);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping(value = "/delete")
+    @DeleteMapping(value = "/question")
     public void deleteQuestionBoard(@RequestParam("questionNumber")Long questionNumber){
         questionBoardService.deleteQuestionBoard(questionNumber);
     }
 
-    @PostMapping(value = "/create")
+    @PostMapping(value = "/question")
     public Long createQuestionBoard(@RequestBody QuestionBoardRequestDto questionBoardDto){
         return questionBoardService.createQuestionBoard(questionBoardDto);
     }
-    @GetMapping(value = "/getPage")
+    @GetMapping(value = "/question/page")
     public Page<QuestionBoard> requestPage(Pageable pageable){
         return questionBoardService.requestPage(pageable);
     }

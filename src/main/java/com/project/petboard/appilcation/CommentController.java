@@ -10,22 +10,21 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
-@RequestMapping("/Comment")
 @RestController
 public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping(value = "/createComment")
+    @PostMapping("/comment")
     public CommentResponseDto createComment(@RequestBody CommentRequestDto commentRequestDto) {
         return commentService.createComment(commentRequestDto);
     }
 
-    @DeleteMapping(value = "deleteComment")
+    @DeleteMapping("/comment")
     public void deleteComment(@RequestParam("commentNumber")Long commentNumber) {
         commentService.deleteComment(commentNumber);
     }
-    @GetMapping(value = "getCommentPage")
+    @GetMapping("/comment/page")
     public Page<Comment> fetchCommentPage(Pageable pageable) {
        return commentService.fetchCommentPage(pageable);
     }
