@@ -49,6 +49,11 @@ public class QuestionBoardService {
         }
     }
 
+    public void questionBoardAnswer(QuestionBoardAnswerRequestDto answerRequestDto){
+       QuestionBoard questionBoard = questionBoardRepository.findByQuestionBoardNumber(answerRequestDto.getQuestionBoardNumber());
+       questionBoard.completeAnswer(answerRequestDto);
+    }
+
     public Member getMemberEntity(Long memberNumber){
         return memberRepository.findByMemberNumber(memberNumber);
     }

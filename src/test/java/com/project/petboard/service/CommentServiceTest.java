@@ -8,9 +8,10 @@ import com.project.petboard.domain.post.PostRepository;
 import com.project.petboard.domain.recomment.ReocommentResponseDto;
 import com.project.petboard.infrastructure.exception.CrudErrorCode;
 import com.project.petboard.infrastructure.exception.CustomErrorException;
-import org.junit.Before;
-import org.junit.Test;
+import org.aspectj.lang.annotation.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -31,12 +32,14 @@ public class CommentServiceTest {
 
     private Comment comment;
 
-    @Before
+    @BeforeEach
     public void setup(){
-        commentRequestDto = new CommentRequestDto(
-                1L,1L,"contents"
-        );
-        comment = commentRequestDto.toEntity(new Post(),new Member());
+        comment = Comment.builder()
+                .post(new Post())
+                .member(new Member())
+                .commentContents("contents")
+                .build();
+        commentRequestDto = new CommentRequestDto();
     }
 
     @Test

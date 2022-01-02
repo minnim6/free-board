@@ -1,24 +1,21 @@
 package com.project.petboard.domain.questionboard;
 
 import com.project.petboard.domain.member.Member;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
-@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 public class QuestionBoardRequestDto {
 
-    private final Long questionBoardNumber;
+    private Long questionBoardNumber;
 
-    private final Long memberNumber;
+    private Long memberNumber;
 
-    private final String questionBoardTitle;
+    private String questionBoardTitle;
 
-    private final String questionBoardContents;
+    private String questionBoardContents;
 
     public QuestionBoard toEntity(Member member){
         return  QuestionBoard.builder()

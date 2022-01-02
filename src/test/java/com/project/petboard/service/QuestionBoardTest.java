@@ -5,9 +5,9 @@ import com.project.petboard.domain.member.MemberRepository;
 import com.project.petboard.domain.questionboard.*;
 import com.project.petboard.infrastructure.exception.CustomErrorException;
 import com.project.petboard.infrastructure.exception.HttpErrorCode;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import java.util.Date;
 
@@ -26,15 +26,16 @@ public class QuestionBoardTest {
 
     private QuestionBoard questionBoard;
 
-    private QuestionResponseDto questionResponseDto;
-
     private QuestionBoardRequestDto questionBoardRequestDto;
 
-    @Before
+    @BeforeEach
     public void setup() {
-        questionBoardRequestDto = new QuestionBoardRequestDto(1L,
-                1L, "title", "contents");
-        questionBoard = questionBoardRequestDto.toEntity(new Member());
+        questionBoard = QuestionBoard.builder()
+                .member(new Member())
+                .questionBoardTitle("title")
+                .questionBoardContents("contents")
+                .build();
+        questionBoardRequestDto = new QuestionBoardRequestDto();
     }
 
     @DisplayName("질문게시글 생성 테스트")
@@ -63,6 +64,16 @@ public class QuestionBoardTest {
         }
     }
 
+    @DisplayName("질문게시글 답변 테스트")
+    @Test
+    public void questionBoardAnswerShouldBeSuccess(){
+        given(questionBoardRepository.findByQuestionBoardNumber(1L)).willReturn(questionBoard);
+
+        questionBoardService.questionBoardAnswer(new QuestionBoardAnswerRequestDto(1L,"answer"));
+
+        assertThat(questionBoardRepository.findByQuestionBoardNumber(1L).getQuestionBoardAnswer()).isEqualTo("answer");
+    }
+
     @DisplayName("질문게시글 조회 테스트")
     @Test
     public void findQuestionBoardShouldBeSuccess() {
@@ -70,7 +81,7 @@ public class QuestionBoardTest {
         given(questionBoardRepository.save(any())).willReturn(questionBoard);
         given(questionBoardRepository.findByQuestionBoardNumber(1L)).willReturn(questionBoard);
         //when
-        questionResponseDto = questionBoardService.fetchQuestionBoard(1L);
+        QuestionResponseDto questionResponseDto = questionBoardService.fetchQuestionBoard(1L);
         //then
         assertThat(questionResponseDto).isNotNull();
     }

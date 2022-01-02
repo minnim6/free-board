@@ -4,12 +4,13 @@ import com.project.petboard.domain.member.Member;
 import com.project.petboard.domain.post.Post;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
 
-@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 public class CommentRequestDto {
 

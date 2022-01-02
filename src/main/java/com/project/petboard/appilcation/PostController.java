@@ -24,9 +24,15 @@ public class PostController {
         return postService.createPost(postRequestDto);
     }
 
+    @PatchMapping("/post")
+    @PreAuthorize("hasRole('MEMBER')")
+    public Long updatePost(@RequestBody PostRequestDto postRequestDto) {
+        return postService.createPost(postRequestDto);
+    }
+
     @DeleteMapping("/post")
     @PreAuthorize("hasRole('MEMBER')")
-    public void deletePost(@RequestParam("postNumber")Long postNumber) {
+    public void deletePost(@RequestParam("postNumber") Long postNumber) {
         postService.deletePost(postNumber);
     }
 
@@ -35,9 +41,9 @@ public class PostController {
             return postService.fetchPost(postNumber);
     }
 
-    @PostMapping("/post/status")
+    @PatchMapping("/post/status")
     @PreAuthorize("hasRole('ADMIN')")
-    public void visibleChangePostStatus(@RequestParam("postNumber")Long postNumber) {
+    public void visibleChangePostStatus(@RequestParam("postNumber") Long postNumber) {
         postService.visibleChangePostStatus(postNumber);
     }
 }

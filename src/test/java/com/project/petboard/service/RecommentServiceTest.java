@@ -10,9 +10,9 @@ import com.project.petboard.domain.recomment.*;
 import com.project.petboard.infrastructure.exception.CrudErrorCode;
 import com.project.petboard.infrastructure.exception.CustomErrorException;
 import lombok.Builder;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -35,7 +35,7 @@ public class RecommentServiceTest {
 
     private Recomment recomment;
 
-    @Before
+    @BeforeEach
     public void setup(){
         recommentRequestDto =
                 new RecommentRequestDto(1L ,1L,

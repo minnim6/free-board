@@ -55,10 +55,6 @@ public class PostService {
         post.toggleStatusY();
     }
 
-    public PostResponseDto updatePost(PostRequestDto postRequestDto) {
-        return new PostResponseDto(postRepository.save(postRequestDto.toEntity(getMemberEntity(postRequestDto.getMemberNumber()))));
-    }
-
     @Transactional(readOnly = true)
     public PostResponseDto fetchPost(Long postNumber) {
         try {

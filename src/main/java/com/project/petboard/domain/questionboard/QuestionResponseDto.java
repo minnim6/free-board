@@ -1,18 +1,20 @@
 package com.project.petboard.domain.questionboard;
 
 import com.project.petboard.domain.member.MemberResponseDto;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Date;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Getter
 public class QuestionResponseDto {
 
     private final Long questionBoardNumber;
 
-    private final MemberResponseDto memberReponeseDto;
+    private final MemberResponseDto memberResponseDto;
 
     private final String questionBoardTitle;
 
@@ -26,7 +28,7 @@ public class QuestionResponseDto {
 
     public QuestionResponseDto(QuestionBoard questionBoard){
         this.questionBoardNumber = questionBoard.getQuestionBoardNumber();
-        this.memberReponeseDto = new MemberResponseDto(questionBoard.getMember());
+        this.memberResponseDto = new MemberResponseDto(questionBoard.getMember());
         this.questionBoardTitle = questionBoard.getQuestionBoardTitle();
         this.questionBoardContents = questionBoard.getQuestionBoardContents();
         this.questionBoardCreateDate = questionBoard.getQuestionBoardCreateDate();

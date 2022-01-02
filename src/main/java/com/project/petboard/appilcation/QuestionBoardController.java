@@ -1,9 +1,6 @@
 package com.project.petboard.appilcation;
 
-import com.project.petboard.domain.questionboard.QuestionBoard;
-import com.project.petboard.domain.questionboard.QuestionBoardRequestDto;
-import com.project.petboard.domain.questionboard.QuestionBoardService;
-import com.project.petboard.domain.questionboard.QuestionResponseDto;
+import com.project.petboard.domain.questionboard.*;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +23,12 @@ public class QuestionBoardController {
     @DeleteMapping(value = "/question")
     public void deleteQuestionBoard(@RequestParam("questionNumber")Long questionNumber){
         questionBoardService.deleteQuestionBoard(questionNumber);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/post/answer")
+    public void questionBoardAnswer(@RequestBody QuestionBoardAnswerRequestDto answerRequestDto){
+        questionBoardService.questionBoardAnswer(answerRequestDto);
     }
 
     @PostMapping(value = "/question")

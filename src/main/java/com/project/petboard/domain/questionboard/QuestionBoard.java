@@ -47,9 +47,9 @@ public class QuestionBoard {
         this.questionBoardContents = questionBoardContents;
     }
 
-    public void completeAnswer(String questionBoardAnswer,Date questionBoardAnswerDate){
-        this.questionBoardAnswer = questionBoardAnswer;
-        this.questionBoardAnswerDate = questionBoardAnswerDate;
+    public void completeAnswer(QuestionBoardAnswerRequestDto answerRequestDto){
+        this.questionBoardAnswer = answerRequestDto.getQuestionBoardAnswer();
+        this.questionBoardAnswerDate = new Date();
     }
 
 }

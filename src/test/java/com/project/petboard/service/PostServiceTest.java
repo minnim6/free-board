@@ -9,9 +9,10 @@ import com.project.petboard.domain.report.SanctionsRepository;
 import com.project.petboard.infrastructure.exception.CustomErrorException;
 import com.project.petboard.infrastructure.exception.HttpErrorCode;
 import com.project.petboard.infrastructure.exception.ReportErrorCode;
-import org.junit.Before;
-import org.junit.Test;
+import org.aspectj.lang.annotation.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -34,7 +35,7 @@ public class PostServiceTest {
 
     private Post post;
 
-    @Before
+    @BeforeEach
     public void setup() {
         postRequestDto = new PostRequestDto(
                 1L,"title","contnents","Category"

@@ -4,7 +4,7 @@ import com.project.petboard.domain.member.MemberRepository;
 import com.project.petboard.infrastructure.exception.CustomErrorException;
 import com.project.petboard.infrastructure.jwt.JwtTokenUtil;
 import com.project.petboard.infrastructure.jwt.ResponseJwt;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Date;
 
