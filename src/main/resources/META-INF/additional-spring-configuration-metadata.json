@@ -4,5 +4,10 @@
       "name": "spring.jpa.datasource.driver-class-name",
       "type": "java.lang.String",
       "description": "Description for spring.jpa.datasource.driver-class-name."
-  }
-] }
+    },
+    {
+      "name": "excludedUrls.list",
+      "type": "java.lang.String",
+      "description": "Description for excludedUrls.list."
+    }
+  ] }

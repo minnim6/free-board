@@ -1,5 +1,6 @@
 package com.project.petboard.domain.member;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +19,7 @@ public class Role {
     private Long roleNumber;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "member_number")
     private Member member;
 

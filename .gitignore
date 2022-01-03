@@ -3,8 +3,8 @@
 /.idea/workspace.xml
 /.idea
 /.gradle
-/gradle
 /build
 /src/main/resources/application-database.yml
 /src/main/resources/application-kakao.yml
 /src/main/resources/application-jwt.yml
+/src/main/resources/applicaition-filter-excluded-url.yml

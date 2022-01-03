@@ -1,6 +1,7 @@
 package com.project.petboard.domain.post;
 
 import com.project.petboard.domain.member.Member;
+import com.project.petboard.domain.member.MemberResponseDto;
 import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,7 +9,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -43,7 +43,6 @@ public class Post {
     @CreationTimestamp
     private Date postAmendDate;
 
-
     @Enumerated(EnumType.STRING)
     private PostStatus postStatus;
 
@@ -58,6 +57,11 @@ public class Post {
         this.postStatus = PostStatus.Y;
         this.postReportCount = 0;
     }
+
+    public MemberResponseDto toMemberResponseDto(){
+        return new MemberResponseDto(this.member);
+    }
+
     public void addReportCount(){
         this.postReportCount = postReportCount+1;
     }
@@ -69,4 +73,5 @@ public class Post {
     public void toggleStatusY() {
         this.postStatus = PostStatus.Y;
     }
+
 }
