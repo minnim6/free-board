@@ -48,7 +48,7 @@ public class CommentControllerTest {
         commentRequestDto.put("memberNumber", 1);
         commentRequestDto.put("commentContents", "contents");
 
-        mockMvc.perform(post("comment")
+        mockMvc.perform(post("/comment")
                         .content(objectMapper.writeValueAsString(commentRequestDto))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))

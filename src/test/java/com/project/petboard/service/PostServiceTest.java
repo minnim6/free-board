@@ -6,6 +6,7 @@ import com.project.petboard.domain.post.*;
 import com.project.petboard.domain.report.ReportRepository;
 import com.project.petboard.domain.report.Sanctions;
 import com.project.petboard.domain.report.SanctionsRepository;
+import com.project.petboard.infrastructure.exception.CrudErrorCode;
 import com.project.petboard.infrastructure.exception.CustomErrorException;
 import com.project.petboard.infrastructure.exception.HttpErrorCode;
 import com.project.petboard.infrastructure.exception.ReportErrorCode;
@@ -67,7 +68,7 @@ public class PostServiceTest {
             Long postNumber = postService.createPost(null);
         }catch (CustomErrorException e) {
             //then
-            assertThat(e.getErrorCode()).isEqualTo(HttpErrorCode.BAD_REQUEST);
+            assertThat(e.getErrorCode()).isEqualTo(CrudErrorCode.NULL_EXCEPTION);
         }
     }
 

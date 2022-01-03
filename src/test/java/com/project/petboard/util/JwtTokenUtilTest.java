@@ -32,8 +32,6 @@ public class JwtTokenUtilTest {
         given(memberRepository.existsByMemberRefreshToken(refreshToken)).willReturn(true);
 
         assertThat(jwtTokenUtil.requestToken(accessToken, refreshToken)).isInstanceOf(ResponseJwt.class);
-
-        verify(memberRepository, times(1)).existsByMemberRefreshToken(refreshToken); // existsByMemberRefreshToken 1회 실행했냐?
     }
 
     @Test
