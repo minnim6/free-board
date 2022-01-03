@@ -2,13 +2,15 @@ package com.project.petboard.infrastructure.jwt;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @Getter
 public class ResponseJwt {
 
-    private final String accessToken;
-    private final String refreshToken;
-    private final long accessTokenExpireTime;
+    private String accessToken;
+    private String refreshToken;
+    private long accessTokenExpireTime;
 
     @Builder
     public ResponseJwt(String accessToken, String refreshToken, long assessTokenExpireTime){

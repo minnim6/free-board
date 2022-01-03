@@ -1,7 +1,7 @@
 package com.project.petboard.domain.post;
 
 import com.project.petboard.domain.member.Member;
-import com.project.petboard.domain.member.MemberRequestDto;
+import com.project.petboard.domain.member.MemberResponseDto;
 import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -59,8 +58,8 @@ public class Post {
         this.postReportCount = 0;
     }
 
-    public MemberRequestDto toMemberRequestDto(){
-        return new MemberRequestDto(this.member);
+    public MemberResponseDto toMemberResponseDto(){
+        return new MemberResponseDto(this.member);
     }
 
     public void addReportCount(){

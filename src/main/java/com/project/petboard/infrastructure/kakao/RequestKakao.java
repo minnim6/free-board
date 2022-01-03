@@ -13,6 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 public class RequestKakao {
+
     private Long id;
     private KakaoAccount kakao_account;
 

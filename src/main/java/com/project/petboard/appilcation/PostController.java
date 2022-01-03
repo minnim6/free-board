@@ -8,37 +8,42 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
-@RequestMapping(value = "/post")
 @RestController
 public class PostController {
 
     private final PostService postService;
 
-    @GetMapping("/getPage")
+    @GetMapping("/post/page")
     public Page<Post> requestPage(Pageable pageable) {
         return postService.requestPage(pageable);
     }
 
-    @PostMapping("/create")
+    @PostMapping("/post")
     @PreAuthorize("hasRole('MEMBER')")
-    public void createPost(@RequestBody PostDto postDto) {
-        postService.createPost(postDto);
+    public Long createPost(@RequestBody PostRequestDto postRequestDto) {
+        return postService.createPost(postRequestDto);
     }
 
-    @DeleteMapping("/delete")
+    @PatchMapping("/post")
     @PreAuthorize("hasRole('MEMBER')")
-    public void deletePost(@RequestParam("postNumber")Long postNumber) {
+    public Long updatePost(@RequestBody PostRequestDto postRequestDto) {
+        return postService.createPost(postRequestDto);
+    }
+
+    @DeleteMapping("/post")
+    @PreAuthorize("hasRole('MEMBER')")
+    public void deletePost(@RequestParam("postNumber") Long postNumber) {
         postService.deletePost(postNumber);
     }
 
-    @GetMapping("/getPost")
-    public PostRequestDto fetchPost(@RequestParam("postNumber") Long postNumber){
+    @GetMapping("/post")
+    public PostResponseDto fetchPost(@RequestParam("postNumber") Long postNumber){
             return postService.fetchPost(postNumber);
     }
 
-    @PostMapping("/visibleChangePostStatus")
+    @PatchMapping("/post/status")
     @PreAuthorize("hasRole('ADMIN')")
-    public void visibleChangePostStatus(@RequestParam("postNumber")Long postNumber) {
+    public void visibleChangePostStatus(@RequestParam("postNumber") Long postNumber) {
         postService.visibleChangePostStatus(postNumber);
     }
 }

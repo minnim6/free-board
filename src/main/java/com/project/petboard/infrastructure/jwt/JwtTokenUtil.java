@@ -2,11 +2,11 @@ package com.project.petboard.infrastructure.jwt;
 
 import com.project.petboard.domain.member.Member;
 import com.project.petboard.domain.member.MemberRepository;
-import com.project.petboard.domain.member.Role;
 import com.project.petboard.infrastructure.exception.CustomErrorException;
-import com.project.petboard.infrastructure.exception.ErrorCode;
+import com.project.petboard.infrastructure.exception.HttpErrorCode;
+import com.project.petboard.infrastructure.exception.JwtErrorCode;
 import io.jsonwebtoken.*;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Component
 public class JwtTokenUtil {
 
@@ -46,8 +46,10 @@ public class JwtTokenUtil {
         long nowDate = (new Date()).getTime();
         Date tokenExpireDate = crateTokenExpireDate(nowDate, ACCESS_TOKEN_EXPIRE_TIME);
         String accessToken = crateAccessToken(member.getMemberNumber(), tokenExpireDate);
+
         Date refreshTokenExpireDate = crateTokenExpireDate(nowDate, REFRESH_TOKEN_EXPIRE_TIME);
         String refreshToken = createRefreshToken(refreshTokenExpireDate);
+
         member.setMemberRefreshToke(refreshToken);
         member.setMemberRefreshTokenExpireTime(refreshTokenExpireDate);
 
@@ -58,7 +60,7 @@ public class JwtTokenUtil {
                 .build();
     }
 
-    public boolean isExistsMemberRefreshToken(String refreshToken){
+    private boolean isExistsMemberRefreshToken(String refreshToken){
       return memberRepository.existsByMemberRefreshToken(refreshToken);
     }
 
@@ -95,18 +97,18 @@ public class JwtTokenUtil {
         }
     }
 
-    public Claims paresClaims(String token) {
+    private Claims paresClaims(String token) {
         try {
             return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
         } catch (JwtException e) {
-            throw new JwtException("만료되었거나 올바르지 않은 토큰입니다.", e);
+            throw new JwtException("올바르지 않은 토큰입니다.", e);
         }
     }
 
     public Authentication getAuthentication(String token) {
         Claims claims = paresClaims(token);
         if (!isCheckAuthorities(claims)) {
-            throw new CustomErrorException(ErrorCode.BAD_REQUEST);
+            throw new CustomErrorException(HttpErrorCode.BAD_REQUEST);
         }
         Long memberNumber =  Long.valueOf(String.valueOf(claims.get(AUTHORITIES_KEY)));
 
@@ -117,41 +119,36 @@ public class JwtTokenUtil {
         return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
     }
 
-    public Collection<? extends GrantedAuthority> getAuthorities(Long memberNumber) {
-        List<Role> roles = memberRepository.findByMemberNumber(memberNumber).getMemberRole();
-        System.out.println(roles.get(0).getRole());
+    private Collection<? extends GrantedAuthority> getAuthorities(Long memberNumber) {
         return memberRepository.findByMemberNumber(memberNumber)
                 .getMemberRole()
                 .stream().map(role -> new SimpleGrantedAuthority(role.getRole()))
                 .collect(Collectors.toList());
     }
 
-    public boolean isCheckAuthorities(Claims claims) {
+    private boolean isCheckAuthorities(Claims claims) {
         return !(claims.get(AUTHORITIES_KEY) == null);
     }
 
-    public ResponseJwt requestToken(HttpServletRequest servletRequest) {
-        String accessToken = servletRequest.getHeader("accessToken");
-        String refreshToken = servletRequest.getHeader("refreshToken");
-        if(isExistsMemberRefreshToken(refreshToken)&&isValidateToken(refreshToken)) {
+    public ResponseJwt requestToken(String accessToken, String refreshToken) {
+        if(isValidateToken(refreshToken)) {
             Long memberNumber = Long.valueOf(String.valueOf(getClaims(accessToken).get("memberNumber")));
-
-            Date tokenExpireDate = createTokenExpireDate();
+            Date tokenExpireDate = createAccessTokenExpireDate();
             crateAccessToken(memberNumber, tokenExpireDate);
             return new ResponseJwt(accessToken,refreshToken ,tokenExpireDate.getTime());
         }
-        throw new CustomErrorException(ErrorCode.TOKEN_EXPIRE);
+        throw new CustomErrorException(JwtErrorCode.TOKEN_EXPIRE);
     }
 
-    public Date createTokenExpireDate() {
+    private Date createAccessTokenExpireDate() {
         return new Date(new Date().getTime() + ACCESS_TOKEN_EXPIRE_TIME);
     }
 
-    public Claims getClaims(String accessToken) {
+    private Claims getClaims(String accessToken) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(accessToken).getBody();
     }
 
-    public boolean isValidateDate(Date refreshTokenExpireTime) {
+    private boolean isValidateDate(Date refreshTokenExpireTime) {
         return new Date().before(refreshTokenExpireTime);
     }
 }

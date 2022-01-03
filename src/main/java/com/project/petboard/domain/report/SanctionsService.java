@@ -15,6 +15,7 @@ public class SanctionsService {
     public void createSanctions(SanctionsDto sanctionsDto) {
         sanctionsRepository.save(sanctionsDto.toEntity());
     }
+
     @Transactional(readOnly = true)
     public List<Sanctions> fetchSanctionsList() {
         return sanctionsRepository.findAll();

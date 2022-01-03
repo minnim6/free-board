@@ -10,26 +10,25 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@PreAuthorize("hasRole('ADMIN')")
 @AllArgsConstructor
 @RestController
-@RequestMapping("/Sanctions")
 public class SanctionsController {
 
     private SanctionsService sanctionsService;
 
-    @PostMapping
+    @PostMapping("/sanctions")
     public void createSanctions(SanctionsDto sanctionsDto) {
         sanctionsService.createSanctions(sanctionsDto);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping
+    @GetMapping("/sanctions/page")
     public List<Sanctions> fetchSanctionsList() {
         return sanctionsService.fetchSanctionsList();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping(value = "deleteSanctions")
+
+    @DeleteMapping("/sanctions")
     public void deleteSanctions(String sanctionsKey) {
         sanctionsService.deleteSanctions(sanctionsKey);
     }

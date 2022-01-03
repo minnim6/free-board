@@ -1,29 +1,31 @@
 package com.project.petboard.domain.post;
 
-import com.project.petboard.domain.member.MemberRequestDto;
+import com.project.petboard.domain.member.Member;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
-@Getter
+import java.time.LocalDateTime;
+import java.util.Date;
+
 @NoArgsConstructor
+@Getter
 public class PostRequestDto {
 
-    private  Long postNumber;
+    private Long memberNumber;
 
-    private  MemberRequestDto memberRequestDto;
+    private String postTitle;
 
-    private  String postTitle;
+    private String postContents;
 
-    private  String postContents;
+    private String postCategory;
 
-    private  String postCategory;
-
-    public PostRequestDto(Post post){
-        this.memberRequestDto = post.toMemberRequestDto();
-        this.postNumber = post.getPostNumber();;
-        this.postCategory = post.getPostCategory();
-        this.postTitle = post.getPostTitle();
-        this.postContents = post.getPostContents();
+    public Post toEntity(Member member){
+        return Post.builder()
+                .member(member)
+                .postTitle(postTitle)
+                .postCategory(postCategory)
+                .postContents(postContents)
+                .build();
     }
 }

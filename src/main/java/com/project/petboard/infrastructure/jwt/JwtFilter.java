@@ -20,7 +20,7 @@ import java.util.List;
 public class JwtFilter extends OncePerRequestFilter {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String BEARER_PREFIX = "Bearer ";
+    public static final String BEARER_PREFIX = "Bearer";
 
     private final JwtTokenUtil jwtTokenUtil;
 
@@ -35,8 +35,6 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = jwtTokenUtil.resolveToken(request);
-        log.info(request.getServletPath());
-        log.info("----------");
         if (!token.isEmpty() && jwtTokenUtil.isValidateToken(token)) {
             Authentication authentication = jwtTokenUtil.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);

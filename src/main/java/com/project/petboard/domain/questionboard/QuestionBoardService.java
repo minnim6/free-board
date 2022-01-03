@@ -1,15 +1,14 @@
 package com.project.petboard.domain.questionboard;
 
+import com.project.petboard.domain.member.Member;
+import com.project.petboard.domain.member.MemberRepository;
 import com.project.petboard.infrastructure.exception.CustomErrorException;
-import com.project.petboard.infrastructure.exception.ErrorCode;
+import com.project.petboard.infrastructure.exception.HttpErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 
 @RequiredArgsConstructor
 @Transactional
@@ -18,12 +17,14 @@ public class QuestionBoardService {
 
     private final QuestionBoardRepository questionBoardRepository;
 
+    private final MemberRepository memberRepository;
+
     @Transactional(readOnly = true)
-    public QuestionBoardDto fetchQuestionBoard(Long questionNumber) {
+    public QuestionResponseDto fetchQuestionBoard(Long questionNumber) {
         try {
-            return new QuestionBoardDto(questionBoardRepository.findByQuestionBoardNumber(questionNumber));
+            return new QuestionResponseDto(questionBoardRepository.findByQuestionBoardNumber(questionNumber));
         } catch (Exception e) {
-            throw new CustomErrorException(e.getMessage(), ErrorCode.NOT_FOUND);
+            throw new CustomErrorException(e.getMessage(), HttpErrorCode.NOT_FOUND);
         }
     }
 
@@ -31,8 +32,12 @@ public class QuestionBoardService {
         questionBoardRepository.deleteById(questionNumber);
     }
 
-    public void createQuestionBoard(QuestionBoardDto questionBoardDto) {
-        questionBoardRepository.save(questionBoardDto.toEntity());
+    public Long createQuestionBoard(QuestionBoardRequestDto questionBoardDto) {
+        try {
+            return questionBoardRepository.save(questionBoardDto.toEntity(getMemberEntity(questionBoardDto.getMemberNumber()))).getQuestionBoardNumber();
+        }catch (Exception e){
+            throw new CustomErrorException(e.getMessage(),HttpErrorCode.BAD_REQUEST);
+        }
     }
 
     @Transactional(readOnly = true)
@@ -40,7 +45,16 @@ public class QuestionBoardService {
         try {
             return questionBoardRepository.findAll(pageable);
         } catch (Exception e) {
-            throw new CustomErrorException(e.getMessage(), ErrorCode.NOT_FOUND);
+            throw new CustomErrorException(e.getMessage(), HttpErrorCode.NOT_FOUND);
         }
+    }
+
+    public void questionBoardAnswer(QuestionBoardAnswerRequestDto answerRequestDto){
+       QuestionBoard questionBoard = questionBoardRepository.findByQuestionBoardNumber(answerRequestDto.getQuestionBoardNumber());
+       questionBoard.completeAnswer(answerRequestDto);
+    }
+
+    public Member getMemberEntity(Long memberNumber){
+        return memberRepository.findByMemberNumber(memberNumber);
     }
 }
