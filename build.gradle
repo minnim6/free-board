@@ -7,9 +7,6 @@ plugins {
 group 'com.pet.board'
 version '1.0-SNAPSHOT'
 
-configurations {
-
-}
 repositories {
     mavenCentral()
 }

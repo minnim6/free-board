@@ -1,5 +1,6 @@
 package com.project.petboard.domain.comment;
 
+import com.fasterxml.jackson.databind.util.Converter;
 import com.project.petboard.domain.member.Member;
 import com.project.petboard.domain.member.MemberRepository;
 import com.project.petboard.domain.post.Post;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.function.Function;
 
 @RequiredArgsConstructor
 @Transactional
@@ -37,8 +40,14 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Comment> fetchCommentPage(Pageable pageable) {
-        return commentRepository.findAll(pageable);
+    public Page<CommentResponseDto> fetchCommentPage(Pageable pageable) {
+        return commentRepository.findAll(pageable).map(new Function<Comment, CommentResponseDto>() {
+            @Override
+            public CommentResponseDto apply(Comment comment) {
+                // Conversion logic
+                return new CommentResponseDto(comment);
+            }
+        });
     }
 
     public void deleteComment(Long commentNumber) {

@@ -1,7 +1,9 @@
 package com.project.petboard.domain.report;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @Getter
 public class SanctionsDto {
 
@@ -17,6 +19,12 @@ public class SanctionsDto {
                 .sanctionsValue(this.sanctionsValue)
                 .sanctionsContents(this.getSanctionsContents())
                 .build();
+    }
+
+    public SanctionsDto(Sanctions sanctions){
+        this.sanctionsKey = sanctions.getSanctionsKey();
+        this.sanctionsValue = sanctions.getSanctionsValue();
+        this.sanctionsContents = sanctions.getSanctionsContents();
     }
 
 }

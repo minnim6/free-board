@@ -3,6 +3,7 @@ package com.project.petboard.appilcation;
 import com.project.petboard.domain.recomment.Recomment;
 import com.project.petboard.domain.recomment.RecommentRequestDto;
 import com.project.petboard.domain.recomment.RecommentService;
+import com.project.petboard.domain.recomment.ReocommentResponseDto;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +24,7 @@ public class RecommentController {
     }
 
     @GetMapping(value = "/recomment/page")
-    public Page<Recomment> requestRecommentPage(Pageable pageable){
+    public Page<ReocommentResponseDto> requestRecommentPage(Pageable pageable){
         return recommentService.requestRecommentPage(pageable);
     }
 }

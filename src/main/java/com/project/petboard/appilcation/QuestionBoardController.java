@@ -36,7 +36,7 @@ public class QuestionBoardController {
         return questionBoardService.createQuestionBoard(questionBoardDto);
     }
     @GetMapping(value = "/question/page")
-    public Page<QuestionBoard> requestPage(Pageable pageable){
+    public Page<QuestionResponseDto> requestPage(Pageable pageable){
         return questionBoardService.requestPage(pageable);
     }
 }

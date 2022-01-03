@@ -1,5 +1,7 @@
 package com.project.petboard.domain.post;
 
+import com.project.petboard.domain.comment.Comment;
+import com.project.petboard.domain.comment.CommentResponseDto;
 import com.project.petboard.domain.member.Member;
 import com.project.petboard.domain.member.MemberRepository;
 import com.project.petboard.domain.report.ReportRepository;
@@ -13,6 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.function.Function;
 
 @RequiredArgsConstructor
 @Transactional
@@ -28,9 +32,15 @@ public class PostService {
     private final SanctionsRepository sanctionsRepository;
 
     @Transactional(readOnly = true)
-    public Page<Post> requestPage(Pageable pageable) {
+    public Page<PostResponseDto> requestPage(Pageable pageable) {
         try {
-            return postRepository.findAll(pageable);
+            return postRepository.findAll(pageable).map(new Function<Post, PostResponseDto>() {
+                @Override
+                public PostResponseDto apply(Post post) {
+                    // Conversion logic
+                    return new PostResponseDto(post);
+                }
+            });
         } catch (Exception e) {
             throw new CustomErrorException(e.getMessage(), HttpErrorCode.NOT_FOUND);
         }

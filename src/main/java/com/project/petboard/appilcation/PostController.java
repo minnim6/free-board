@@ -14,7 +14,7 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping("/post/page")
-    public Page<Post> requestPage(Pageable pageable) {
+    public Page<PostResponseDto> requestPage(Pageable pageable) {
         return postService.requestPage(pageable);
     }
 

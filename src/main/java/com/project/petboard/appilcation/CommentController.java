@@ -25,7 +25,7 @@ public class CommentController {
         commentService.deleteComment(commentNumber);
     }
     @GetMapping("/comment/page")
-    public Page<Comment> fetchCommentPage(Pageable pageable) {
+    public Page<CommentResponseDto> fetchCommentPage(Pageable pageable) {
        return commentService.fetchCommentPage(pageable);
     }
 }

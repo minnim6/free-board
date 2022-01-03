@@ -5,7 +5,10 @@ import com.project.petboard.domain.report.SanctionsDto;
 import com.project.petboard.domain.report.SanctionsRepository;
 import com.project.petboard.domain.report.SanctionsService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,8 +26,8 @@ public class SanctionsController {
     }
 
     @GetMapping("/sanctions/page")
-    public List<Sanctions> fetchSanctionsList() {
-        return sanctionsService.fetchSanctionsList();
+    public Page<SanctionsDto> fetchSanctionsList(Pageable pageable) {
+        return sanctionsService.fetchSanctionsList(pageable);
     }
 
 

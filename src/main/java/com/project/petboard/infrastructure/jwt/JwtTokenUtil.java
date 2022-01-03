@@ -7,6 +7,7 @@ import com.project.petboard.infrastructure.exception.HttpErrorCode;
 import com.project.petboard.infrastructure.exception.JwtErrorCode;
 import io.jsonwebtoken.*;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Component
 public class JwtTokenUtil {
 
