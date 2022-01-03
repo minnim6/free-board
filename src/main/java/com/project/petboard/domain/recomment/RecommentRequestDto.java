@@ -5,20 +5,21 @@ import com.project.petboard.domain.member.Member;
 import com.project.petboard.domain.post.Post;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 public class RecommentRequestDto {
 
-    private final Long postNumber;
+    private Long postNumber;
 
-    private final Long memberNumber;
+    private Long memberNumber;
 
-    private final Long commentNumber;
+    private Long commentNumber;
 
-    private final String recommentContents;
+    private String recommentContents;
 
     public Recomment toEntity(Post post, Member member,Comment comment){
         return Recomment.builder()

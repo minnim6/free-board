@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@PreAuthorize("hasRole('ADMIN')")
 @AllArgsConstructor
 @RestController
 public class SanctionsController {
@@ -21,13 +22,12 @@ public class SanctionsController {
         sanctionsService.createSanctions(sanctionsDto);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/sanctions/page")
     public List<Sanctions> fetchSanctionsList() {
         return sanctionsService.fetchSanctionsList();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+
     @DeleteMapping("/sanctions")
     public void deleteSanctions(String sanctionsKey) {
         sanctionsService.deleteSanctions(sanctionsKey);

@@ -39,11 +39,11 @@ public class MemberService {
                 .orElseGet(() -> saveMember(requestKakao));
     }
 
-    private void saveRole(Member member) {
+    public void saveRole(Member member) {
         roleRepository.save(new Role(member, "MEMBER"));
     }
 
-    public Member saveMember(RequestKakao requestKakao) {
+    private Member saveMember(RequestKakao requestKakao) {
         memberRepository.save(requestKakao.toEntity());
         Member member = memberRepository.findByMemberSnsId(String.valueOf(requestKakao.getId())).get();
         saveRole(member);

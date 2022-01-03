@@ -37,10 +37,13 @@ public class RecommentServiceTest {
 
     @BeforeEach
     public void setup(){
-        recommentRequestDto =
-                new RecommentRequestDto(1L ,1L,
-                        1L,"contnets");
-        recomment = recommentRequestDto.toEntity(new Post(),new Member(),new Comment());
+       recomment = Recomment.builder()
+               .comment(new Comment())
+               .member(new Member())
+               .post(new Post())
+               .recommentContents("contents")
+               .build();
+       recommentRequestDto = new RecommentRequestDto();
     }
 
     @Test

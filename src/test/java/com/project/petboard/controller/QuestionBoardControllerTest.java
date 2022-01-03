@@ -52,7 +52,6 @@ public class QuestionBoardControllerTest {
     @DisplayName("질문 게시글 가져오기 테스트")
     @Test
     public void fetchQuestionBoardTestShouldBeSuccess() throws Exception {
-
         String title = "title";
         String content = "contents";
         QuestionBoard questionBoard = QuestionBoard.builder()

@@ -37,10 +37,13 @@ public class PostServiceTest {
 
     @BeforeEach
     public void setup() {
-        postRequestDto = new PostRequestDto(
-                1L,"title","contnents","Category"
-        );
-        post = postRequestDto.toEntity(new Member());
+        post = Post.builder()
+                .member(new Member())
+                .postTitle("title")
+                .postContents("contents")
+                .postCategory("category")
+                .build();
+        postRequestDto = new PostRequestDto();
     }
 
     @Test

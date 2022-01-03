@@ -20,13 +20,6 @@ public class PostRequestDto {
 
     private String postCategory;
 
-    public PostRequestDto(Long memberNumber,String postTitle,String postContents,String postCategory){
-        this.memberNumber = memberNumber;
-        this.postTitle = postTitle;
-        this.postContents = postContents;
-        this.postCategory = postCategory;
-    }
-
     public Post toEntity(Member member){
         return Post.builder()
                 .member(member)

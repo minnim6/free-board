@@ -20,7 +20,7 @@ import java.util.List;
 public class JwtFilter extends OncePerRequestFilter {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String BEARER_PREFIX = "Bearer ";
+    public static final String BEARER_PREFIX = "Bearer";
 
     private final JwtTokenUtil jwtTokenUtil;
 
