@@ -5,6 +5,7 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -69,6 +70,7 @@ public class CommentTest {
                 .then().statusCode(HttpStatus.OK.value());
     }
 
+    @Order(3)
     @DisplayName("댓글 삭제 테스트")
     @Test
     public void deleteCommentTest(){

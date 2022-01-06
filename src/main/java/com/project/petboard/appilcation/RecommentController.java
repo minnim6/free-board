@@ -16,6 +16,7 @@ import javax.validation.Valid;
 @AllArgsConstructor
 @RestController
 public class RecommentController {
+
     private final RecommentService recommentService;
 
     @PreAuthorize("hasRole('MEMBER')")

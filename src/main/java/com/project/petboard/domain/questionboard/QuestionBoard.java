@@ -2,13 +2,11 @@ package com.project.petboard.domain.questionboard;
 
 import com.project.petboard.domain.member.Member;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Date;
 
 @Getter
@@ -21,7 +19,7 @@ public class QuestionBoard {
     private Long questionBoardNumber;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "member_number")
     private Member member;
 
     private String questionBoardTitle;

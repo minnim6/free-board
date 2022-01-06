@@ -1,17 +1,13 @@
 package com.project.petboard.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.petboard.appilcation.CommentController;
 import com.project.petboard.appilcation.QuestionBoardController;
 import com.project.petboard.domain.member.Member;
-import com.project.petboard.domain.member.MemberResponseDto;
 import com.project.petboard.domain.questionboard.QuestionBoard;
 import com.project.petboard.domain.questionboard.QuestionBoardRepository;
 import com.project.petboard.domain.questionboard.QuestionBoardService;
 import com.project.petboard.domain.questionboard.QuestionResponseDto;
 import com.project.petboard.infrastructure.configure.SecurityConfig;
-import com.project.petboard.infrastructure.jwt.JwtTokenUtil;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +22,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.assertj.core.api.Assertions.assertThat;
 
 
 @WebMvcTest(value = QuestionBoardController.class, excludeFilters = {
@@ -123,7 +118,6 @@ public class QuestionBoardControllerTest{
     public void createQuestionBoardTestShouldBeSuccess() throws Exception {
         Map<String, Object> questionBoardRequestDto = new HashMap<>();
 
-        questionBoardRequestDto.put("questionBoardNumber", 1);
         questionBoardRequestDto.put("memberResponseDto", 1);
         questionBoardRequestDto.put("questionBoardTitle", "title111111111111111");
         questionBoardRequestDto.put("questionBoardContents", "contents11111111111111");

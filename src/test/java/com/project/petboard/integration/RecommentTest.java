@@ -77,7 +77,7 @@ public class RecommentTest {
         given().accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(ContentType.JSON)
                 .header("Authorization",token)
-                .param("recommentNumber",String.valueOf(1)).log().all()
+                .param("recommentNumber",String.valueOf(2)).log().all()
                 .when().delete("/recomment")
                 .then().statusCode(HttpStatus.OK.value());
     }

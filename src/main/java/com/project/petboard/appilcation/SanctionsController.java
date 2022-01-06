@@ -20,7 +20,7 @@ public class SanctionsController {
     private SanctionsService sanctionsService;
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/sanctions")
+    @PostMapping("/sanctions/admin")
     public void createSanctions(@RequestBody @Valid SanctionsDto sanctionsDto, BindingResult bindingResult) {
         if(bindingResult.hasErrors()){
             throw new RequestErrorException(bindingResult);
@@ -28,13 +28,13 @@ public class SanctionsController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/sanctions/page")
+    @GetMapping("/sanctions/page/admin")
     public Page<SanctionsDto> fetchSanctionsList(Pageable pageable) {
         return sanctionsService.fetchSanctionsList(pageable);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/sanctions")
+    @DeleteMapping("/sanctions/admin")
     public void deleteSanctions(@RequestParam("sanctionsKey") String sanctionsKey) {
         sanctionsService.deleteSanctions(sanctionsKey);
     }

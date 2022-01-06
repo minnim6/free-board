@@ -33,7 +33,7 @@ public class PostTest {
 
     @BeforeEach
     void setUp() {
-        Date tokenExpireDate = new Date(new Date().getTime() + 100000L);
+        Date tokenExpireDate = new Date(new Date().getTime() + 1000000L);
         token = jwtTokenUtil.crateAccessToken(1L,tokenExpireDate);
         RestAssured.port = port;
     }

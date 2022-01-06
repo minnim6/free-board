@@ -6,7 +6,6 @@ import com.project.petboard.infrastructure.exception.CustomErrorException;
 import com.project.petboard.infrastructure.exception.HttpErrorCode;
 import com.project.petboard.infrastructure.exception.JwtErrorCode;
 import io.jsonwebtoken.*;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,7 +18,9 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.Base64;
+import java.util.Collection;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -90,7 +91,6 @@ public class JwtTokenUtil {
     }
 
     public boolean isValidateToken(String token) {
-        Jws<Claims> claims2 = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token); // 가져온 토큰을 claims로 바꿈
             return !claims.getBody().getExpiration().before(new Date()); //-> 만료된 토큰일 경우 false 리턴
@@ -133,7 +133,7 @@ public class JwtTokenUtil {
     }
 
     public ResponseJwt requestToken(String accessToken, String refreshToken) {
-        if(isValidateToken(refreshToken)) {
+        if(isValidateToken(refreshToken)&&isExistsMemberRefreshToken(refreshToken)) {
             Long memberNumber = Long.valueOf(String.valueOf(getClaims(accessToken).get("memberNumber")));
             Date tokenExpireDate = createAccessTokenExpireDate();
             crateAccessToken(memberNumber, tokenExpireDate);
@@ -148,9 +148,5 @@ public class JwtTokenUtil {
 
     private Claims getClaims(String accessToken) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(accessToken).getBody();
-    }
-
-    private boolean isValidateDate(Date refreshTokenExpireTime) {
-        return new Date().before(refreshTokenExpireTime);
     }
 }

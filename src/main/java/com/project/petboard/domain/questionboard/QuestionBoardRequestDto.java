@@ -1,21 +1,18 @@
 package com.project.petboard.domain.questionboard;
 
 import com.project.petboard.domain.member.Member;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
-import java.util.Date;
 
 @NotNull
 @NoArgsConstructor
 @Getter
 public class QuestionBoardRequestDto {
-
-    @Positive(message = "필수로 요소가 필요합니다.")
-    private Long questionBoardNumber;
 
     @Positive(message = "필수로 요소가 필요합니다.")
     private Long memberNumber;

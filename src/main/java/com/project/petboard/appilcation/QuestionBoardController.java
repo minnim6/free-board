@@ -1,6 +1,9 @@
 package com.project.petboard.appilcation;
 
-import com.project.petboard.domain.questionboard.*;
+import com.project.petboard.domain.questionboard.QuestionBoardAnswerRequestDto;
+import com.project.petboard.domain.questionboard.QuestionBoardRequestDto;
+import com.project.petboard.domain.questionboard.QuestionBoardService;
+import com.project.petboard.domain.questionboard.QuestionResponseDto;
 import com.project.petboard.infrastructure.exception.RequestErrorException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -12,13 +15,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @AllArgsConstructor
-
 @RestController
 public class QuestionBoardController {
 
     private final QuestionBoardService questionBoardService;
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/question")
     public QuestionResponseDto fetchQuestionBoard(@RequestParam("questionNumber")Long questionNumber){
         return questionBoardService.fetchQuestionBoard(questionNumber);
@@ -46,7 +47,6 @@ public class QuestionBoardController {
         }return questionBoardService.createQuestionBoard(questionBoardDto);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/question/page")
     public Page<QuestionResponseDto> requestPage(Pageable pageable){
         return questionBoardService.requestPage(pageable);
