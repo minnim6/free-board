@@ -4,13 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.petboard.appilcation.SanctionsController;
 import com.project.petboard.domain.report.SanctionsRepository;
 import com.project.petboard.domain.report.SanctionsService;
+import com.project.petboard.infrastructure.configure.SecurityConfig;
 import com.project.petboard.infrastructure.jwt.JwtTokenUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,7 +24,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.HashMap;
 import java.util.Map;
 
-@WebMvcTest(SanctionsController.class)
+@WebMvcTest(value = SanctionsController.class, excludeFilters = {
+        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class) })
 public class SanctionsControllerTest {
 
     @Autowired
@@ -35,19 +40,17 @@ public class SanctionsControllerTest {
     @MockBean
     private SanctionsService sanctionsService;
 
-    @MockBean
-    private JwtTokenUtil jwtTokenUtil;
-
     private final String sanctionsKey = "sanctionKey";
 
+    @WithMockUser(roles = "ADMIN")
     @DisplayName("제재 종류 생성 테스트")
     @Test
     public void createSanctionsTestShouldBeSuccess() throws Exception {
         Map<String, Object> sanctionsDto = new HashMap<>();
 
-        sanctionsDto.put("sanctionsKey", "key");
+        sanctionsDto.put("sanctionsKey", "sanctions");
         sanctionsDto.put("sanctionsValue", 5);
-        sanctionsDto.put("sanctionsContents", "contents");
+        sanctionsDto.put("sanctionsContents", "contentsconconconcon");
 
         mockMvc.perform(post("/sanctions")
                         .content(objectMapper.writeValueAsString(sanctionsDto))
@@ -56,11 +59,29 @@ public class SanctionsControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @WithMockUser(roles = "ADMIN")
+    @DisplayName("제재 종류 생성 실패 테스트")
+    @Test
+    public void createSanctionsTestShouldBeFail() throws Exception {
+        Map<String, Object> sanctionsDto = new HashMap<>();
+
+        sanctionsDto.put("sanctionsKey", "");
+        sanctionsDto.put("sanctionsValue", 5);
+        sanctionsDto.put("sanctionsContents", "contents");
+
+        mockMvc.perform(post("/sanctions")
+                        .content(objectMapper.writeValueAsString(sanctionsDto))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @WithMockUser(roles = "ADMIN")
     @DisplayName("제재 종류 삭제 테스트")
     @Test
     public void deleteSanctionsTestShouldBeSuccess() throws Exception {
             mockMvc.perform(delete("/sanctions")
-                            .param("recommentNumber",String.valueOf(sanctionsKey)))
+                            .param("sanctionsKey",sanctionsKey))
                     .andExpect(status().isOk());
         assertThat(sanctionsRepository.findBySanctionsKey(sanctionsKey)).isNull();
     }

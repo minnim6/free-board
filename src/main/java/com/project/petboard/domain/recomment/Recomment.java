@@ -1,8 +1,8 @@
 package com.project.petboard.domain.recomment;
 
-import com.project.petboard.domain.post.Post;
 import com.project.petboard.domain.comment.Comment;
 import com.project.petboard.domain.member.Member;
+import com.project.petboard.domain.post.Post;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,15 +21,15 @@ public class Recomment {
     private Long recommentNumber;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "post_number")
     private Post post;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "member_number")
     private Member member;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "comment_number")
     private Comment comment;
 
     private String recommentContents;

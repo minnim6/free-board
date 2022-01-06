@@ -1,7 +1,7 @@
 package com.project.petboard.domain.member;
 
-import com.project.petboard.infrastructure.jwt.ResponseJwt;
 import com.project.petboard.infrastructure.jwt.JwtTokenUtil;
+import com.project.petboard.infrastructure.jwt.ResponseJwt;
 import com.project.petboard.infrastructure.kakao.KakaoUtil;
 import com.project.petboard.infrastructure.kakao.RequestKakao;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class MemberService {
     private final JwtTokenUtil jwtTokenUtil;
 
     public void deleteMember(Long memberNumber) {
-        memberRepository.deleteById(memberNumber);
+        memberRepository.findByMemberNumber(memberNumber).memberStatusChange();
     }
 
     public ResponseJwt loginMember(String code) {
@@ -40,7 +40,7 @@ public class MemberService {
     }
 
     public void saveRole(Member member) {
-        roleRepository.save(new Role(member, "MEMBER"));
+        roleRepository.save(new Role(member, "ROLE_MEMBER"));
     }
 
     private Member saveMember(RequestKakao requestKakao) {
@@ -48,10 +48,6 @@ public class MemberService {
         Member member = memberRepository.findByMemberSnsId(String.valueOf(requestKakao.getId())).get();
         saveRole(member);
         return member;
-    }
-
-    private boolean isExistsMemberRefreshToken(String refreshToken){
-        return memberRepository.existsByMemberRefreshToken(refreshToken);
     }
 
 }

@@ -1,5 +1,7 @@
 package com.project.petboard.service;
 
+import com.project.petboard.domain.post.Post;
+import com.project.petboard.domain.post.PostResponseDto;
 import com.project.petboard.domain.report.Sanctions;
 import com.project.petboard.domain.report.SanctionsDto;
 import com.project.petboard.domain.report.SanctionsRepository;
@@ -7,6 +9,13 @@ import com.project.petboard.domain.report.SanctionsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -55,4 +64,21 @@ public class SanctionsServiceTest {
         assertThat(sanctionsRepository.findBySanctionsKey(sanctionKey)
                 .getSanctionsContents()).isEqualTo("contents");
     }
+
+    @DisplayName("페이지 가져오기 테스트")
+    @Test
+    public void getSanctionsPageTestShouldBeSuccess() {
+        //given
+        Pageable pageable = PageRequest.of(1, 10);
+        List<Sanctions> sanctionsList = new ArrayList<>();
+        sanctionsList.add(sanctions);
+        sanctionsList.add(sanctions);
+        Page<Sanctions> sanctionsPage = new PageImpl<>(sanctionsList);
+        given(sanctionsRepository.findAll(pageable)).willReturn(sanctionsPage);
+        //when
+        Page<SanctionsDto> sanctionsDtos = sanctionsService.fetchSanctionsList(pageable);
+        //then
+        assertThat(sanctionsDtos.getSize()).isEqualTo(2);
+    }
+
 }

@@ -90,6 +90,7 @@ public class JwtTokenUtil {
     }
 
     public boolean isValidateToken(String token) {
+        Jws<Claims> claims2 = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token); // 가져온 토큰을 claims로 바꿈
             return !claims.getBody().getExpiration().before(new Date()); //-> 만료된 토큰일 경우 false 리턴

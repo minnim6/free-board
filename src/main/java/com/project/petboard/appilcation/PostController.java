@@ -1,11 +1,15 @@
 package com.project.petboard.appilcation;
 
 import com.project.petboard.domain.post.*;
+import com.project.petboard.infrastructure.exception.RequestErrorException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @AllArgsConstructor
 @RestController
@@ -15,23 +19,25 @@ public class PostController {
 
     @GetMapping("/post/page")
     public Page<PostResponseDto> requestPage(Pageable pageable) {
-        return postService.requestPage(pageable);
+        return postService.getPostPage(pageable);
     }
 
+    @PreAuthorize("hasRole('MEMBER')")
     @PostMapping("/post")
-    @PreAuthorize("hasRole('MEMBER')")
-    public Long createPost(@RequestBody PostRequestDto postRequestDto) {
-        return postService.createPost(postRequestDto);
+    public Long createPost(@RequestBody @Valid PostRequestDto postRequestDto, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()){
+            throw new RequestErrorException(bindingResult);
+        }return postService.createPost(postRequestDto);
     }
 
-    @PatchMapping("/post")
     @PreAuthorize("hasRole('MEMBER')")
+    @PatchMapping("/post")
     public Long updatePost(@RequestBody PostRequestDto postRequestDto) {
         return postService.createPost(postRequestDto);
     }
 
-    @DeleteMapping("/post")
     @PreAuthorize("hasRole('MEMBER')")
+    @DeleteMapping("/post")
     public void deletePost(@RequestParam("postNumber") Long postNumber) {
         postService.deletePost(postNumber);
     }
@@ -41,8 +47,8 @@ public class PostController {
             return postService.fetchPost(postNumber);
     }
 
-    @PatchMapping("/post/status")
     @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/post/status")
     public void visibleChangePostStatus(@RequestParam("postNumber") Long postNumber) {
         postService.visibleChangePostStatus(postNumber);
     }

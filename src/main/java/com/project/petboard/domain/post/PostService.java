@@ -1,12 +1,11 @@
 package com.project.petboard.domain.post;
 
-import com.project.petboard.domain.comment.Comment;
-import com.project.petboard.domain.comment.CommentResponseDto;
+import com.project.petboard.domain.comment.CommentRepository;
 import com.project.petboard.domain.member.Member;
 import com.project.petboard.domain.member.MemberRepository;
+import com.project.petboard.domain.recomment.RecommentRepository;
 import com.project.petboard.domain.report.ReportRepository;
 import com.project.petboard.domain.report.SanctionsRepository;
-import com.project.petboard.infrastructure.exception.CrudErrorCode;
 import com.project.petboard.infrastructure.exception.CustomErrorException;
 import com.project.petboard.infrastructure.exception.HttpErrorCode;
 import com.project.petboard.infrastructure.exception.ReportErrorCode;
@@ -15,8 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.function.Function;
 
 @RequiredArgsConstructor
 @Transactional
@@ -31,16 +28,14 @@ public class PostService {
 
     private final SanctionsRepository sanctionsRepository;
 
+    private final CommentRepository commentRepository;
+
+    private final RecommentRepository recommentRepository;
+
     @Transactional(readOnly = true)
-    public Page<PostResponseDto> requestPage(Pageable pageable) {
+    public Page<PostResponseDto> getPostPage(Pageable pageable) {
         try {
-            return postRepository.findAll(pageable).map(new Function<Post, PostResponseDto>() {
-                @Override
-                public PostResponseDto apply(Post post) {
-                    // Conversion logic
-                    return new PostResponseDto(post);
-                }
-            });
+            return postRepository.findAllByPostStatus(pageable,PostStatus.Y).map(PostResponseDto::new);
         } catch (Exception e) {
             throw new CustomErrorException(e.getMessage(), HttpErrorCode.NOT_FOUND);
         }
@@ -49,14 +44,16 @@ public class PostService {
     public Long createPost(PostRequestDto postRequestDto) {
         try {
             return postRepository.save(postRequestDto.toEntity(getMemberEntity(postRequestDto.getMemberNumber()))).getPostNumber();
-        }catch (NullPointerException e){
-            throw new CustomErrorException(e.getMessage(), CrudErrorCode.NULL_EXCEPTION);
-        } catch (Exception e){
+        }catch (Exception e){
             throw new CustomErrorException(e.getMessage(), HttpErrorCode.BAD_REQUEST);
         }
     }
 
     public void deletePost(Long postNumber) {
+        Post post = getPostEntity(postNumber);
+        reportRepository.deleteAllByPost(post);
+        recommentRepository.deleteAllByPost(post);
+        commentRepository.deleteAllByPost(post);
         postRepository.deleteById(postNumber);
     }
 
@@ -68,7 +65,11 @@ public class PostService {
     @Transactional(readOnly = true)
     public PostResponseDto fetchPost(Long postNumber) {
         try {
-            return new PostResponseDto(postRepository.findByPostNumber(postNumber));
+            Post post = postRepository.findByPostNumber(postNumber);
+            if(post.getPostStatus().equals(PostStatus.N)) {
+                throw new CustomErrorException(HttpErrorCode.NOT_FOUND);
+            }
+            return new PostResponseDto(post);
         } catch (Exception e) {
             throw new CustomErrorException(e.getMessage(), HttpErrorCode.NOT_FOUND);
         }

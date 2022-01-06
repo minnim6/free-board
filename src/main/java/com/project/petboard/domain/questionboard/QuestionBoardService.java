@@ -50,7 +50,6 @@ public class QuestionBoardService {
             return questionBoardRepository.findAll(pageable).map(new Function<QuestionBoard, QuestionResponseDto>() {
                 @Override
                 public QuestionResponseDto apply(QuestionBoard questionBoard) {
-                    // Conversion logic
                     return new QuestionResponseDto(questionBoard);
                 }});
         } catch (Exception e) {

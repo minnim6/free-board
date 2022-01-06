@@ -2,12 +2,21 @@ package com.project.petboard.service;
 
 import com.project.petboard.domain.member.Member;
 import com.project.petboard.domain.member.MemberRepository;
+import com.project.petboard.domain.post.Post;
+import com.project.petboard.domain.post.PostResponseDto;
 import com.project.petboard.domain.questionboard.*;
 import com.project.petboard.infrastructure.exception.CustomErrorException;
 import com.project.petboard.infrastructure.exception.HttpErrorCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -107,5 +116,21 @@ public class QuestionBoardServiceTest {
         questionBoardService.deleteQuestionBoard(1L);
         //then
         verify(questionBoardRepository).deleteById(1L);
+    }
+
+    @DisplayName("페이지 가져오기 테스트")
+    @Test
+    public void getQuestionBoardPageTestShouldBeSuccess() {
+        //given
+        Pageable pageable = PageRequest.of(1, 10);
+        List<QuestionBoard> questionBoardList = new ArrayList<>();
+        questionBoardList.add(questionBoard);
+        questionBoardList.add(questionBoard);
+        Page<QuestionBoard> questionBoards = new PageImpl<>(questionBoardList);
+        given(questionBoardRepository.findAll(pageable)).willReturn(questionBoards);
+        //when
+        Page<QuestionResponseDto> questionResponseDtos = questionBoardService.requestPage(pageable);
+        //then
+        assertThat(questionResponseDtos.getSize()).isEqualTo(2);
     }
 }

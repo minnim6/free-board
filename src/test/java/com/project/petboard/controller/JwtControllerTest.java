@@ -1,8 +1,9 @@
 package com.project.petboard.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.petboard.appilcation.CommentController;
 import com.project.petboard.appilcation.JwtController;
-import com.project.petboard.domain.member.MemberRepository;
+import com.project.petboard.infrastructure.configure.SecurityConfig;
 import com.project.petboard.infrastructure.jwt.JwtTokenUtil;
 import com.project.petboard.infrastructure.jwt.ResponseJwt;
 import org.junit.jupiter.api.DisplayName;
@@ -11,6 +12,9 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 
@@ -20,9 +24,9 @@ import java.util.Date;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-@WebMvcTest(JwtController.class)
-public class JwtControllerTest {
+@WebMvcTest(value = JwtController.class, excludeFilters = {
+        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)})
+public class JwtControllerTest{
 
     @Autowired
     private ObjectMapper objectMapper;

@@ -4,13 +4,11 @@ package com.project.petboard.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.petboard.appilcation.PostController;
 import com.project.petboard.domain.member.Member;
-import com.project.petboard.domain.post.*;
+import com.project.petboard.domain.post.Post;
+import com.project.petboard.domain.post.PostRepository;
+import com.project.petboard.domain.post.PostResponseDto;
+import com.project.petboard.domain.post.PostService;
 import com.project.petboard.infrastructure.configure.SecurityConfig;
-import com.project.petboard.infrastructure.jwt.JwtFilter;
-import com.project.petboard.infrastructure.jwt.JwtTokenUtil;
-import org.hibernate.sql.Delete;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,22 +19,19 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.util.LinkedMultiValueMap;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.assertj.core.api.Assertions.assertThat;
 
-@WebMvcTest(PostController.class)
-public class PostControllerTest {
+@WebMvcTest(value = PostController.class, excludeFilters = {
+        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)})
+public class PostControllerTest{
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -49,9 +44,6 @@ public class PostControllerTest {
 
     @MockBean
     private PostService postService;
-
-    @MockBean
-    private JwtTokenUtil jwtTokenUtil;
 
     private final Long postId = 1L;
 
@@ -71,29 +63,31 @@ public class PostControllerTest {
         doReturn(new PostResponseDto(post)).when(postService).fetchPost(postId);
 
         mockMvc.perform(get("/post")
-                .param("postNumber", String.valueOf(postId)))
+                        .param("postNumber", String.valueOf(postId)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.postTitle").value(title))
                 .andExpect(jsonPath("$.postContents").value(content));
 
     }
 
+    @WithMockUser(roles = "MEMBER")
     @DisplayName("게시물 삭제 테스트")
     @Test
     public void deletePostTestShouldBeSuccess() throws Exception {
 
         mockMvc.perform(delete("/post")
-                .param("postNumber", String.valueOf(postId)))
+                        .param("postNumber", String.valueOf(postId)))
                 .andExpect(status().isOk());
 
         assertThat(postRepository.findByPostNumber(1L)).isNull();
     }
 
+    @WithMockUser(roles = "MEMBER")
     @DisplayName("게시물 수정 테스트")
     @Test
     public void updatePostTestShouldBeSuccess() throws Exception {
 
-        Map<String,Object> postRequestDto = new HashMap<>();
+        Map<String, Object> postRequestDto = new HashMap<>();
 
         postRequestDto.put("memberNumber", 1);
         postRequestDto.put("postTitle", "title");
@@ -101,18 +95,19 @@ public class PostControllerTest {
         postRequestDto.put("postCategory", "category");
 
         mockMvc.perform(patch("/post")
-                .content(objectMapper.writeValueAsString(postRequestDto))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+                        .content(objectMapper.writeValueAsString(postRequestDto))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
     }
 
-    @DisplayName("질문게시글 생성 테스트")
+    @WithMockUser(roles = "MEMBER")
+    @DisplayName("게시글 생성 테스트")
     @Test
     public void createPostTestShouldBeSuccess() throws Exception {
 
-        Map<String,Object> postRequestDto = new HashMap<>();
+        Map<String, Object> postRequestDto = new HashMap<>();
 
         postRequestDto.put("memberNumber", 1);
         postRequestDto.put("postTitle", "title");
@@ -126,6 +121,26 @@ public class PostControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @WithMockUser(roles = "MEMBER")
+    @DisplayName("질문게시글 생성 실패 테스트")
+    @Test
+    public void createPostTestShouldBeFail() throws Exception {
+
+        Map<String, Object> postRequestDto = new HashMap<>();
+
+        postRequestDto.put("memberNumber", 1);
+        postRequestDto.put("postTitle", "");
+        postRequestDto.put("postContents", "contents");
+        postRequestDto.put("postCategory", "category");
+
+        mockMvc.perform(post("/post")
+                        .content(objectMapper.writeValueAsString(postRequestDto))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @WithMockUser(roles = "ADMIN")
     @DisplayName("게시물 상태변경 테스트")
     @Test
     public void postStatusChangeTestShouldBeSuccess() throws Exception {
