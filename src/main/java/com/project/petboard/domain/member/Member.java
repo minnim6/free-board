@@ -1,20 +1,15 @@
 package com.project.petboard.domain.member;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.petboard.infrastructure.kakao.KakaoAccount;
-import jdk.jfr.Enabled;
 import lombok.Builder;
-import lombok.Generated;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @NoArgsConstructor
@@ -42,7 +37,7 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private MemberSignupCategory memberSignupCategory;
 
-    @OneToMany(mappedBy = "member",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "member")
     private List<Role> memberRole = new ArrayList<>();
 
     private String memberRefreshToken;
@@ -66,6 +61,16 @@ public class Member {
 
     public void setMemberRefreshTokenExpireTime(Date refreshTokenExpireTime){
         this.memberRefreshTokenExpireTime = refreshTokenExpireTime;
+    }
+
+    public void memberStatusChange(){
+        this.memberNickname = "탈퇴한 회원입니다.";
+        this.memberEmail = "null";
+        this.memberSnsId = "null";
+        this.memberStatus = MemberStatus.N;
+        this.memberJoinDate = null;
+        this.memberRefreshToken = null;
+        this.memberRefreshTokenExpireTime = null;
     }
 
     public Member kakaoProfileUpdate(KakaoAccount kakaoAccount){

@@ -6,7 +6,6 @@ import com.project.petboard.domain.member.Member;
 import com.project.petboard.domain.member.MemberRepository;
 import com.project.petboard.domain.post.Post;
 import com.project.petboard.domain.post.PostRepository;
-import com.project.petboard.infrastructure.exception.CrudErrorCode;
 import com.project.petboard.infrastructure.exception.CustomErrorException;
 import com.project.petboard.infrastructure.exception.HttpErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.function.Function;
 
 @RequiredArgsConstructor
 @Transactional
@@ -32,8 +33,6 @@ public class RecommentService {
         try {
             return new ReocommentResponseDto(recommentRepository.save(recommentRequestDto.toEntity(getPostEntity(recommentRequestDto.getPostNumber())
                     ,getMemberEntity(recommentRequestDto.getMemberNumber()),getCommentEntity(recommentRequestDto.getCommentNumber()))));
-        }catch (NullPointerException e){
-            throw new CustomErrorException(e.getMessage(), CrudErrorCode.NULL_EXCEPTION);
         }catch (Exception e){
             throw new CustomErrorException(e.getMessage(), HttpErrorCode.BAD_REQUEST);
         }
@@ -44,9 +43,15 @@ public class RecommentService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Recomment> requestRecommentPage(Pageable pageable) {
+    public Page<ReocommentResponseDto> requestRecommentPage(Pageable pageable) {
         try {
-            return recommentRepository.findAll(pageable);
+            return recommentRepository.findAll(pageable).map(new Function<Recomment, ReocommentResponseDto>() {
+                @Override
+                public ReocommentResponseDto apply(Recomment recomment) {
+                    // Conversion logic
+                    return new ReocommentResponseDto(recomment);
+                }
+            });
         }catch (Exception e){
             throw new CustomErrorException(e.getMessage(), HttpErrorCode.NOT_FOUND);
         }

@@ -2,6 +2,8 @@ package com.project.petboard.domain.questionboard;
 
 import com.project.petboard.domain.member.Member;
 import com.project.petboard.domain.member.MemberRepository;
+import com.project.petboard.domain.post.Post;
+import com.project.petboard.domain.post.PostResponseDto;
 import com.project.petboard.infrastructure.exception.CustomErrorException;
 import com.project.petboard.infrastructure.exception.HttpErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.function.Function;
 
 @RequiredArgsConstructor
 @Transactional
@@ -41,9 +45,13 @@ public class QuestionBoardService {
     }
 
     @Transactional(readOnly = true)
-    public Page<QuestionBoard> requestPage(Pageable pageable) {
+    public Page<QuestionResponseDto> requestPage(Pageable pageable) {
         try {
-            return questionBoardRepository.findAll(pageable);
+            return questionBoardRepository.findAll(pageable).map(new Function<QuestionBoard, QuestionResponseDto>() {
+                @Override
+                public QuestionResponseDto apply(QuestionBoard questionBoard) {
+                    return new QuestionResponseDto(questionBoard);
+                }});
         } catch (Exception e) {
             throw new CustomErrorException(e.getMessage(), HttpErrorCode.NOT_FOUND);
         }

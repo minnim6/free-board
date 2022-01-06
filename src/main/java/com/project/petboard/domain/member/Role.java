@@ -1,11 +1,8 @@
 package com.project.petboard.domain.member;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sun.istack.NotNull;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 

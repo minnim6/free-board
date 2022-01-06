@@ -2,20 +2,15 @@ package com.project.petboard.service;
 
 import com.project.petboard.domain.member.*;
 import com.project.petboard.infrastructure.jwt.JwtTokenUtil;
-import com.project.petboard.infrastructure.jwt.ResponseJwt;
 import com.project.petboard.infrastructure.kakao.KakaoUtil;
 import com.project.petboard.infrastructure.kakao.RequestKakao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
-
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 public class MemberServiceTest {
 
@@ -47,9 +42,11 @@ public class MemberServiceTest {
     @DisplayName("멤버 삭제 테스트")
     @Test
     public void deleteMemberTestShouldSuccess(){
+        //given
+        given(memberRepository.findByMemberNumber(1L)).willReturn(member);
         //when
-        memberRepository.deleteById(1L);
+        memberService.deleteMember(1L);
         //then
-        verify(memberRepository).deleteById(1L);
+        assertThat(memberRepository.findByMemberNumber(1L).getMemberStatus()).isEqualTo(MemberStatus.N);
     }
 }

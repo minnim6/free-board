@@ -2,18 +2,15 @@ package com.project.petboard.infrastructure.jwt;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -26,10 +23,13 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        if (!request.getServletPath().contains("get") && request.getServletPath().contains("login") && request.getServletPath().equals("/")) {
+        if(request.getServletPath().contains("/admin")){
             return false;
+        } else if (request.getMethod().equals("GET") | request.getServletPath().contains("login") | request.getServletPath().equals("/")
+        | request.getServletPath().contains("jwt")) {
+            return true;
         }
-        return true;
+        return false;
     }
 
     @Override

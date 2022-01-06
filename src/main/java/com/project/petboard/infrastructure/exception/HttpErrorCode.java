@@ -2,6 +2,8 @@ package com.project.petboard.infrastructure.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
+
 
 @Getter
 @AllArgsConstructor

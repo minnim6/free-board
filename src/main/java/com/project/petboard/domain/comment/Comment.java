@@ -1,7 +1,7 @@
 package com.project.petboard.domain.comment;
 
-import com.project.petboard.domain.post.Post;
 import com.project.petboard.domain.member.Member;
+import com.project.petboard.domain.post.Post;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,11 +20,11 @@ public class Comment {
     private Long commentNumber;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "post_number")
     private Post post;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "member_number")
     private Member member;
 
     private String commentContents;

@@ -1,24 +1,32 @@
 package com.project.petboard.service;
 
+import com.project.petboard.domain.comment.CommentRepository;
 import com.project.petboard.domain.member.Member;
 import com.project.petboard.domain.member.MemberRepository;
 import com.project.petboard.domain.post.*;
+import com.project.petboard.domain.recomment.RecommentRepository;
 import com.project.petboard.domain.report.ReportRepository;
 import com.project.petboard.domain.report.Sanctions;
 import com.project.petboard.domain.report.SanctionsRepository;
-import com.project.petboard.infrastructure.exception.CrudErrorCode;
 import com.project.petboard.infrastructure.exception.CustomErrorException;
 import com.project.petboard.infrastructure.exception.HttpErrorCode;
 import com.project.petboard.infrastructure.exception.ReportErrorCode;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 public class PostServiceTest {
 
@@ -30,7 +38,12 @@ public class PostServiceTest {
 
     SanctionsRepository sanctionsRepository = mock(SanctionsRepository.class);
 
-    PostService postService = new PostService(postRepository, reportRepository, memberRepository, sanctionsRepository);
+    CommentRepository commentRepository = mock(CommentRepository.class);
+
+    RecommentRepository recommentRepository = mock(RecommentRepository.class);
+
+    PostService postService = new PostService(postRepository, reportRepository, memberRepository, sanctionsRepository,
+            commentRepository,recommentRepository);
 
     private PostRequestDto postRequestDto;
 
@@ -59,6 +72,17 @@ public class PostServiceTest {
     }
 
     @Test
+    @DisplayName("게시물 생성 테스트2")
+    public void createPostTestShouldBeSuccess2() {
+        //given
+        given(postRepository.save(any())).willReturn(post);
+        //when
+        Long postNumber = postService.createPost(postRequestDto);
+        //then
+        assertThat(post.getPostNumber()).isEqualTo(postNumber);
+    }
+
+    @Test
     @DisplayName("게시물 생성 실패 테스트")
     public void createPostTestShouldBeFail() {
         //given
@@ -68,7 +92,7 @@ public class PostServiceTest {
             Long postNumber = postService.createPost(null);
         }catch (CustomErrorException e) {
             //then
-            assertThat(e.getErrorCode()).isEqualTo(CrudErrorCode.NULL_EXCEPTION);
+            assertThat(e.getErrorCode()).isEqualTo(HttpErrorCode.BAD_REQUEST);
         }
     }
 
@@ -104,10 +128,15 @@ public class PostServiceTest {
     @Test
     @DisplayName("게시물 삭제 테스트")
     public void deletePostShouldBeSuccess() {
+        //given
+        given(postRepository.findByPostNumber(1L)).willReturn(post);
         //when
         postService.deletePost(1L);
         //then
         verify(postRepository).deleteById(1L);
+        verify(recommentRepository).deleteAllByPost(post);
+        verify(commentRepository).deleteAllByPost(post);
+        verify(reportRepository).deleteAllByPost(post);
     }
 
 
@@ -148,5 +177,21 @@ public class PostServiceTest {
            //then
            assertThat(e.getErrorCode()).isEqualTo(ReportErrorCode.REPORT_DUPLICATION);
        }
+    }
+
+    @DisplayName("페이지 가져오기 테스트")
+    @Test
+    public void getPostPageTestShouldBeSuccess() {
+        //given
+        Pageable pageable = PageRequest.of(1, 10);
+        List<Post> postList = new ArrayList<>();
+        postList.add(post);
+        postList.add(post);
+        Page<Post> posts = new PageImpl<>(postList);
+        given(postRepository.findAllByPostStatus(pageable,PostStatus.Y)).willReturn(posts);
+        //when
+        Page<PostResponseDto> postResponseDtos = postService.getPostPage(pageable);
+        //then
+        assertThat(postResponseDtos.getSize()).isEqualTo(2);
     }
 }
