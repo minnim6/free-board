@@ -22,12 +22,15 @@ values(1,1,'내용','2021-11-24','2021-11-24');
 insert into comment
 (post_number,member_number,comment_contents,comment_create_date,comment_amend_date)
 values(2,1,'내용','2021-11-24','2021-11-24');
+insert into comment
+(post_number,member_number,comment_contents,comment_create_date,comment_amend_date)
+values(2,1,'내용','2021-11-24','2021-11-24');
 insert into recomment
 (post_number,member_number,comment_number,recomment_contents,recomment_create_date,recomment_amend_date)
 values(1,1,1,'내용','2021-11-24','2021-11-24');
 insert into recomment
 (post_number,member_number,comment_number,recomment_contents,recomment_create_date,recomment_amend_date)
-values(2,1,2,'내용','2021-11-24','2021-11-24');
+values(2,1,3,'내용','2021-11-24','2021-11-24');
 insert into question_board
 (member_number,question_board_title,question_board_contents,question_board_create_date)
  values(1,'title','contents','2021-11-24');

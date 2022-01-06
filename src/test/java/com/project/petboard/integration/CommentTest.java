@@ -5,7 +5,6 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -70,7 +69,6 @@ public class CommentTest {
                 .then().statusCode(HttpStatus.OK.value());
     }
 
-    @Order(3)
     @DisplayName("댓글 삭제 테스트")
     @Test
     public void deleteCommentTest(){
@@ -78,7 +76,7 @@ public class CommentTest {
         given().accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(ContentType.JSON)
                 .header("Authorization",token)
-                .param("commentNumber",String.valueOf(1)).log().all()
+                .param("commentNumber",String.valueOf(2)).log().all()
                 .when().delete("/comment")
                 .then().statusCode(HttpStatus.OK.value());
     }
