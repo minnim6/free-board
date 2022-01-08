@@ -12,11 +12,13 @@ import com.project.petboard.infrastructure.configure.SecurityConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -25,13 +27,16 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@AutoConfigureRestDocs
 @WebMvcTest(value = PostController.class, excludeFilters = {
         @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)})
-public class PostControllerTest{
+public class PostControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -46,6 +51,7 @@ public class PostControllerTest{
     private PostService postService;
 
     private final Long postId = 1L;
+
 
     @DisplayName("게시물 가져오기 테스트")
     @Test
@@ -62,11 +68,16 @@ public class PostControllerTest{
 
         doReturn(new PostResponseDto(post)).when(postService).fetchPost(postId);
 
-        mockMvc.perform(get("/post")
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/post")
                         .param("postNumber", String.valueOf(postId)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.postTitle").value(title))
-                .andExpect(jsonPath("$.postContents").value(content));
+                        .andExpect(status().isOk())
+                        .andDo(document("{class-name}/{method-name}",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("postNumber").description("post number")
+                        )
+                ));
 
     }
 
@@ -154,7 +165,8 @@ public class PostControllerTest{
     @Test
     public void getPostPageTestShouldBeSuccess() throws Exception {
         mockMvc.perform(get("/post/page")
-                        .param("page",String.valueOf(0)))
+                        .param("page", String.valueOf(0)))
                 .andExpect(status().isOk());
     }
+
 }

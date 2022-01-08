@@ -53,9 +53,8 @@ dependencies {
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.5.2'
 
-    implementation 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.5.RELEASE'
-    // Maven 과 같이 test Scope 에 대한 mockMvc 의존성을 추가 (WebClient, Assured 사용가능)
-    implementation 'org.springframework.restdocs:spring-restdocs-mockmvc:2.0.5.RELEASE'
+    testImplementation group: 'org.springframework.restdocs', name: 'spring-restdocs-mockmvc', version: '2.0.5.RELEASE'
+
 
 
 }
@@ -64,28 +63,10 @@ test {
     useJUnitPlatform()
 }
 
-
-ext {
-    // Snippet 의 생성 위치를 지정
-    snippetsDir = file('build/generated-snippets')
-}
-
 asciidoctor {
-    // Snippets 디렉토리를 Input 디렉토리로 설정
-    inputs.dir snippetsDir
-    // 문서 생성 전 테스트가 실행되도록 test 에 종속 설정
-    dependsOn test
-}
-task copyDocument(type: Copy) {
-    dependsOn asciidoctor
-
-    from file("build/asciidoc/html5/")
-    into file("src/main/resources/static/docs")
+    dependsOn test // (2)
 }
 
-build {
-    dependsOn copyDocument
-}
 
 
 bootJar {
