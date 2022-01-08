@@ -1,6 +1,8 @@
 package com.project.petboard.appilcation;
 
-import com.project.petboard.domain.post.*;
+import com.project.petboard.domain.post.PostRequestDto;
+import com.project.petboard.domain.post.PostResponseDto;
+import com.project.petboard.domain.post.PostService;
 import com.project.petboard.infrastructure.exception.RequestErrorException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,13 +29,13 @@ public class PostController {
     public Long createPost(@RequestBody @Valid PostRequestDto postRequestDto, BindingResult bindingResult) {
         if(bindingResult.hasErrors()){
             throw new RequestErrorException(bindingResult);
-        }return postService.createPost(postRequestDto);
+        }return postService.createAndUpdatePost(postRequestDto);
     }
 
     @PreAuthorize("hasRole('MEMBER')")
     @PatchMapping("/post")
     public Long updatePost(@RequestBody PostRequestDto postRequestDto) {
-        return postService.createPost(postRequestDto);
+        return postService.createAndUpdatePost(postRequestDto);
     }
 
     @PreAuthorize("hasRole('MEMBER')")
