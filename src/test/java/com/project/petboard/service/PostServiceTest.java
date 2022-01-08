@@ -66,7 +66,7 @@ public class PostServiceTest {
         //given
         given(postRepository.save(any())).willReturn(post);
         //when
-        Long postNumber = postService.createAndUpdatePost(postRequestDto);
+        Long postNumber = postService.savePost(postRequestDto);
         //then
         assertThat(post.getPostNumber()).isEqualTo(postNumber);
     }
@@ -77,7 +77,7 @@ public class PostServiceTest {
         //given
         given(postRepository.save(any())).willReturn(post);
         //when
-        Long postNumber = postService.createAndUpdatePost(postRequestDto);
+        Long postNumber = postService.savePost(postRequestDto);
         //then
         assertThat(post.getPostNumber()).isEqualTo(postNumber);
     }
@@ -89,7 +89,7 @@ public class PostServiceTest {
         given(postRepository.save(any())).willReturn(null);
         try {
             //when
-            Long postNumber = postService.createAndUpdatePost(null);
+            Long postNumber = postService.savePost(null);
         }catch (CustomErrorException e) {
             //then
             assertThat(e.getErrorCode()).isEqualTo(HttpErrorCode.BAD_REQUEST);

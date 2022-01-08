@@ -29,13 +29,13 @@ public class PostController {
     public Long createPost(@RequestBody @Valid PostRequestDto postRequestDto, BindingResult bindingResult) {
         if(bindingResult.hasErrors()){
             throw new RequestErrorException(bindingResult);
-        }return postService.createAndUpdatePost(postRequestDto);
+        }return postService.savePost(postRequestDto);
     }
 
     @PreAuthorize("hasRole('MEMBER')")
     @PatchMapping("/post")
     public Long updatePost(@RequestBody PostRequestDto postRequestDto) {
-        return postService.createAndUpdatePost(postRequestDto);
+        return postService.savePost(postRequestDto);
     }
 
     @PreAuthorize("hasRole('MEMBER')")

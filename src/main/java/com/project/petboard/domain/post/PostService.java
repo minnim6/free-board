@@ -41,7 +41,7 @@ public class PostService {
         }
     }
 
-    public Long createAndUpdatePost(PostRequestDto postRequestDto) {
+    public Long savePost(PostRequestDto postRequestDto) {
         try {
             return postRepository.save(postRequestDto.toEntity(getMemberEntity(postRequestDto.getMemberNumber()))).getPostNumber();
         }catch (Exception e){
