@@ -146,4 +146,12 @@ public class QuestionBoardControllerTest{
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError());
     }
+
+    @DisplayName("질문글 페이지 가져오기 테스트")
+    @Test
+    public void getQuestionPageTestShouldBeSuccess() throws Exception {
+        mockMvc.perform(get("/question/page")
+                        .param("page",String.valueOf(0)))
+                .andExpect(status().isOk());
+    }
 }

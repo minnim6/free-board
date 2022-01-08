@@ -20,8 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(value = SanctionsController.class, excludeFilters = {
@@ -84,5 +83,14 @@ public class SanctionsControllerTest {
                             .param("sanctionsKey",sanctionsKey))
                     .andExpect(status().isOk());
         assertThat(sanctionsRepository.findBySanctionsKey(sanctionsKey)).isNull();
+    }
+
+    @WithMockUser(roles = "ADMIN")
+    @DisplayName("제재종류 페이지 가져오기 테스트")
+    @Test
+    public void getSanctionsPageTestShouldBeSuccess() throws Exception {
+        mockMvc.perform(get("/sanctions/page/admin")
+                        .param("page",String.valueOf(0)))
+                .andExpect(status().isOk());
     }
 }

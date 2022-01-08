@@ -1,18 +1,10 @@
 package com.project.petboard.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.petboard.appilcation.CommentController;
-import com.project.petboard.appilcation.QuestionBoardController;
 import com.project.petboard.appilcation.RecommentController;
-import com.project.petboard.domain.comment.Comment;
-import com.project.petboard.domain.comment.CommentResponseDto;
-import com.project.petboard.domain.comment.CommentService;
-import com.project.petboard.domain.member.Member;
-import com.project.petboard.domain.post.Post;
 import com.project.petboard.domain.recomment.RecommentRepository;
 import com.project.petboard.domain.recomment.RecommentService;
 import com.project.petboard.infrastructure.configure.SecurityConfig;
-import com.project.petboard.infrastructure.jwt.JwtTokenUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +19,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(value = RecommentController.class, excludeFilters = {
         @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)})
@@ -96,6 +85,14 @@ public class RecommentControllerTest{
                 .param("recommentNumber",String.valueOf(recommentNumber)))
                 .andExpect(status().isOk());
         assertThat(recommentRepository.findByRecommentNumber(recommentNumber)).isNull();
+    }
+
+    @DisplayName("대댓글 페이지 가져오기 테스트")
+    @Test
+    public void getRecommentPageTestShouldBeSuccess() throws Exception {
+       mockMvc.perform(get("/recomment/page")
+               .param("page",String.valueOf(0)))
+               .andExpect(status().isOk());
     }
 
 }

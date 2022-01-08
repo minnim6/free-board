@@ -2,17 +2,9 @@ package com.project.petboard.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.petboard.appilcation.CommentController;
-import com.project.petboard.appilcation.SanctionsController;
-import com.project.petboard.controller.SecurityConfig.TestSecurityConfig;
-import com.project.petboard.domain.comment.Comment;
 import com.project.petboard.domain.comment.CommentRepository;
 import com.project.petboard.domain.comment.CommentService;
 import com.project.petboard.infrastructure.configure.SecurityConfig;
-import com.project.petboard.infrastructure.jwt.JwtFilter;
-import com.project.petboard.infrastructure.jwt.JwtSecurityConfig;
-import com.project.petboard.infrastructure.jwt.JwtTokenUtil;
-import io.restassured.RestAssured;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +15,12 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -85,6 +75,14 @@ public class CommentControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError());
+    }
+
+    @DisplayName("댓글 페이지 가져오기 테스트")
+    @Test
+    public void getCommentPageTestShouldBeSuccess() throws Exception {
+        mockMvc.perform(get("/comment/page")
+                        .param("page",String.valueOf(0)))
+                .andExpect(status().isOk());
     }
 
 }

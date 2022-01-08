@@ -150,4 +150,11 @@ public class PostControllerTest{
 
     }
 
+    @DisplayName("게시물 페이지 가져오기 테스트")
+    @Test
+    public void getPostPageTestShouldBeSuccess() throws Exception {
+        mockMvc.perform(get("/post/page")
+                        .param("page",String.valueOf(0)))
+                .andExpect(status().isOk());
+    }
 }
