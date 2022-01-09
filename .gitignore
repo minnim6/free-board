@@ -8,6 +8,3 @@
 /src/main/resources/application-database.yml
 /src/main/resources/application-kakao.yml
 /src/main/resources/application-jwt.yml
-/src/main/resources/applicaition-filter-excluded-url.yml
-/src/test/resources/application-jwt.yml
-/src/test/resources/application-kakao.yml
