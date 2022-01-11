@@ -25,4 +25,5 @@ public class Sanctions{
         this.sanctionsValue = sanctionsValue;
         this.sanctionsContents = sanctionsContents;
     }
+
 }

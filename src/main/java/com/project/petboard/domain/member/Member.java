@@ -1,15 +1,15 @@
 package com.project.petboard.domain.member;
 
-import jdk.jfr.Enabled;
+import com.project.petboard.infrastructure.kakao.KakaoAccount;
 import lombok.Builder;
-import lombok.Generated;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -22,6 +22,10 @@ public class Member {
 
     private String memberNickname;
 
+    private String memberEmail;
+
+    private String memberSnsId;
+
     @Temporal(value = TemporalType.DATE) //년월일 date 타입 db에 매핑
     @Column(insertable = true, updatable = false)
     @CreationTimestamp
@@ -31,21 +35,48 @@ public class Member {
     private MemberStatus memberStatus;
 
     @Enumerated(EnumType.STRING)
-    private MemberSingupCategory memberSingupCategory;
+    private MemberSignupCategory memberSignupCategory;
+
+    @OneToMany(mappedBy = "member")
+    private List<Role> memberRole = new ArrayList<>();
+
+    private String memberRefreshToken;
+
+    @Temporal(value = TemporalType.TIMESTAMP ) //년월일 date 타입 db에 매핑
+    private Date memberRefreshTokenExpireTime;
 
     @Builder
-    public Member(String memberNickname,MemberSingupCategory memberSingupCategory,MemberStatus memberStatus){
+    public Member(String memberNickname,MemberSignupCategory memberSignupCategory,String memberEmail
+    ,String memberSnsId){
         this.memberNickname = memberNickname;
-        this.memberSingupCategory = memberSingupCategory;
-        this.memberStatus = memberStatus;
+        this.memberSignupCategory = memberSignupCategory;
+        this.memberEmail = memberEmail;
+        this.memberStatus = MemberStatus.Y;
+        this.memberSnsId = memberSnsId;
     }
 
-    /**
-     * nickname 변경
-     * @param Nickname 변경할 닉네임.
-     */
-    public void nicknameChange(String Nickname){
-        this.memberNickname = Nickname;
+    public void setMemberRefreshToke(String refreshToke){
+        this.memberRefreshToken = refreshToke;
+    }
+
+    public void setMemberRefreshTokenExpireTime(Date refreshTokenExpireTime){
+        this.memberRefreshTokenExpireTime = refreshTokenExpireTime;
+    }
+
+    public void memberStatusChange(){
+        this.memberNickname = "탈퇴한 회원입니다.";
+        this.memberEmail = "null";
+        this.memberSnsId = "null";
+        this.memberStatus = MemberStatus.N;
+        this.memberJoinDate = null;
+        this.memberRefreshToken = null;
+        this.memberRefreshTokenExpireTime = null;
+    }
+
+    public Member kakaoProfileUpdate(KakaoAccount kakaoAccount){
+        this.memberNickname = kakaoAccount.getProfile().getNickname();
+        this.memberEmail = kakaoAccount.getEmail();
+        return this;
     }
 
 }

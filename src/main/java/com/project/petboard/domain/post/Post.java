@@ -1,6 +1,7 @@
 package com.project.petboard.domain.post;
 
 import com.project.petboard.domain.member.Member;
+import com.project.petboard.domain.member.MemberResponseDto;
 import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,7 +9,9 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
+
 
 @Getter
 @NoArgsConstructor
@@ -21,13 +24,13 @@ public class Post {
 
     @NotNull
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "member_number")
     private Member member;
 
-    @Temporal(value = TemporalType.DATE) //년월일 date 타입 db에 매핑
-    @Column(insertable = true, updatable = false)
+  //  @Temporal(value = TemporalType.DATE) //년월일 date 타입 db에 매핑
+    @Column(updatable = false)
     @CreationTimestamp
-    private Date postCreateDate;
+    private LocalDateTime postCreateDate;
 
     private String postTitle;
 
@@ -55,17 +58,14 @@ public class Post {
         this.postReportCount = 0;
     }
 
-
-    public void updateTitle(String postTitle) {
-        this.postTitle = postTitle;
+    public MemberResponseDto toMemberResponseDto(){
+        return new MemberResponseDto(this.member);
     }
 
-    public void updateContents(String postContents){
-        this.postContents = postContents;
-    }
-
-    public void updateCategory(String postCategory){
-        this.postCategory = postCategory;
+    public void updatePost(PostRequestDto postRequestDto){
+        this.postCategory = postRequestDto.getPostCategory();
+        this.postTitle = postRequestDto.getPostTitle();
+        this.postContents = postRequestDto.getPostContents();
     }
 
     public void addReportCount(){

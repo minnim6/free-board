@@ -2,48 +2,83 @@ plugins {
     id 'org.springframework.boot' version '2.4.1'
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
     id 'java'
-    id 'groovy' // groovy 지원
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
+}
+
+configurations {
+    asciidoctorExtensions
 }
 
 group 'com.pet.board'
 version '1.0-SNAPSHOT'
 
-configurations {
-    all {
-        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
-    }
-}
 repositories {
     mavenCentral()
 }
 
+ext {
+    snippetsDir = file('build/generated-snippets') // (2)
+}
+
+asciidoctor { // (3)
+    inputs.dir snippetsDir
+    dependsOn test
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
 
     //lombok
     implementation("org.projectlombok:lombok")
     annotationProcessor('org.projectlombok:lombok')
-    testAnnotationProcessor('org.projectlombok:lombok')
 
-    //junit5
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
+    // test
+    testImplementation 'io.rest-assured:rest-assured'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
 
-    implementation "org.spockframework:spock-core:1.1-groovy-2.4"
-    implementation "org.spockframework:spock-spring:1.1-groovy-2.4"
+    // https://mvnrepository.com/artifact/org.codehaus.jackson/jackson-core-asl
+    implementation 'org.codehaus.jackson:jackson-core-asl:1.9.13'
+    // https://mvnrepository.com/artifact/com.google.code.gson/gson
+    implementation 'com.google.code.gson:gson:2.8.9'
 
     implementation('org.springframework.boot:spring-boot-starter-web')
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'com.h2database:h2:1.4.200'
+    implementation 'com.h2database:h2:2.0.204'
     implementation('org.slf4j:jcl-over-slf4j')
     implementation('ch.qos.logback:logback-classic')
     implementation('mysql:mysql-connector-java')
 
+    testImplementation 'com.h2database:h2:2.0.204'
+
+    // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+// https://mvnrepository.com/artifact/org.springframework.security.oauth/spring-security-oauth2
+    implementation 'org.springframework.security.oauth:spring-security-oauth2:2.5.1.RELEASE'
+
+// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
+
+    implementation 'org.springframework.boot:spring-boot-starter-security:2.6.2'
+
+    testImplementation('io.rest-assured:xml-path:4.4.0')
+
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.5.2'
+
+    testImplementation group: 'org.springframework.restdocs', name: 'spring-restdocs-mockmvc', version: '2.0.5.RELEASE'
+    asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+
+
 }
 
-test {
-    useJUnitPlatform()
+
+bootJar {
+    dependsOn asciidoctor
+    copy {
+        from "${asciidoctor.outputDir}"
+        into "static/docs"
+    }
 }
+
+

@@ -1,0 +1,20 @@
+=== member delete
+http-request
+include::build/generated-snippets/member/delete/http-request.adoc[]
+request-parameters
+include::build/generated-snippets/member/delete/request-parameters.adoc[]
+
+== member login & join
+curl:
+include::build/generated-snippets/member/login/curl-request.adoc[]
+http-request
+include::build/generated-snippets/member/login/http-request.adoc[]
+http-response
+include::build/generated-snippets/member/login/http-response.adoc[]
+httpie-request
+include::build/generated-snippets/member/login/httpie-request.adoc[]
+request-body
+include::build/generated-snippets/member/login/request-body.adoc[]
+request-parameters
+include::build/generated-snippets/member/login/request-parameters.adoc[]
+

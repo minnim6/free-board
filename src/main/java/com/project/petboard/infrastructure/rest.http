@@ -1,0 +1,8 @@
+POST http://localhost:8080/jwt/requestToken
+accessToken: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0MyIsIm1lbWJlck51bWJlciI6IjQzIiwiZXhwIjoxNjM5NzE4ODE4fQ.ePrzONUtx7MUh8xVhULRUyZCUy_MQKkpbELvVoupcEDGMfHE_SwOeAJc_TqZmonnSUSNHcRNOO3OQfVNVbSZYA
+refreshToken: eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDEyMzYyNTB9.W5hlZrjfccqzdoP9iDhNxV6RNu8pr0Ejs8OrEiJ65HE
+###
+
+
+
+

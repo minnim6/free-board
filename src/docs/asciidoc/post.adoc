@@ -1,0 +1,63 @@
+
+
+
+=== post create
+http-request
+include::build/generated-snippets/post/create/http-request.adoc[]
+http-response
+include::build/generated-snippets/post/create/http-response.adoc[]
+request-fields
+include::build/generated-snippets/post/create/request-fields.adoc[]
+response-fields
+include::build/generated-snippets/post/create/response-fields.adoc[]
+
+
+=== post get
+
+curl:
+include::build/generated-snippets/post/fetch/curl-request.adoc[]
+http-request
+include::build/generated-snippets/post/fetch/http-request.adoc[]
+http-response
+include::build/generated-snippets/post/fetch/http-response.adoc[]
+httpie-request
+include::build/generated-snippets/post/fetch/httpie-request.adoc[]
+request-body
+include::build/generated-snippets/post/fetch/request-body.adoc[]
+request-parameters
+include::build/generated-snippets/post/fetch/request-parameters.adoc[]
+
+=== post update
+http-request
+include::build/generated-snippets/post/update/http-request.adoc[]
+http-response
+include::build/generated-snippets/post/update/http-response.adoc[]
+request-fields
+include::build/generated-snippets/post/update/request-fields.adoc[]
+response-fields
+include::build/generated-snippets/post/update/response-fields.adoc[]
+
+=== post delete
+http-request
+include::build/generated-snippets/post/delete/http-request.adoc[]
+request-parameters
+include::build/generated-snippets/post/delete/request-parameters.adoc[]
+
+
+=== post getPage
+http-request
+include::build/generated-snippets/post/page/http-request.adoc[]
+http-response
+include::build/generated-snippets/post/page/http-response.adoc[]
+request-fields
+include::build/generated-snippets/post/page/request-fields.adoc[]
+response-fields
+include::build/generated-snippets/post/page/response-fields.adoc[]
+
+=== post status change
+http-request
+include::build/generated-snippets/post/status/http-request.adoc[]
+http-response
+include::build/generated-snippets/post/status/http-response.adoc[]
+request-parameters
+include::build/generated-snippets/post/status/request-parameters.adoc[]

@@ -1,0 +1,27 @@
+
+
+
+=== sanctions create
+http-request
+include::build/generated-snippets/sanctions/create/http-request.adoc[]
+http-response
+include::build/generated-snippets/sanctions/create/http-response.adoc[]
+request-fields
+include::build/generated-snippets/sanctions/create/request-fields.adoc[]
+
+=== sanctions delete
+http-request
+include::build/generated-snippets/sanctions/delete/http-request.adoc[]
+request-parameters
+include::build/generated-snippets/sanctions/delete/request-parameters.adoc[]
+
+
+=== post getPage
+http-request
+include::build/generated-snippets/sanctions/page/http-request.adoc[]
+http-response
+include::build/generated-snippets/sanctions/page/http-response.adoc[]
+request-fields
+include::build/generated-snippets/sanctions/page/request-fields.adoc[]
+response-fields
+include::build/generated-snippets/sanctions/page/response-fields.adoc[]

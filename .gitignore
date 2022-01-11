@@ -3,6 +3,8 @@
 /.idea/workspace.xml
 /.idea
 /.gradle
-/gradle
 /build
-/src/test/resources/database.yml
+/out
+/src/main/resources/application-data.yml
+/src/main/resources/application-kakao.yml
+/src/main/resources/application-jwt.yml
