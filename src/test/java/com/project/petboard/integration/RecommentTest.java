@@ -64,6 +64,19 @@ public class RecommentTest {
                 .then().statusCode(HttpStatus.OK.value());
     }
 
+    @DisplayName("댓글 수정 테스트")
+    @Test
+    public void updateCommentTest() throws JsonProcessingException {
+
+        given().accept(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(ContentType.JSON)
+                .header("Authorization",token)
+                .body(objectMapper.writeValueAsString(new RecommentRequestTestDto())).log().all()
+                .when().patch("/recomment")
+                .then().statusCode(HttpStatus.OK.value());
+    }
+
+
     @DisplayName("대댓글 삭제 테스트")
     @Test
     public void deleteRecommentTest(){

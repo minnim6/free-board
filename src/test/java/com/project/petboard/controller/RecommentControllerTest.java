@@ -110,6 +110,34 @@ public class RecommentControllerTest{
                         )));
         assertThat(recommentRepository.findByRecommentNumber(recommentNumber)).isNull();
     }
+    @WithMockUser(roles = "MEMBER")
+    @DisplayName("댓글 업데이트 테스트")
+    @Test
+    public void updateCommentTestShouldBeSuccess() throws Exception {
+        doReturn(recommentResponseDto).when(recommentService).updateContents(any());
+        mockMvc.perform(patch("/recomment")
+                        .content(objectMapper.writeValueAsString(new RecommentRequestTestDto()))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(document("recomment/update",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("memberNumber").type(JsonFieldType.NUMBER).description("회원 번호"),
+                                fieldWithPath("postNumber").type(JsonFieldType.NUMBER).description("게시물 번호"),
+                                fieldWithPath("commentNumber").type(JsonFieldType.NUMBER).description("댓글 번호"),
+                                fieldWithPath("recommentContents").type(JsonFieldType.STRING).description("댓글 내용")
+                        ),
+                        responseFields(
+                                fieldWithPath("recommentNumber").description("고유번호"),
+                                fieldWithPath("recommentContents").description("내용"),
+                                fieldWithPath("recommentCreateDate").description("작성날짜"),
+                                fieldWithPath("memberResponseDto.memberNumber").description("회원 고유 번호"),
+                                fieldWithPath("memberResponseDto.memberNickname").description("회원 닉네임")
+                        )
+                ));
+    }
 
     @DisplayName("대댓글 페이지 가져오기 테스트")
     @Test

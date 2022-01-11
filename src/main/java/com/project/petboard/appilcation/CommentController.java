@@ -36,4 +36,13 @@ public class CommentController {
     public List<CommentResponseDto> getCommentPage(@RequestBody RequestPage requestPage) {
        return commentService.getCommentPage(requestPage);
     }
+
+    @PreAuthorize("hasRole('MEMBER')")
+    @PatchMapping("/comment")
+    public CommentResponseDto updateComment(@RequestBody @Valid CommentRequestDto commentRequestDto, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            throw new RequestErrorException(bindingResult);
+        }return commentService.updateContents(commentRequestDto);
+    }
+
 }

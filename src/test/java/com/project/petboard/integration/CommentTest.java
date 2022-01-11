@@ -56,6 +56,18 @@ public class CommentTest {
                 .then().statusCode(HttpStatus.OK.value());
     }
 
+    @DisplayName("댓글 수정 테스트")
+    @Test
+    public void updateCommentTest() throws JsonProcessingException {
+
+        given().accept(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(ContentType.JSON)
+                .header("Authorization",token)
+                .body(objectMapper.writeValueAsString(new CommentRequestTestDto())).log().all()
+                .when().patch("/comment")
+                .then().statusCode(HttpStatus.OK.value());
+    }
+
     @DisplayName("댓글 페이지 가져오기 테스트")
     @Test
     public void requestPageTest(){

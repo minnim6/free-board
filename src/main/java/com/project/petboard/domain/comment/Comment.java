@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+
 @Getter
 @NoArgsConstructor
 
@@ -49,4 +50,5 @@ public class Comment {
     public void update(String commentContents){
         this.commentContents = commentContents;
     }
+
 }

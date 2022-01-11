@@ -44,6 +44,12 @@ public class CommentService {
             return page;
     }
 
+    public CommentResponseDto updateContents(CommentRequestDto commentRequestDto){
+        Comment comment = getCommentEntity(commentRequestDto.getMemberNumber());
+        comment.update(commentRequestDto.getCommentContents());
+        return new CommentResponseDto(comment);
+    }
+
     public void deleteComment(Long commentNumber) {
         recommentRepository.deleteAllByComment(getCommentEntity(commentNumber));
         commentRepository.deleteById(commentNumber);

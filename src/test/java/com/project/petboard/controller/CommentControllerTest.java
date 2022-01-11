@@ -97,6 +97,34 @@ public class CommentControllerTest {
     }
 
     @WithMockUser(roles = "MEMBER")
+    @DisplayName("댓글 업데이트 테스트")
+    @Test
+    public void updateCommentTestShouldBeSuccess() throws Exception {
+        doReturn(commentResponseDto).when(commentService).updateContents(any());
+        mockMvc.perform(patch("/comment")
+                        .content(objectMapper.writeValueAsString(new CommentRequestTestDto()))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andDo(document("comment/update",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("memberNumber").type(JsonFieldType.NUMBER).description("회원 번호"),
+                                fieldWithPath("postNumber").type(JsonFieldType.NUMBER).description("게시물 번호"),
+                                fieldWithPath("commentContents").type(JsonFieldType.STRING).description("게시물 내용")
+                        ),
+                                responseFields(
+                                        fieldWithPath("commentNumber").description("고유번호"),
+                                        fieldWithPath("commentContents").description("내용"),
+                                        fieldWithPath("commentCreateDate").description("작성날짜"),
+                                        fieldWithPath("memberResponseDto.memberNumber").description("회원 고유 번호"),
+                                        fieldWithPath("memberResponseDto.memberNickname").description("회원 닉네임")
+                                )
+                                ));
+    }
+
+    @WithMockUser(roles = "MEMBER")
     @DisplayName("댓글 생성실패 테스트")
     @Test
     public void createCommentTestShouldBeFail() throws Exception {

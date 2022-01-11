@@ -3,10 +3,12 @@ package com.project.petboard.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.petboard.appilcation.PostController;
+import com.project.petboard.domain.comment.CommentResponseDto;
 import com.project.petboard.domain.member.MemberResponseDto;
 import com.project.petboard.domain.post.PostRepository;
 import com.project.petboard.domain.post.PostResponseDto;
 import com.project.petboard.domain.post.PostService;
+import com.project.petboard.domain.recomment.RecommentResponseDto;
 import com.project.petboard.infrastructure.configure.SecurityConfig;
 import com.project.petboard.request.PostCreateRequestTestDto;
 import com.project.petboard.request.PostUpdateRequestTestDto;
@@ -25,10 +27,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -94,7 +93,7 @@ public class PostControllerTest {
                                 fieldWithPath("postCategory").description("카테고리"),
                                 fieldWithPath("memberResponseDto.memberNumber").description("회원 고유 번호"),
                                 fieldWithPath("memberResponseDto.memberNickname").description("회원 닉네임")
-                        )
+                         )
 
                 ));
 

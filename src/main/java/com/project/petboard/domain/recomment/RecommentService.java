@@ -43,6 +43,12 @@ public class RecommentService {
             return page;
     }
 
+    public RecommentResponseDto updateContents(RecommentRequestDto recommentRequestDto){
+        Recomment recomment = recommentRepository.findByRecommentNumber(recommentRequestDto.getCommentNumber());
+        recomment.update(recommentRequestDto.getRecommentContents());
+        return new RecommentResponseDto(recomment);
+    }
+
     private Comment getCommentEntity(Long commentNumber){
         return commentRepository.findByCommentNumber(commentNumber);
     }

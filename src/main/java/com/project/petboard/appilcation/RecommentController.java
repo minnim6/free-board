@@ -35,4 +35,12 @@ public class RecommentController {
     public List<RecommentResponseDto> requestRecommentPage(@RequestParam("commentNumber")Long commentNumber){
         return recommentService.requestRecommentPage(commentNumber);
     }
+
+    @PreAuthorize("hasRole('MEMBER')")
+    @PatchMapping("/recomment")
+    public RecommentResponseDto updateComment(@RequestBody @Valid RecommentRequestDto recommentRequestDto, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            throw new RequestErrorException(bindingResult);
+        }return recommentService.updateContents(recommentRequestDto);
+    }
 }
