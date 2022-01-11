@@ -1,26 +1,22 @@
 package com.project.petboard.domain.post;
 
 import com.project.petboard.domain.member.MemberResponseDto;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
 
 @Getter
-@NoArgsConstructor
+@AllArgsConstructor
 public class PostResponseDto {
 
-    private  Long postNumber;
+    private final Long postNumber;
 
-    private MemberResponseDto memberResponseDto;
+    private final MemberResponseDto memberResponseDto;
 
-    private  String postTitle;
+    private final String postTitle;
 
-    private  String postContents;
+    private final String postContents;
 
-    private  String postCategory;
+    private final String postCategory;
 
     public PostResponseDto(Post post){
         this.memberResponseDto = post.toMemberResponseDto();

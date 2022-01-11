@@ -3,13 +3,13 @@ package com.project.petboard.service;
 import com.project.petboard.domain.comment.CommentRepository;
 import com.project.petboard.domain.member.Member;
 import com.project.petboard.domain.member.MemberRepository;
+import com.project.petboard.domain.page.RequestPage;
 import com.project.petboard.domain.post.*;
 import com.project.petboard.domain.recomment.RecommentRepository;
 import com.project.petboard.domain.report.ReportRepository;
 import com.project.petboard.domain.report.Sanctions;
 import com.project.petboard.domain.report.SanctionsRepository;
 import com.project.petboard.infrastructure.exception.CustomErrorException;
-import com.project.petboard.infrastructure.exception.HttpErrorCode;
 import com.project.petboard.infrastructure.exception.ReportErrorCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -66,20 +66,9 @@ public class PostServiceTest {
         //given
         given(postRepository.save(any())).willReturn(post);
         //when
-        Long postNumber = postService.savePost(postRequestDto);
+        PostResponseDto postResponseDto = postService.savePost(postRequestDto);
         //then
-        assertThat(post.getPostNumber()).isEqualTo(postNumber);
-    }
-
-    @Test
-    @DisplayName("게시물 생성 테스트2")
-    public void createPostTestShouldBeSuccess2() {
-        //given
-        given(postRepository.save(any())).willReturn(post);
-        //when
-        Long postNumber = postService.savePost(postRequestDto);
-        //then
-        assertThat(post.getPostNumber()).isEqualTo(postNumber);
+        assertThat(post.getPostNumber()).isEqualTo(postResponseDto.getPostNumber());
     }
 
     @Test
@@ -89,10 +78,10 @@ public class PostServiceTest {
         given(postRepository.save(any())).willReturn(null);
         try {
             //when
-            Long postNumber = postService.savePost(null);
-        }catch (CustomErrorException e) {
+            PostResponseDto postResponseDto= postService.savePost(null);
+        }catch (NullPointerException e) {
             //then
-            assertThat(e.getErrorCode()).isEqualTo(HttpErrorCode.BAD_REQUEST);
+            assertThat(postRepository.findByPostNumber(1L)).isNull();
         }
     }
 
@@ -119,9 +108,9 @@ public class PostServiceTest {
         try {
             //when
             postResponseDto = postService.fetchPost(1L);
-        }catch (CustomErrorException e){
+        }catch (NullPointerException e){
             //then
-            assertThat(e.getErrorCode()).isEqualTo(HttpErrorCode.NOT_FOUND);
+            assertThat(postRepository.findByPostNumber(1L)).isNull();
         }
     }
 
@@ -183,15 +172,17 @@ public class PostServiceTest {
     @Test
     public void getPostPageTestShouldBeSuccess() {
         //given
-        Pageable pageable = PageRequest.of(1, 10);
+        Pageable pageable = PageRequest.of(0,10);
         List<Post> postList = new ArrayList<>();
         postList.add(post);
         postList.add(post);
         Page<Post> posts = new PageImpl<>(postList);
+        RequestPage requestPage = new RequestPage(0,10);
         given(postRepository.findAllByPostStatus(pageable,PostStatus.Y)).willReturn(posts);
         //when
-        Page<PostResponseDto> postResponseDtos = postService.getPostPage(pageable);
+        List<PostResponseDto> postResponseDtos = postService.getPostPage(requestPage);
         //then
-        assertThat(postResponseDtos.getSize()).isEqualTo(2);
+        assertThat(postResponseDtos.size()).isEqualTo(2);
     }
+
 }

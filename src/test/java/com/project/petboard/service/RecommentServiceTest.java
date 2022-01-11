@@ -2,29 +2,23 @@ package com.project.petboard.service;
 
 import com.project.petboard.domain.comment.Comment;
 import com.project.petboard.domain.comment.CommentRepository;
-import com.project.petboard.domain.comment.CommentResponseDto;
 import com.project.petboard.domain.member.Member;
 import com.project.petboard.domain.member.MemberRepository;
 import com.project.petboard.domain.post.Post;
 import com.project.petboard.domain.post.PostRepository;
 import com.project.petboard.domain.recomment.*;
-import com.project.petboard.infrastructure.exception.CustomErrorException;
-import com.project.petboard.infrastructure.exception.HttpErrorCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 public class RecommentServiceTest {
 
@@ -62,7 +56,7 @@ public class RecommentServiceTest {
         given(commentRepository.findByCommentNumber(1L)).willReturn(new Comment());
         given(recommentRepository.save(any())).willReturn(recomment);
         //when
-        ReocommentResponseDto reocommentResponseDto = recommentService.createRecomment(recommentRequestDto);
+        RecommentResponseDto reocommentResponseDto = recommentService.createRecomment(recommentRequestDto);
         //then
         assertThat(reocommentResponseDto).isNotNull();
     }
@@ -77,10 +71,10 @@ public class RecommentServiceTest {
         given(recommentRepository.save(any())).willReturn(null);
         try {
             //when
-            ReocommentResponseDto reocommentResponseDto = recommentService.createRecomment(recommentRequestDto);
-        }catch (CustomErrorException e){
+            RecommentResponseDto recommentResponseDto = recommentService.createRecomment(recommentRequestDto);
+        }catch (NullPointerException e){
             //then
-            assertThat(e.getErrorCode()).isEqualTo(HttpErrorCode.BAD_REQUEST);
+            assertThat(recommentRepository.findByRecommentNumber(1L)).isNull();
         }
     }
 
@@ -97,16 +91,14 @@ public class RecommentServiceTest {
     @Test
     public void getCommentPageTestShouldBeSuccess() {
         //given
-        Pageable pageable = PageRequest.of(1, 10);
         List<Recomment> recommentList = new ArrayList<>();
         recommentList.add(recomment);
         recommentList.add(recomment);
-        Page<Recomment> recomments = new PageImpl<>(recommentList);
-        given(recommentRepository.findAll(pageable)).willReturn(recomments);
+        given(recommentRepository.findAllByComment(any())).willReturn(recommentList);
         //when
-        Page<ReocommentResponseDto> requestRecommentPage = recommentService.requestRecommentPage(pageable);
+        List<RecommentResponseDto> requestRecommentPage = recommentService.requestRecommentPage(1L);
         //then
-        assertThat(requestRecommentPage.getSize()).isEqualTo(2);
+        assertThat(requestRecommentPage.size()).isEqualTo(2);
     }
 
 }

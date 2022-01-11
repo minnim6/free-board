@@ -1,17 +1,16 @@
 package com.project.petboard.appilcation;
 
 import com.project.petboard.domain.recomment.RecommentRequestDto;
+import com.project.petboard.domain.recomment.RecommentResponseDto;
 import com.project.petboard.domain.recomment.RecommentService;
-import com.project.petboard.domain.recomment.ReocommentResponseDto;
 import com.project.petboard.infrastructure.exception.RequestErrorException;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -33,7 +32,7 @@ public class RecommentController {
     }
 
     @GetMapping(value = "/recomment/page")
-    public Page<ReocommentResponseDto> requestRecommentPage(Pageable pageable){
-        return recommentService.requestRecommentPage(pageable);
+    public List<RecommentResponseDto> requestRecommentPage(@RequestParam("commentNumber")Long commentNumber){
+        return recommentService.requestRecommentPage(commentNumber);
     }
 }

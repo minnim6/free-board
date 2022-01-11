@@ -1,6 +1,10 @@
 package com.project.petboard.integration;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.petboard.infrastructure.jwt.JwtTokenUtil;
+import com.project.petboard.request.PostCreateRequestTestDto;
+import com.project.petboard.request.PostUpdateRequestTestDto;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,8 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -31,6 +33,10 @@ public class PostTest {
 
     String token;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
+
     @BeforeEach
     void setUp() {
         Date tokenExpireDate = new Date(new Date().getTime() + 1000000L);
@@ -41,19 +47,11 @@ public class PostTest {
 
     @DisplayName("게시물 작성 테스트")
     @Test
-    public void createPostTest() {
-
-        Map<String, Object> postRequestDto = new HashMap<>();
-
-        postRequestDto.put("memberNumber", 1);
-        postRequestDto.put("postTitle", "title");
-        postRequestDto.put("postContents", "contents");
-        postRequestDto.put("postCategory", "category");
-
+    public void createPostTest() throws Exception {
         given().accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(ContentType.JSON)
                 .header("Authorization",token)
-                .body(postRequestDto).log().all()
+                .body(objectMapper.writeValueAsString(new PostCreateRequestTestDto())).log().all()
                 .when().post("/post")
                 .then().statusCode(HttpStatus.OK.value());
 
@@ -63,12 +61,15 @@ public class PostTest {
     @Test
     public void requestPageTest(){
 
-        Pageable pageable = PageRequest.of(1, 10);
+        Map<String, Object> requestPage = new HashMap<>();
+
+        requestPage.put("size", 10);
+        requestPage.put("page", 0);
 
         given().accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(ContentType.JSON)
                 .header("Authorization",token)
-                .body(pageable).log().all()
+                .body(requestPage).log().all()
                 .when().get("/post/page")
                 .then().statusCode(HttpStatus.OK.value());
     }
@@ -100,19 +101,12 @@ public class PostTest {
 
     @DisplayName("게시물 업데이트 테스트")
     @Test
-    public void updatePostTest(){
-
-        Map<String, Object> postRequestDto = new HashMap<>();
-
-        postRequestDto.put("memberNumber", 1);
-        postRequestDto.put("postTitle", "title2");
-        postRequestDto.put("postContents", "contents");
-        postRequestDto.put("postCategory", "category");
+    public void updatePostTest() throws JsonProcessingException {
 
         given().accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(ContentType.JSON)
                 .header("Authorization",token)
-                .body(postRequestDto).log().all()
+                .body(objectMapper.writeValueAsString(new PostUpdateRequestTestDto())).log().all()
                 .when().patch("/post")
                 .then().statusCode(HttpStatus.OK.value());
     }

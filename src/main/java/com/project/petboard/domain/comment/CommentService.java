@@ -2,18 +2,18 @@ package com.project.petboard.domain.comment;
 
 import com.project.petboard.domain.member.Member;
 import com.project.petboard.domain.member.MemberRepository;
+import com.project.petboard.domain.page.RequestPage;
 import com.project.petboard.domain.post.Post;
 import com.project.petboard.domain.post.PostRepository;
 import com.project.petboard.domain.recomment.RecommentRepository;
-import com.project.petboard.infrastructure.exception.CustomErrorException;
-import com.project.petboard.infrastructure.exception.HttpErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.function.Function;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -30,23 +30,18 @@ public class CommentService {
     private final RecommentRepository recommentRepository;
 
     public CommentResponseDto createComment(CommentRequestDto commentRequestDto) {
-        try {
             return new CommentResponseDto(commentRepository.save(commentRequestDto.toEntity(
                     getPostEntity(commentRequestDto.getPostNumber()),getMemberEntity(commentRequestDto.getMemberNumber())
             )));
-        }catch (Exception e){
-            throw new CustomErrorException(e.getMessage(), HttpErrorCode.BAD_REQUEST);
-        }
     }
 
     @Transactional(readOnly = true)
-    public Page<CommentResponseDto> getCommentPage(Pageable pageable) {
-        return commentRepository.findAll(pageable).map(new Function<Comment, CommentResponseDto>() {
-            @Override
-            public CommentResponseDto apply(Comment comment) {
-                return new CommentResponseDto(comment);
-            }
-        });
+    public List<CommentResponseDto> getCommentPage(RequestPage requestPage) {
+            Pageable pageable = PageRequest.of(requestPage.getPage(),requestPage.getSize());
+            List<CommentResponseDto> page = commentRepository.findAll(pageable).getContent().stream()
+                    .map(comment -> new CommentResponseDto(comment))
+                    .collect(Collectors.toList());
+            return page;
     }
 
     public void deleteComment(Long commentNumber) {

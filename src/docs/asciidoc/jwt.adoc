@@ -1,0 +1,13 @@
+== jwt request
+curl:
+include::build/generated-snippets/jwt/requestToken/curl-request.adoc[]
+http-request
+include::build/generated-snippets/jwt/requestToken/http-request.adoc[]
+request-headers
+include::build/generated-snippets/jwt/requestToken/http-request.adoc[]
+http-response
+include::build/generated-snippets/jwt/requestToken/request-headers.adoc[]
+httpie-request
+include::build/generated-snippets/jwt/requestToken/httpie-request.adoc[]
+response-body
+include::build/generated-snippets/jwt/requestToken/response-body.adoc[]

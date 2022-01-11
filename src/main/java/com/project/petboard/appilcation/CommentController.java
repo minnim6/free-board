@@ -3,15 +3,15 @@ package com.project.petboard.appilcation;
 import com.project.petboard.domain.comment.CommentRequestDto;
 import com.project.petboard.domain.comment.CommentResponseDto;
 import com.project.petboard.domain.comment.CommentService;
+import com.project.petboard.domain.page.RequestPage;
 import com.project.petboard.infrastructure.exception.RequestErrorException;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -33,7 +33,7 @@ public class CommentController {
         commentService.deleteComment(commentNumber);
     }
     @GetMapping("/comment/page")
-    public Page<CommentResponseDto> getCommentPage(Pageable pageable) {
-       return commentService.getCommentPage(pageable);
+    public List<CommentResponseDto> getCommentPage(@RequestBody RequestPage requestPage) {
+       return commentService.getCommentPage(requestPage);
     }
 }

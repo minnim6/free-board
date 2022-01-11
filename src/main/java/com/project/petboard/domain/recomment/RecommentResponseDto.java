@@ -1,6 +1,6 @@
 package com.project.petboard.domain.recomment;
 
-import com.project.petboard.domain.comment.Comment;
+import com.project.petboard.domain.member.MemberResponseDto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -8,19 +8,19 @@ import java.util.Date;
 
 @RequiredArgsConstructor
 @Getter
-public class ReocommentResponseDto {
+public class RecommentResponseDto {
 
-    private final String memberNickname;
+    private final Long recommentNumber;
 
-    private final Comment comment;
+    private final MemberResponseDto memberResponseDto;
 
     private final String recommentContents;
 
     private final Date recommentCreateDate;
 
-    public ReocommentResponseDto(Recomment recomment){
-        this.memberNickname = recomment.getMember().getMemberNickname();
-        this.comment = recomment.getComment();
+    public RecommentResponseDto(Recomment recomment){
+        this.recommentNumber = recomment.getRecommentNumber();
+        this.memberResponseDto = new MemberResponseDto(recomment.getMember());
         this.recommentContents = recomment.getRecommentContents();
         this.recommentCreateDate = recomment.getRecommentCreateDate();
     }
