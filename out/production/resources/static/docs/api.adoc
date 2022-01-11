@@ -1,0 +1,2 @@
+==post
+include::{snippets}/post-controller-test/fetch-post-test-should-be-success/curl-request.adoc[]

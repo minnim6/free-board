@@ -1,0 +1,10 @@
+spring:
+  profiles:
+    include:
+      - data
+      - kakao
+      - jwt
+---
+spring:
+  profiles:
+    active: local # 기본 환경 선택
