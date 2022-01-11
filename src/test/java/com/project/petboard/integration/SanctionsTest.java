@@ -1,6 +1,9 @@
 package com.project.petboard.integration;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.petboard.infrastructure.jwt.JwtTokenUtil;
+import com.project.petboard.request.SanctionsRequestTestDto;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,8 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -29,6 +30,10 @@ public class SanctionsTest {
     @Autowired
     JwtTokenUtil jwtTokenUtil;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
+
     String token;
 
     @BeforeEach
@@ -40,17 +45,12 @@ public class SanctionsTest {
 
     @DisplayName("제재종류 추가 테스트")
     @Test
-    public void crateSanctionsTest(){
-        Map<String, Object> sanctionsRequestDto = new HashMap<>();
-
-        sanctionsRequestDto.put("sanctionsKey", "게시물");
-        sanctionsRequestDto.put("sanctionsValue", 1);
-        sanctionsRequestDto.put("sanctionsContents", "contentscontents");
+    public void crateSanctionsTest() throws JsonProcessingException {
 
         given().accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(ContentType.JSON)
                 .header("Authorization",token)
-                .body(sanctionsRequestDto).log().all()
+                .body(objectMapper.writeValueAsString(new SanctionsRequestTestDto())).log().all()
                 .when().post("/sanctions/admin")
                 .then().statusCode(HttpStatus.OK.value());
     }
@@ -58,12 +58,15 @@ public class SanctionsTest {
     @DisplayName("제재종류 페이지 가져오기 테스트")
     @Test
     public void getCSancionsPage(){
-        Pageable pageable = PageRequest.of(1, 10);
+        Map<String, Object> requestPage = new HashMap<>();
+
+        requestPage.put("page", 0);
+        requestPage.put("size", 10);
 
         given().accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(ContentType.JSON)
                 .header("Authorization",token)
-                .body(pageable).log().all()
+                .body(requestPage).log().all()
                 .when().get("/sanctions/page/admin")
                 .then().statusCode(HttpStatus.OK.value());
     }

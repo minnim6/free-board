@@ -1,0 +1,27 @@
+
+
+
+=== recomment create
+http-request
+include::build/generated-snippets/recomment/create/http-request.adoc[]
+http-response
+include::build/generated-snippets/recomment/create/http-response.adoc[]
+request-fields
+include::build/generated-snippets/recomment/create/request-fields.adoc[]
+
+=== recomment delete
+http-request
+include::build/generated-snippets/recomment/delete/http-request.adoc[]
+request-parameters
+include::build/generated-snippets/recomment/delete/request-parameters.adoc[]
+
+
+=== recomment getPage
+http-response
+include::build/generated-snippets/recomment/page/http-response.adoc[]
+request-fields
+include::build/generated-snippets/recomment/page/request-fields.adoc[]
+response-fields
+include::build/generated-snippets/recomment/page/response-fields.adoc[]
+request-parameters
+include::build/generated-snippets/recomment/page/request-parameters.adoc[]

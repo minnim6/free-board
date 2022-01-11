@@ -1,0 +1,35 @@
+
+
+
+=== comment create
+http-request
+include::build/generated-snippets/comment/create/http-request.adoc[]
+http-response
+include::build/generated-snippets/comment/create/http-response.adoc[]
+request-fields
+include::build/generated-snippets/comment/create/request-fields.adoc[]
+response-fields
+include::build/generated-snippets/comment/create/response-fields.adoc[]
+
+
+=== comment get
+
+curl:
+include::build/generated-snippets/comment/get/curl-request.adoc[]
+http-request
+include::build/generated-snippets/comment/get/http-request.adoc[]
+http-response
+include::build/generated-snippets/comment/get/http-response.adoc[]
+httpie-request
+include::build/generated-snippets/comment/get/httpie-request.adoc[]
+request-body
+include::build/generated-snippets/comment/get/request-body.adoc[]
+request-parameters
+include::build/generated-snippets/comment/get/request-parameters.adoc[]
+
+=== comment delete
+http-request
+include::build/generated-snippets/comment/delete/http-request.adoc[]
+request-parameters
+include::build/generated-snippets/comment/delete/request-parameters.adoc[]
+

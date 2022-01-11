@@ -6,15 +6,12 @@ import com.project.petboard.domain.member.Member;
 import com.project.petboard.domain.member.MemberRepository;
 import com.project.petboard.domain.post.Post;
 import com.project.petboard.domain.post.PostRepository;
-import com.project.petboard.infrastructure.exception.CustomErrorException;
-import com.project.petboard.infrastructure.exception.HttpErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.function.Function;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional
@@ -29,13 +26,9 @@ public class RecommentService {
 
     private final CommentRepository commentRepository;
 
-    public ReocommentResponseDto createRecomment(RecommentRequestDto recommentRequestDto) {
-        try {
-            return new ReocommentResponseDto(recommentRepository.save(recommentRequestDto.toEntity(getPostEntity(recommentRequestDto.getPostNumber())
+    public RecommentResponseDto createRecomment(RecommentRequestDto recommentRequestDto) {
+            return new RecommentResponseDto(recommentRepository.save(recommentRequestDto.toEntity(getPostEntity(recommentRequestDto.getPostNumber())
                     ,getMemberEntity(recommentRequestDto.getMemberNumber()),getCommentEntity(recommentRequestDto.getCommentNumber()))));
-        }catch (Exception e){
-            throw new CustomErrorException(e.getMessage(), HttpErrorCode.BAD_REQUEST);
-        }
     }
 
     public void deleteRecomment(Long recommentNumber) {
@@ -43,18 +36,11 @@ public class RecommentService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ReocommentResponseDto> requestRecommentPage(Pageable pageable) {
-        try {
-            return recommentRepository.findAll(pageable).map(new Function<Recomment, ReocommentResponseDto>() {
-                @Override
-                public ReocommentResponseDto apply(Recomment recomment) {
-                    // Conversion logic
-                    return new ReocommentResponseDto(recomment);
-                }
-            });
-        }catch (Exception e){
-            throw new CustomErrorException(e.getMessage(), HttpErrorCode.NOT_FOUND);
-        }
+    public List<RecommentResponseDto> requestRecommentPage(Long commentNumber) {
+            List<RecommentResponseDto> page = recommentRepository.findAllByComment(getCommentEntity(commentNumber)).stream()
+                    .map(recomment -> new RecommentResponseDto(recomment))
+                    .collect(Collectors.toList());
+            return page;
     }
 
     private Comment getCommentEntity(Long commentNumber){

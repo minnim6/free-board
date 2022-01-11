@@ -3,6 +3,7 @@ package com.project.petboard.domain.post;
 import com.project.petboard.domain.comment.CommentRepository;
 import com.project.petboard.domain.member.Member;
 import com.project.petboard.domain.member.MemberRepository;
+import com.project.petboard.domain.page.RequestPage;
 import com.project.petboard.domain.recomment.RecommentRepository;
 import com.project.petboard.domain.report.ReportRepository;
 import com.project.petboard.domain.report.SanctionsRepository;
@@ -10,10 +11,13 @@ import com.project.petboard.infrastructure.exception.CustomErrorException;
 import com.project.petboard.infrastructure.exception.HttpErrorCode;
 import com.project.petboard.infrastructure.exception.ReportErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional
@@ -33,20 +37,22 @@ public class PostService {
     private final RecommentRepository recommentRepository;
 
     @Transactional(readOnly = true)
-    public Page<PostResponseDto> getPostPage(Pageable pageable) {
-        try {
-            return postRepository.findAllByPostStatus(pageable,PostStatus.Y).map(PostResponseDto::new);
-        } catch (Exception e) {
-            throw new CustomErrorException(e.getMessage(), HttpErrorCode.NOT_FOUND);
-        }
+    public List<PostResponseDto> getPostPage(RequestPage requestPage) {
+            Pageable pageable = PageRequest.of(requestPage.getPage(),requestPage.getSize());
+            List<PostResponseDto> postPage = postRepository.findAllByPostStatus(pageable,PostStatus.Y).getContent().stream()
+                    .map(post -> new PostResponseDto(post))
+                    .collect(Collectors.toList());
+            return  postPage;
     }
 
-    public Long savePost(PostRequestDto postRequestDto) {
-        try {
-            return postRepository.save(postRequestDto.toEntity(getMemberEntity(postRequestDto.getMemberNumber()))).getPostNumber();
-        }catch (Exception e){
-            throw new CustomErrorException(e.getMessage(), HttpErrorCode.BAD_REQUEST);
-        }
+    public PostResponseDto savePost(PostRequestDto postRequestDto) {
+            return new PostResponseDto(postRepository.save(postRequestDto.toEntity(getMemberEntity(postRequestDto.getMemberNumber()))));
+    }
+
+    public PostResponseDto updatePost(PostRequestDto postRequestDto) {
+            Post post = getPostEntity(postRequestDto.getPostNumber());
+            post.updatePost(postRequestDto);
+            return new PostResponseDto(post);
     }
 
     public void deletePost(Long postNumber) {
@@ -64,15 +70,11 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public PostResponseDto fetchPost(Long postNumber) {
-        try {
             Post post = postRepository.findByPostNumber(postNumber);
             if(post.getPostStatus().equals(PostStatus.N)) {
                 throw new CustomErrorException(HttpErrorCode.NOT_FOUND);
             }
             return new PostResponseDto(post);
-        } catch (Exception e) {
-            throw new CustomErrorException(e.getMessage(), HttpErrorCode.NOT_FOUND);
-        }
     }
 
     public void reportPost(Long memberNumber, Long postNumber) {

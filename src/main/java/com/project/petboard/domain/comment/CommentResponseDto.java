@@ -1,12 +1,12 @@
 package com.project.petboard.domain.comment;
 
-import com.project.petboard.domain.member.Member;
 import com.project.petboard.domain.member.MemberResponseDto;
-import com.project.petboard.domain.post.Post;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.Date;
 
+@AllArgsConstructor
 @Getter
 public class CommentResponseDto {
 

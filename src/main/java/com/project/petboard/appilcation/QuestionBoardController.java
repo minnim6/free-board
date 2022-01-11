@@ -1,18 +1,18 @@
 package com.project.petboard.appilcation;
 
+import com.project.petboard.domain.page.RequestPage;
 import com.project.petboard.domain.questionboard.QuestionBoardAnswerRequestDto;
 import com.project.petboard.domain.questionboard.QuestionBoardRequestDto;
 import com.project.petboard.domain.questionboard.QuestionBoardService;
 import com.project.petboard.domain.questionboard.QuestionResponseDto;
 import com.project.petboard.infrastructure.exception.RequestErrorException;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -41,14 +41,14 @@ public class QuestionBoardController {
 
     @PreAuthorize("hasRole('MEMBER')")
     @PostMapping(value = "/question")
-    public Long createQuestionBoard(@RequestBody @Valid QuestionBoardRequestDto questionBoardDto, BindingResult bindingResult){
+    public QuestionResponseDto createQuestionBoard(@RequestBody @Valid QuestionBoardRequestDto questionBoardDto, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             throw new RequestErrorException(bindingResult);
         }return questionBoardService.createQuestionBoard(questionBoardDto);
     }
 
     @GetMapping(value = "/question/page")
-    public Page<QuestionResponseDto> requestPage(Pageable pageable){
-        return questionBoardService.requestPage(pageable);
+    public List<QuestionResponseDto> requestPage(@RequestBody RequestPage requestPage){
+        return questionBoardService.requestPage(requestPage);
     }
 }

@@ -3,11 +3,10 @@ package com.project.petboard.service;
 import com.project.petboard.domain.comment.*;
 import com.project.petboard.domain.member.Member;
 import com.project.petboard.domain.member.MemberRepository;
+import com.project.petboard.domain.page.RequestPage;
 import com.project.petboard.domain.post.Post;
 import com.project.petboard.domain.post.PostRepository;
 import com.project.petboard.domain.recomment.RecommentRepository;
-import com.project.petboard.infrastructure.exception.CustomErrorException;
-import com.project.petboard.infrastructure.exception.HttpErrorCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -74,9 +73,9 @@ public class CommentServiceTest {
         try {
             //when
             CommentResponseDto commentResponseDto = commentService.createComment(commentRequestDto);
-        } catch (CustomErrorException e) {
+        } catch (NullPointerException e) {
             //then
-            assertThat(e.getErrorCode()).isEqualTo(HttpErrorCode.BAD_REQUEST);
+            assertThat(commentRepository.findByCommentNumber(1L)).isNull();
         }
     }
 
@@ -96,15 +95,16 @@ public class CommentServiceTest {
     @Test
     public void getCommentPageTestShouldBeSuccess() {
         //given
-        Pageable pageable = PageRequest.of(1, 10);
         List<Comment> commentList = new ArrayList<>();
         commentList.add(comment);
         commentList.add(comment);
         Page<Comment> comments = new PageImpl<>(commentList);
+        Pageable pageable = PageRequest.of(0, 10);
+        RequestPage requestPage = new RequestPage(0,10);
         given(commentRepository.findAll(pageable)).willReturn(comments);
         //when
-        Page<CommentResponseDto> commentResponseDtos = commentService.getCommentPage(pageable);
+        List<CommentResponseDto> commentResponseDtos = commentService.getCommentPage(requestPage);
         //then
-        assertThat(commentResponseDtos.getSize()).isEqualTo(2);
+        assertThat(commentResponseDtos.size()).isEqualTo(2);
     }
 }

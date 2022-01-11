@@ -61,6 +61,12 @@ public class Post {
         return new MemberResponseDto(this.member);
     }
 
+    public void updatePost(PostRequestDto postRequestDto){
+        this.postCategory = postRequestDto.getPostCategory();
+        this.postTitle = postRequestDto.getPostTitle();
+        this.postContents = postRequestDto.getPostContents();
+    }
+
     public void addReportCount(){
         this.postReportCount = postReportCount+1;
     }

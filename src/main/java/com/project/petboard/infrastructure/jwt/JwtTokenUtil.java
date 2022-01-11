@@ -58,7 +58,7 @@ public class JwtTokenUtil {
         return ResponseJwt.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
-                .assessTokenExpireTime(tokenExpireDate.getTime())
+                .assessTokenExpireTime(tokenExpireDate)
                 .build();
     }
 
@@ -137,7 +137,7 @@ public class JwtTokenUtil {
             Long memberNumber = Long.valueOf(String.valueOf(getClaims(accessToken).get("memberNumber")));
             Date tokenExpireDate = createAccessTokenExpireDate();
             crateAccessToken(memberNumber, tokenExpireDate);
-            return new ResponseJwt(accessToken,refreshToken ,tokenExpireDate.getTime());
+            return new ResponseJwt(accessToken,refreshToken ,tokenExpireDate);
         }
         throw new CustomErrorException(JwtErrorCode.TOKEN_EXPIRE);
     }

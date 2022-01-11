@@ -1,6 +1,9 @@
 package com.project.petboard.integration;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.petboard.infrastructure.jwt.JwtTokenUtil;
+import com.project.petboard.request.RecommentRequestTestDto;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,14 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 
@@ -29,6 +28,9 @@ public class RecommentTest {
     @Autowired
     JwtTokenUtil jwtTokenUtil;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
     String token;
 
     @BeforeEach
@@ -40,18 +42,12 @@ public class RecommentTest {
 
     @DisplayName("대댓글 작성 테스트")
     @Test
-    public void createRecommentTest(){
-        Map<String, Object> recommentRequestDto = new HashMap<>();
-
-        recommentRequestDto.put("memberNumber", 1);
-        recommentRequestDto.put("postNumber", 1);
-        recommentRequestDto.put("commentNumber", 1);
-        recommentRequestDto.put("recommentContents", "contents");
+    public void createRecommentTest() throws JsonProcessingException {
 
         given().accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(ContentType.JSON)
                 .header("Authorization",token)
-                .body(recommentRequestDto).log().all()
+                .body(objectMapper.writeValueAsString(new RecommentRequestTestDto())).log().all()
                 .when().post("/recomment")
                 .then().statusCode(HttpStatus.OK.value());
     }
@@ -60,12 +56,10 @@ public class RecommentTest {
     @Test
     public void requestPageTest(){
 
-        Pageable pageable = PageRequest.of(1, 10);
-
         given().accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(ContentType.JSON)
                 .header("Authorization",token)
-                .body(pageable).log().all()
+                .param("commentNumber",String.valueOf(2)).log().all()
                 .when().get("/recomment/page")
                 .then().statusCode(HttpStatus.OK.value());
     }
@@ -81,4 +75,5 @@ public class RecommentTest {
                 .when().delete("/recomment")
                 .then().statusCode(HttpStatus.OK.value());
     }
+
 }

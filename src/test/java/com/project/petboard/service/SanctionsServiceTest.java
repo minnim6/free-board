@@ -1,7 +1,6 @@
 package com.project.petboard.service;
 
-import com.project.petboard.domain.post.Post;
-import com.project.petboard.domain.post.PostResponseDto;
+import com.project.petboard.domain.page.RequestPage;
 import com.project.petboard.domain.report.Sanctions;
 import com.project.petboard.domain.report.SanctionsDto;
 import com.project.petboard.domain.report.SanctionsRepository;
@@ -17,10 +16,11 @@ import org.springframework.data.domain.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 public class SanctionsServiceTest {
     SanctionsRepository sanctionsRepository = mock(SanctionsRepository.class);
@@ -69,16 +69,17 @@ public class SanctionsServiceTest {
     @Test
     public void getSanctionsPageTestShouldBeSuccess() {
         //given
-        Pageable pageable = PageRequest.of(1, 10);
+        Pageable pageable = PageRequest.of(0, 10);
         List<Sanctions> sanctionsList = new ArrayList<>();
         sanctionsList.add(sanctions);
         sanctionsList.add(sanctions);
         Page<Sanctions> sanctionsPage = new PageImpl<>(sanctionsList);
         given(sanctionsRepository.findAll(pageable)).willReturn(sanctionsPage);
+        RequestPage requestPage = new RequestPage(0,10);
         //when
-        Page<SanctionsDto> sanctionsDtos = sanctionsService.fetchSanctionsList(pageable);
+        List<SanctionsDto> sanctionsDtos = sanctionsService.fetchSanctionsList(requestPage);
         //then
-        assertThat(sanctionsDtos.getSize()).isEqualTo(2);
+        assertThat(sanctionsDtos.size()).isEqualTo(2);
     }
 
 }

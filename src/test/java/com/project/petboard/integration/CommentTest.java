@@ -1,16 +1,18 @@
 package com.project.petboard.integration;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.petboard.infrastructure.jwt.JwtTokenUtil;
+import com.project.petboard.request.CommentRequestTestDto;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -20,6 +22,7 @@ import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 
+@AutoConfigureRestDocs(uriScheme = "https", uriHost = "docs.api.com")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CommentTest {
 
@@ -28,6 +31,9 @@ public class CommentTest {
 
     @Autowired
     JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     String token;
 
@@ -40,17 +46,12 @@ public class CommentTest {
 
     @DisplayName("댓글 작성 테스트")
     @Test
-    public void createCommentTest(){
-        Map<String, Object> commentRequestDto = new HashMap<>();
-
-        commentRequestDto.put("memberNumber", 1);
-        commentRequestDto.put("postNumber", 1);
-        commentRequestDto.put("commentContents", "contents");
+    public void createCommentTest() throws JsonProcessingException {
 
         given().accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(ContentType.JSON)
                 .header("Authorization",token)
-                .body(commentRequestDto).log().all()
+                .body(objectMapper.writeValueAsString(new CommentRequestTestDto())).log().all()
                 .when().post("/comment")
                 .then().statusCode(HttpStatus.OK.value());
     }
@@ -59,12 +60,15 @@ public class CommentTest {
     @Test
     public void requestPageTest(){
 
-        Pageable pageable = PageRequest.of(1, 10);
+        Map<String, Object> requestPage = new HashMap<>();
+
+        requestPage.put("page", 0);
+        requestPage.put("size", 10);
 
         given().accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(ContentType.JSON)
                 .header("Authorization",token)
-                .body(pageable).log().all()
+                .body(requestPage).log().all()
                 .when().get("/comment/page")
                 .then().statusCode(HttpStatus.OK.value());
     }
@@ -80,4 +84,5 @@ public class CommentTest {
                 .when().delete("/comment")
                 .then().statusCode(HttpStatus.OK.value());
     }
+
 }

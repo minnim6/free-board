@@ -1,0 +1,53 @@
+
+
+
+=== question create
+http-request
+include::build/generated-snippets/question/create/http-request.adoc[]
+http-response
+include::build/generated-snippets/question/create/http-response.adoc[]
+request-fields
+include::build/generated-snippets/question/create/request-fields.adoc[]
+response-fields
+include::build/generated-snippets/question/create/response-fields.adoc[]
+
+
+=== question answer
+http-request
+include::build/generated-snippets/question/answer/http-request.adoc[]
+http-response
+include::build/generated-snippets/question/answer/http-response.adoc[]
+request-fields
+include::build/generated-snippets/question/answer/request-fields.adoc[]
+
+=== question get
+
+curl:
+include::build/generated-snippets/question/fetch/curl-request.adoc[]
+http-request
+include::build/generated-snippets/question/fetch/http-request.adoc[]
+http-response
+include::build/generated-snippets/question/fetch/http-response.adoc[]
+httpie-request
+include::build/generated-snippets/question/fetch/httpie-request.adoc[]
+request-body
+include::build/generated-snippets/question/fetch/request-body.adoc[]
+request-parameters
+include::build/generated-snippets/question/fetch/request-parameters.adoc[]
+
+=== question delete
+http-request
+include::build/generated-snippets/question/delete/http-request.adoc[]
+request-parameters
+include::build/generated-snippets/question/delete/request-parameters.adoc[]
+
+
+=== question getPage
+http-request
+include::build/generated-snippets/question/page/http-request.adoc[]
+http-response
+include::build/generated-snippets/question/page/http-response.adoc[]
+request-fields
+include::build/generated-snippets/question/page/request-fields.adoc[]
+response-fields
+include::build/generated-snippets/question/page/response-fields.adoc[]
