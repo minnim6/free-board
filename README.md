@@ -59,3 +59,5 @@
 - 게시물 신고 관련 규정 추가 / 삭제 / 조회
 - 게시물 자체 블라인드 가능
 - 질문 게시판에 게시물에 답변 / 삭제 가능
+
+⭐ special thanks to pursue503 - https://github.com/pursue503
