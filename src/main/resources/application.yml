@@ -4,7 +4,14 @@ spring:
       - data
       - kakao
       - jwt
+
 ---
 spring:
   profiles:
-    active: local # 기본 환경 선택
+    active: local # 기본 환경 선
+---
+spring:
+  profiles:
+    active: real
+server:
+  port: 8080
