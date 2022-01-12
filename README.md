@@ -4,7 +4,7 @@
 
 ---
 
-**jpa , mysql , rds ,  spring boot , java**
+**jpa , mysql , rds , aws ,  spring boot , java **
 
 ### ☑️   중점과제
 
